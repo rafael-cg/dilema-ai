@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilema.ai por Rafael Carneiro Garcia</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --hover-color: #f5f5f5;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --link-color: #66b3ff;
+            --border-color: #404040;
+            --hover-color: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--hover-color);
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background: var(--text-color);
+        }
+
+        .theme-toggle:hover .theme-icon {
+            color: var(--bg-color);
+        }
+
+        .theme-icon {
+            display: none;
+            width: 20px;
+            height: 20px;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .theme-icon.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .bio {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .bio a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        .bio a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-list {
+            list-style: none;
+        }
+
+        .post-item {
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+
+        .post-item:hover {
+            background-color: var(--hover-color);
+            margin: 16px -10px;
+            padding: 12px 10px;
+            border-radius: 4px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-link {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+        }
+
+        .post-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .post-date {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .tutorial-item {
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease;
+        }
+
+        .tutorial-item:hover {
+            background-color: var(--hover-color);
+            margin: 16px -10px;
+            padding: 12px 10px;
+            border-radius: 4px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tutorial-item:last-child {
+            border-bottom: none;
+        }
+
+        .tutorial-link {
+            text-decoration: none;
+            color: var(--text-color);
+            display: block;
+        }
+
+        .tutorial-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .tutorial-description {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .tutorial-date {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .subscribe {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .subscribe a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .subscribe a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+            }
+
+            .theme-icon {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <svg id="theme-toggle-sun-icon" class="theme-icon active" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="theme-toggle-moon-icon" class="theme-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+        
+        <h1>Dilema.ai por Rafael Carneiro Garcia</h1>
+        <div class="subtitle">Evangelizando IA</div>
+        
+        <div class="bio">
+            Rafael Carneiro Garcia é um evangelizador de Inteligência Artificial. Através do <a href="#">Dilema.ai</a>, compartilha insights, tutoriais e reflexões sobre o impacto da IA na sociedade e nos negócios.
+            <a href="#more">Mais</a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Posts Recentes</h2>
+        <ul class="post-list">
+            <li class="post-item">
+                <a href="#" class="post-link">
+                    <div class="post-title">O Futuro da IA Generativa no Brasil</div>
+                    <div class="post-date">22 de maio de 2025</div>
+                </a>
+            </li>
+            <li class="post-item">
+                <a href="#" class="post-link">
+                    <div class="post-title">Como a IA Está Transformando o Mercado de Trabalho</div>
+                    <div class="post-date">18 de maio de 2025</div>
+                </a>
+            </li>
+            <li class="post-item">
+                <a href="#" class="post-link">
+                    <div class="post-title">Ética em IA: Desafios e Oportunidades</div>
+                    <div class="post-date">15 de maio de 2025</div>
+                </a>
+            </li>
+            <li class="post-item">
+                <a href="#" class="post-link">
+                    <div class="post-title">ChatGPT vs Claude: Uma Comparação Prática</div>
+                    <div class="post-date">10 de maio de 2025</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">Tutoriais de IA</h2>
+        <ul class="post-list">
+            <li class="tutorial-item">
+                <a href="#" class="tutorial-link">
+                    <div class="tutorial-title">Guia Completo: Criando Prompts Eficazes</div>
+                    <div class="tutorial-description">Aprenda as melhores práticas para criar prompts que geram resultados excepcionais</div>
+                    <div class="tutorial-date">20 de maio de 2025</div>
+                </a>
+            </li>
+            <li class="tutorial-item">
+                <a href="#" class="tutorial-link">
+                    <div class="tutorial-title">Automatizando Tarefas com ChatGPT</div>
+                    <div class="tutorial-description">Tutorial passo a passo para automatizar workflows usando IA</div>
+                    <div class="tutorial-date">16 de maio de 2025</div>
+                </a>
+            </li>
+            <li class="tutorial-item">
+                <a href="#" class="tutorial-link">
+                    <div class="tutorial-title">Integrando IA em Planilhas do Google</div>
+                    <div class="tutorial-description">Como usar APIs de IA para potencializar suas planilhas</div>
+                    <div class="tutorial-date">12 de maio de 2025</div>
+                </a>
+            </li>
+            <li class="tutorial-item">
+                <a href="#" class="tutorial-link">
+                    <div class="tutorial-title">Criando Chatbots Personalizados</div>
+                    <div class="tutorial-description">Guia prático para desenvolver seu próprio assistente de IA</div>
+                    <div class="tutorial-date">8 de maio de 2025</div>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="subscribe">
+        <a href="#subscribe">Inscreva-se</a> para receber alertas sobre novos posts por email.
+    </div>
+
+    <script>
+        const sunIcon = document.getElementById('theme-toggle-sun-icon');
+        const moonIcon = document.getElementById('theme-toggle-moon-icon');
+        
+        // Carregar tema salvo ou usar padrão claro
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Inicializar ícones baseado no tema carregado
+        updateThemeIcons();
+        function updateThemeIcons() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                // Modo escuro: mostra lua
+                moonIcon.classList.add('active');
+                sunIcon.classList.remove('active');
+            } else {
+                // Modo claro: mostra sol
+                sunIcon.classList.add('active');
+                moonIcon.classList.remove('active');
+            }
+        }
+        
+        // Função para alternar tema
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons();
+        }
+    </script>
+</body>
+</html>
