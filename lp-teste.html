@@ -114,7 +114,7 @@
         }
 
         .video-section {
-            background: #F2F2F2;
+            background: linear-gradient(135deg, #F2F2F2, #FCFCFC);
             padding: 60px 40px;
             display: flex;
             flex-direction: column;
@@ -157,7 +157,7 @@
         }
 
         .form-section {
-            background: #001514;
+            background: linear-gradient(135deg, #001514, #0077B6);
             padding: 60px 40px;
             color: #FCFCFC;
         }
@@ -214,7 +214,7 @@
         }
 
         .submit-btn {
-            background: #FF730E;
+            background: linear-gradient(45deg, #FF730E, #0077B6);
             color: #FCFCFC;
             padding: 18px 40px;
             border: none;
@@ -231,7 +231,6 @@
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 115, 14, 0.4);
-            background: #e6650c;
         }
 
         .benefits {
@@ -247,7 +246,7 @@
         }
 
         .benefit-card {
-            background: #FCFCFC;
+            background: linear-gradient(135deg, #F2F2F2, #FCFCFC);
             padding: 40px 30px;
             border-radius: 15px;
             text-align: center;
@@ -274,9 +273,9 @@
             color: #FCFCFC;
         }
 
-        .icon-orange { background: #FF730E; }
-        .icon-blue { background: #0077B6; }
-        .icon-brown { background: #7A4E2D; }
+        .icon-orange { background: linear-gradient(45deg, #FF730E, #FFFBB0); }
+        .icon-blue { background: linear-gradient(45deg, #0077B6, #FCFCFC); }
+        .icon-brown { background: linear-gradient(45deg, #7A4E2D, #FF730E); }
 
         .benefit-card h3 {
             color: #001514;
@@ -335,7 +334,7 @@
         }
 
         .event-badge {
-            background: #FF730E;
+            background: linear-gradient(45deg, #FF730E, #0077B6);
             color: #FCFCFC;
             padding: 8px 20px;
             border-radius: 25px;
@@ -382,7 +381,6 @@
         <div class="container">
             <div class="event-badge">SOLUÇÕES DE IA PARA O PME VAREJISTA</div>
             <h1>A Maloka cria um cérebro para o varejista</h1>
-            <p>Nos conectamos ao seu sistema, limpamos seus dados e te entregamos diagnósticos e alertas de vendas, estoque e clientes diretamente no seu email ou Whatsapp, sem planilhas complexas e nem confusão.<br><strong>É IA que trabalha por você.</strong></p>
         </div>
     </section>
 
@@ -551,7 +549,7 @@
                 setTimeout(() => {
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
-                    submitBtn.style.background = '#FF730E';
+                    submitBtn.style.background = '';
                     this.reset();
                 }, 2000);
             }, 1500);
