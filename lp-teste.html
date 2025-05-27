@@ -85,10 +85,7 @@
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, #FF730E, #0077B6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #FF730E;
         }
 
         .hero p {
@@ -117,7 +114,7 @@
         }
 
         .video-section {
-            background: linear-gradient(135deg, #F2F2F2, #FCFCFC);
+            background: #F2F2F2;
             padding: 60px 40px;
             display: flex;
             flex-direction: column;
@@ -160,7 +157,7 @@
         }
 
         .form-section {
-            background: linear-gradient(135deg, #001514, #0077B6);
+            background: #001514;
             padding: 60px 40px;
             color: #FCFCFC;
         }
@@ -217,7 +214,7 @@
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #FF730E, #0077B6);
+            background: #FF730E;
             color: #FCFCFC;
             padding: 18px 40px;
             border: none;
@@ -234,6 +231,7 @@
         .submit-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 115, 14, 0.4);
+            background: #e6650c;
         }
 
         .benefits {
@@ -249,7 +247,7 @@
         }
 
         .benefit-card {
-            background: linear-gradient(135deg, #F2F2F2, #FCFCFC);
+            background: #FCFCFC;
             padding: 40px 30px;
             border-radius: 15px;
             text-align: center;
@@ -276,9 +274,9 @@
             color: #FCFCFC;
         }
 
-        .icon-orange { background: linear-gradient(45deg, #FF730E, #FFFBB0); }
-        .icon-blue { background: linear-gradient(45deg, #0077B6, #FCFCFC); }
-        .icon-brown { background: linear-gradient(45deg, #7A4E2D, #FF730E); }
+        .icon-orange { background: #FF730E; }
+        .icon-blue { background: #0077B6; }
+        .icon-brown { background: #7A4E2D; }
 
         .benefit-card h3 {
             color: #001514;
@@ -337,7 +335,7 @@
         }
 
         .event-badge {
-            background: linear-gradient(45deg, #FF730E, #0077B6);
+            background: #FF730E;
             color: #FCFCFC;
             padding: 8px 20px;
             border-radius: 25px;
@@ -382,7 +380,7 @@
     <section class="hero">
         <div class="hero-background"></div>
         <div class="container">
-            <div class="event-badge">SOLUÇÕES DE IA PARA O VAREJO PME</div>
+            <div class="event-badge">SOLUÇÕES DE IA PARA O PME VAREJISTA</div>
             <h1>A Maloka cria um cérebro para o varejista</h1>
             <p>Nos conectamos ao seu sistema, limpamos seus dados, e te entregamos diagnósticos e alertas de vendas, estoque e clientes. Direto no seu email ou WhatsApp, sem planilha nem confusão.<br><strong>É IA que trabalha por você.</strong></p>
         </div>
@@ -553,7 +551,7 @@
                 setTimeout(() => {
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
-                    submitBtn.style.background = '';
+                    submitBtn.style.background = '#FF730E';
                     this.reset();
                 }, 2000);
             }, 1500);
