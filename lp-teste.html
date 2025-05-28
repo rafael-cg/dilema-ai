@@ -861,32 +861,57 @@
         document.getElementById('leadForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Aqui você pode integrar com seu sistema de CRM ou envio de leads
+            // Capturar dados do formulário
             const formData = new FormData(this);
             const leadData = Object.fromEntries(formData);
             
-            // Exemplo de integração (substitua pela sua API)
-            console.log('Lead capturado:', leadData);
-            
-            // Feedback visual para o usuário
+            // Feedback visual
             const submitBtn = this.querySelector('.submit-btn');
             const originalText = submitBtn.textContent;
             
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
             
-            // Simular envio (remova este setTimeout e implemente sua integração real)
-            setTimeout(() => {
+            // URL do Google Apps Script
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyMoJAHs3Czw1j9dmsUCz3mFLRFT2_YgCvIUGYCem3jEfsFpB1heU9ErVq3d7MxICAc/exec';
+            
+            // Enviar para Google Sheets
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(leadData)
+            })
+            .then(() => {
+                // Sucesso
                 submitBtn.textContent = 'Enviado com Sucesso!';
                 submitBtn.style.background = '#0077B6';
                 
+                // Analytics opcional
+                console.log('Lead enviado para Google Sheets:', leadData);
+                
+                // Reset após 3 segundos
                 setTimeout(() => {
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
                     submitBtn.style.background = '';
                     this.reset();
-                }, 2000);
-            }, 1500);
+                }, 3000);
+            })
+            .catch(error => {
+                // Erro
+                console.error('Erro:', error);
+                submitBtn.textContent = 'Erro - Tente Novamente';
+                submitBtn.style.background = '#dc3545';
+                
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '';
+                }, 3000);
+            });
         });
         
         // Prevenir zoom no iOS quando focar em inputs
