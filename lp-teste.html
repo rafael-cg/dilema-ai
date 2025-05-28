@@ -13,38 +13,155 @@
         }
 
         @media (max-width: 480px) {
+            .hero {
+                padding: 70px 0 30px;
+            }
+            
             .hero h1 {
-                font-size: 1.8rem;
-                padding: 0 10px;
-            }
-            
-            .video-section h3 {
-                font-size: 1.2rem !important;
-                margin-bottom: 15px !important;
-            }
-            
-            .feature-item h4 {
-                font-size: 13px;
-            }
-            
-            .feature-item p {
-                font-size: 11px;
-            }
-            
-            .form-container h2 {
-                font-size: 1.5rem;
-            }
-            
-            .section-title {
                 font-size: 1.7rem;
+                padding: 0 15px;
+                line-height: 1.1;
             }
             
             .event-badge {
                 font-size: 10px;
                 padding: 5px 12px;
-                max-width: 90%;
+                max-width: 95%;
+                margin: 0 auto 12px auto;
+                display: block;
                 text-align: center;
-                margin: 0 auto 15px auto;
+            }
+            
+            .container {
+                padding: 0 8px;
+            }
+            
+            .main-content {
+                margin: 0 3px;
+                border-radius: 12px;
+            }
+            
+            .video-section {
+                padding: 20px 15px;
+            }
+            
+            .video-section h3 {
+                font-size: 1.1rem !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .features-grid {
+                gap: 10px;
+                margin-top: 15px;
+            }
+            
+            .feature-item {
+                padding: 12px;
+            }
+            
+            .feature-item h4 {
+                font-size: 12px;
+                margin-bottom: 4px;
+            }
+            
+            .feature-item p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+            
+            .form-section {
+                padding: 20px 15px;
+            }
+            
+            .form-container h2 {
+                font-size: 1.4rem;
+                line-height: 1.1;
+            }
+            
+            .form-container p {
+                font-size: 0.85rem;
+                margin-bottom: 18px;
+            }
+            
+            .form {
+                gap: 12px;
+            }
+            
+            .form-group label {
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            
+            .form-group input,
+            .form-group select {
+                padding: 10px;
+                font-size: 13px;
+            }
+            
+            .submit-btn {
+                padding: 12px 20px;
+                font-size: 13px;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+                padding: 0 15px;
+            }
+            
+            .section-subtitle {
+                font-size: 0.85rem;
+                padding: 0 15px;
+            }
+            
+            .benefits-grid {
+                padding: 0 8px;
+                gap: 18px;
+                grid-template-columns: 1fr;
+                max-width: 100%;
+            }
+            
+            .benefit-card {
+                padding: 20px 12px;
+            }
+            
+            .benefit-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .benefit-card h3 {
+                font-size: 0.95rem;
+                margin-bottom: 6px;
+            }
+            
+            .benefit-card p {
+                font-size: 0.8rem;
+                line-height: 1.3;
+            }
+            
+            .header {
+                padding: 10px 0;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .footer {
+                padding: 25px 0;
+                margin-top: 35px;
+            }
+            
+            .footer p {
+                font-size: 0.8rem;
+                padding: 0 15px;
             }
         }
 
@@ -140,6 +257,8 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(255, 115, 14, 0.3);
+            width: calc(100% - 40px);
+            max-width: 1160px;
         }
 
         .content-grid {
@@ -251,6 +370,11 @@
             color: #001514;
             transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
         .form-group input:focus,
@@ -291,6 +415,10 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 40px;
             margin-top: 50px;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .benefit-card {
@@ -350,133 +478,192 @@
         }
 
         @media (max-width: 768px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .hero {
-                padding: 100px 0 60px;
+                padding: 80px 0 40px;
             }
             
             .hero h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
                 line-height: 1.2;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
+                padding: 0 20px;
+            }
+            
+            .event-badge {
+                font-size: 11px;
+                padding: 6px 15px;
+                margin-bottom: 15px;
+                max-width: 90%;
+            }
+            
+            .container {
+                padding: 0 10px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            
+            .main-content {
+                margin: 0 5px;
+                border-radius: 15px;
+            }
+            
+            .video-section {
+                padding: 25px 20px;
+                order: 1;
+            }
+            
+            .video-section h3 {
+                font-size: 1.2rem !important;
+                margin-bottom: 15px !important;
+                text-align: center;
+                line-height: 1.3;
+            }
+            
+            .video-container {
+                margin-bottom: 20px;
+                border-radius: 10px;
             }
             
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 12px;
+                margin-top: 20px;
             }
             
             .feature-item {
                 padding: 15px;
+                border-radius: 8px;
             }
             
             .feature-item h4 {
-                font-size: 14px;
+                font-size: 13px;
                 margin-bottom: 5px;
+                line-height: 1.2;
             }
             
             .feature-item p {
-                font-size: 12px;
+                font-size: 11px;
                 line-height: 1.3;
             }
             
-            .main-content {
-                margin: 0 10px;
-            }
-            
-            .video-section,
             .form-section {
-                padding: 30px 20px;
+                padding: 25px 20px;
+                order: 2;
             }
             
             .form-container h2 {
-                font-size: 1.8rem;
-                margin-bottom: 15px;
+                font-size: 1.6rem;
+                margin-bottom: 12px;
+                text-align: center;
+                line-height: 1.2;
             }
             
             .form-container p {
-                font-size: 0.95rem;
-                margin-bottom: 25px;
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+                text-align: center;
+                line-height: 1.4;
             }
             
             .form {
-                gap: 20px;
+                gap: 15px;
+            }
+            
+            .form-group label {
+                font-size: 13px;
+                margin-bottom: 6px;
             }
             
             .form-group input,
             .form-group select {
                 padding: 12px;
                 font-size: 14px;
+                border-radius: 6px;
             }
             
             .submit-btn {
-                padding: 15px 30px;
-                font-size: 16px;
+                padding: 14px 25px;
+                font-size: 14px;
+                border-radius: 6px;
+                margin-top: 10px;
             }
             
             .benefits {
-                padding: 60px 0;
+                padding: 40px 0;
             }
             
             .section-title {
-                font-size: 2rem;
-                margin-bottom: 15px;
-            }
-            
-            .section-subtitle {
-                font-size: 1rem;
+                font-size: 1.8rem;
+                margin-bottom: 12px;
+                line-height: 1.2;
                 padding: 0 20px;
             }
             
+            .section-subtitle {
+                font-size: 0.9rem;
+                padding: 0 20px;
+                line-height: 1.4;
+            }
+            
             .benefits-grid {
-                gap: 30px;
-                margin-top: 40px;
+                gap: 20px;
+                margin-top: 30px;
+                padding: 0 10px;
+                grid-template-columns: 1fr;
+                max-width: 100%;
             }
             
             .benefit-card {
-                padding: 30px 20px;
+                padding: 25px 15px;
+                border-radius: 12px;
             }
             
             .benefit-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-                margin-bottom: 15px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+                margin-bottom: 12px;
             }
             
             .benefit-card h3 {
-                font-size: 1.1rem;
-                margin-bottom: 10px;
+                font-size: 1rem;
+                margin-bottom: 8px;
+                line-height: 1.2;
             }
             
             .benefit-card p {
-                font-size: 0.9rem;
-            }
-            
-            .event-badge {
-                padding: 6px 15px;
-                font-size: 12px;
-                margin-bottom: 15px;
-            }
-            
-            .container {
-                padding: 0 15px;
+                font-size: 0.85rem;
+                line-height: 1.4;
             }
             
             .header {
-                padding: 15px 0;
+                padding: 12px 0;
+            }
+            
+            .logo {
+                gap: 10px;
             }
             
             .logo-text {
-                font-size: 24px;
+                font-size: 22px;
             }
             
             .logo-icon {
-                width: 50px;
-                height: 50px;
+                width: 45px;
+                height: 45px;
+            }
+            
+            .footer {
+                padding: 30px 0;
+                margin-top: 40px;
+            }
+            
+            .footer p {
+                font-size: 0.85rem;
+                line-height: 1.4;
             }
         }
 
@@ -550,6 +737,8 @@
                             controls 
                             poster="assets/images/video-thumbnail.jpg"
                             style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;"
+                            preload="metadata"
+                            playsinline
                         >
                             <source src="assets/videos/maloka-demo.mp4" type="video/mp4">
                             <source src="assets/videos/maloka-demo.webm" type="video/webm">
@@ -709,6 +898,24 @@
                     this.reset();
                 }, 2000);
             }, 1500);
+        });
+        
+        // Prevenir zoom no iOS quando focar em inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    if (window.innerWidth < 768) {
+                        document.querySelector('meta[name=viewport]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                    }
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (window.innerWidth < 768) {
+                        document.querySelector('meta[name=viewport]').setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+                    }
+                });
+            });
         });
     </script>
 </body>
