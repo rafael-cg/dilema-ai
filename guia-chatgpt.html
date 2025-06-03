@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nunca usou o ChatGPT? Clique aqui - Guia prático para iniciantes - Dilema.ai por Rafael Carneiro Garcia</title>
+    <meta name="description" content="Tutorial completo para quem nunca usou ChatGPT. Aprenda do básico ao avançado com exemplos práticos para o trabalho do dia a dia.">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --hover-color: #f5f5f5;
+            --gray-text: #666666;
+            --code-bg: #f8f9fa;
+            --highlight-bg: #e3f2fd;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --link-color: #66b3ff;
+            --border-color: #404040;
+            --hover-color: #2a2a2a;
+            --gray-text: #a0a0a0;
+            --code-bg: #2d2d2d;
+            --highlight-bg: #1e3a5f;
+            --success-color: #66bb6a;
+            --warning-color: #ffb74d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 20px;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .back-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--hover-color);
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background: var(--text-color);
+        }
+
+        .theme-toggle:hover .theme-icon {
+            color: var(--bg-color);
+        }
+
+        .theme-icon {
+            display: none;
+            width: 20px;
+            height: 20px;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .theme-icon.active {
+            display: block;
+        }
+
+        .post-header {
+            margin-bottom: 40px;
+        }
+
+        .post-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .post-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray-text);
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .post-meta {
+            color: var(--gray-text);
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .post-content {
+            font-size: 20px;
+            line-height: 1.7;
+        }
+
+        .post-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .post-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+            color: var(--text-color);
+        }
+
+        .post-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
+            color: var(--link-color);
+        }
+
+        .post-content p {
+            margin-bottom: 24px;
+        }
+
+        .post-content a {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .post-content a:hover {
+            text-decoration: underline;
+        }
+
+        .post-content ul, .post-content ol {
+            margin: 24px 0 24px 24px;
+        }
+
+        .post-content li {
+            margin-bottom: 12px;
+        }
+
+        .post-content strong {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .step-box {
+            background: var(--highlight-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 32px 0;
+            border-left: 4px solid var(--link-color);
+        }
+
+        .prompt-example {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .prompt-label {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 12px;
+            font-family: "Inter", sans-serif;
+            font-size: 16px;
+        }
+
+        .prompt-text {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            background: var(--hover-color);
+            padding: 16px;
+            border-radius: 4px;
+            border-left: 4px solid var(--link-color);
+        }
+
+        .blockquote-prompt {
+            border-left: 4px solid var(--link-color);
+            padding-left: 16px;
+            margin: 16px 0;
+            font-style: italic;
+            background: var(--hover-color);
+            padding: 16px;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background: var(--hover-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .tip-title {
+            font-weight: 600;
+            color: var(--success-color);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .warning-box {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid var(--warning-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: var(--warning-color);
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .faq-section {
+            margin-top: 40px;
+        }
+
+        .faq-item {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: var(--hover-color);
+            border-radius: 8px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .interface-section {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .highlight-text {
+            background: var(--highlight-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .feature-card {
+            background: var(--hover-color);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: var(--link-color);
+            margin-bottom: 8px;
+        }
+
+        .post-footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .author-bio {
+            background: var(--hover-color);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+        }
+
+        .author-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .author-description {
+            color: var(--gray-text);
+            font-size: 16px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 15px;
+                font-size: 18px;
+            }
+
+            .post-title {
+                font-size: 1.8rem;
+            }
+
+            .post-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .post-content h2 {
+                font-size: 1.4rem;
+            }
+
+            .post-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .theme-toggle {
+                width: 36px;
+                height: 36px;
+            }
+
+            .theme-icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .prompt-text {
+                font-size: 14px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="back-link">← Voltar para a Dilema.ai</a>
+        
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <svg id="theme-toggle-sun-icon" class="theme-icon active" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="theme-toggle-moon-icon" class="theme-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <h1 class="post-title">Nunca usou o ChatGPT? Clique aqui</h1>
+            <div class="post-subtitle">Guia prático para iniciantes</div>
+            <div class="post-meta">
+                Por Rafael Carneiro Garcia • 23 de maio de 2025 • 10 min de leitura
+            </div>
+        </header>
+
+        <div class="post-content">
+            <p>Se você chegou até aqui, provavelmente já ouviu falar do ChatGPT mas ainda não teve coragem de experimentar. Ou talvez tenha tentado uma vez e não soube bem como usar. Este guia vai mudar isso.</p>
+
+            <p>Vou te ensinar, do absoluto zero, como usar o ChatGPT para resolver problemas reais do seu trabalho e dia a dia. Sem complicação, sem termos técnicos - apenas o que você precisa saber para começar a economizar horas por semana.</p>
+
+            <div class="warning-box">
+                <div class="warning-title">⚡ Importante</div>
+                <p>Este tutorial foi criado para quem <strong>nunca usou</strong> ou está <strong>começando</strong> com ChatGPT. Se você já tem experiência, considere nosso <a href="/guia-prompts-eficazes">Guia Completo de Prompts Eficazes</a>.</p>
+            </div>
+
+            <div class="step-box">
+                <h2>1. Acesse o site do ChatGPT</h2>
+                <p>O primeiro passo é entrar no site oficial: <strong><a href="https://chat.openai.com" target="_blank">https://chat.openai.com</a></strong></p>
+                
+                <p><strong>Fique tranquilo, o uso básico é gratuito.</strong></p>
+                
+                <p>Se deseja que o ChatGPT salve suas conversas, lembre o que você já pediu e recomende melhorias com base no seu uso, clique em <span class="highlight-text">Sign Up</span> para criar uma conta gratuita.</p>
+                
+                <p>Se já tiver conta, clique em <span class="highlight-text">Log in</span>.</p>
+            </div>
+
+            <div class="step-box">
+                <h2>2. Entendendo a interface completa</h2>
+                <p>A interface do ChatGPT é simples e poderosa. Veja os principais elementos que você precisa conhecer:</p>
+
+                <div class="interface-section">
+                    <h4>A) Caixa de entrada</h4>
+                    <p>Na parte inferior da tela está o campo onde você digita suas perguntas. No mundo da IA, essas perguntas são chamadas de <strong>"prompts"</strong>. É aqui que a mágica acontece.</p>
+                    
+                    <h4>B) Histórico de conversas</h4>
+                    <p>Na lateral esquerda da tela (ou acessando o menu no celular), você pode ver e retomar conversas anteriores. Basta clicar em qualquer título da lista para abrir aquela conversa novamente. É como o WhatsApp - cada conversa fica salva.</p>
+                    
+                    <h4>C) Menu de configurações e conta</h4>
+                    <p>No canto inferior esquerdo, você encontra o botão de configurações (ícone de engrenagem), onde é possível mudar o tema, idioma, ou fazer upgrade para o plano pago.</p>
+                    
+                    <h4>D) Biblioteca de GPTs personalizados</h4>
+                    <p>Há também uma aba chamada <strong>"Explore GPTs"</strong> ou <strong>"Descubra GPTs"</strong>, onde você pode explorar robôs feitos para tarefas específicas, como tradução, marketing, código, atendimento, etc.</p>
+                </div>
+            </div>
+
+            <h2>3. Seus primeiros prompts: Exemplos práticos</h2>
+            <p>Agora vamos ao que interessa. Vou te mostrar exemplos reais que você pode copiar, colar e adaptar para suas necessidades:</p>
+
+            <h3>A) Ajuda com planilhas do Excel</h3>
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Copie e cole este prompt:</div>
+                <div class="blockquote-prompt">
+                    Explique a diferença entre as fórmulas COUNT() e COUNTA() no Excel, com exemplos práticos de quando usar cada uma.
+                </div>
+            </div>
+
+            <h3>B) Escrever e-mails profissionais</h3>
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Copie e cole este prompt:</div>
+                <div class="blockquote-prompt">
+                    Escreva um e-mail educado de follow-up para lembrar um cliente sobre nossa reunião agendada para amanhã às 14h. O tom deve ser profissional mas cordial.
+                </div>
+            </div>
+
+            <h3>C) Criar documentos e relatórios</h3>
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Copie e cole este prompt:</div>
+                <div class="blockquote-prompt">
+                    Redija uma política de home office para minha empresa de 20 funcionários, incluindo diretrizes básicas, horários de disponibilidade e uso de equipamentos.
+                </div>
+            </div>
+
+            <h3>D) Analisar arquivos e documentos</h3>
+            <p>Uma funcionalidade poderosa: você pode <strong>enviar planilhas, PDFs, imagens ou prints</strong>, e o ChatGPT analisa e te ajuda com base nesses arquivos.</p>
+            
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Exemplo com arquivo:</div>
+                <div class="blockquote-prompt">
+                    [Envie uma planilha] → "Analise estes dados de vendas e me diga quais são os 3 produtos mais vendidos e em que meses tivemos melhor performance."
+                </div>
+            </div>
+
+            <h3>E) Resolver problemas com prints de tela</h3>
+            <p>Tire uma captura de tela (screenshot) de uma dúvida ou erro em um sistema e envie diretamente na conversa.</p>
+            
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Exemplo com print:</div>
+                <div class="blockquote-prompt">
+                    [Anexe o print] → "Este erro apareceu no meu sistema de vendas. O que significa e como posso resolver?"
+                </div>
+            </div>
+
+            <h3>F) Pesquisa e resumos rápidos</h3>
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Copie e cole este prompt:</div>
+                <div class="blockquote-prompt">
+                    Resuma em 5 tópicos as principais tendências de marketing digital para pequenas empresas em 2025, com dicas práticas que posso implementar.
+                </div>
+            </div>
+
+            <h3>G) Criar imagens para seu negócio</h3>
+            <p>O ChatGPT também pode gerar imagens com base em suas descrições - perfeito para redes sociais ou apresentações.</p>
+            
+            <div class="prompt-example">
+                <div class="prompt-label">💡 Copie e cole este prompt:</div>
+                <div class="blockquote-prompt">
+                    Crie uma imagem de um escritório moderno e acolhedor, com plantas, boa iluminação natural e uma pessoa trabalhando concentrada no computador. Estilo profissional para LinkedIn.
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🎯 Dica de Ouro</div>
+                <p>Sempre seja específico sobre:</p>
+                <ul>
+                    <li><strong>Contexto:</strong> "Para minha empresa de contabilidade..."</li>
+                    <li><strong>Objetivo:</strong> "Quero aumentar vendas..." ou "Preciso organizar..."</li>
+                    <li><strong>Formato:</strong> "Em forma de lista" ou "Como um e-mail"</li>
+                    <li><strong>Tom:</strong> "Formal", "descontraído", "técnico"</li>
+                </ul>
+            </div>
+
+            <h2>4. Recursos avançados que facilitam sua vida</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-title">📂 Análise de Arquivos</div>
+                    <p>Envie Excel, PDF, Word, imagens e o ChatGPT analisa o conteúdo, extrai dados e responde perguntas específicas sobre o arquivo.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-title">🖼️ Geração de Imagens</div>
+                    <p>Descreva uma imagem e o ChatGPT cria para você. Ideal para redes sociais, apresentações ou materiais de marketing.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-title">💬 Conversas Contínuas</div>
+                    <p>O ChatGPT lembra de toda a conversa. Você pode pedir modificações, melhorias ou continuar de onde parou.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-title">🔍 Navegação na Web</div>
+                    <p>O ChatGPT pode buscar informações atualizadas na internet quando você precisa de dados recentes.</p>
+                </div>
+            </div>
+
+            <h2>5. Estratégias para obter melhores resultados</h2>
+
+            <h3>Seja específico, não genérico</h3>
+            <p>Em vez de: "Me ajude com marketing"</p>
+            <p>Diga: "Crie 5 ideias de posts para Instagram de uma loja de roupas femininas, focada em mulheres de 25-40 anos"</p>
+
+            <h3>Forneça contexto</h3>
+            <p>Quanto mais informação relevante você der, melhor será a resposta. Inclua:</p>
+            <ul>
+                <li>Seu setor ou tipo de negócio</li>
+                <li>Seu público-alvo</li>
+                <li>Seus objetivos específicos</li>
+                <li>Limitações (tempo, orçamento, recursos)</li>
+            </ul>
+
+            <h3>Use a conversa a seu favor</h3>
+            <p>Se a primeira resposta não ficou perfeita, continue a conversa:</p>
+            <ul>
+                <li>"Pode fazer isso mais resumido?"</li>
+                <li>"Agora me dê uma versão mais técnica"</li>
+                <li>"Adapte isso para um público mais jovem"</li>
+            </ul>
+
+            <h2>6. Comandos poderosos para o dia a dia</h2>
+
+            <div class="interface-section">
+                <h4>Para análise e decisões:</h4>
+                <ul>
+                    <li>"Compare as vantagens e desvantagens de..."</li>
+                    <li>"Analise estes dados e me dê insights práticos"</li>
+                    <li>"Que perguntas devo fazer antes de tomar esta decisão?"</li>
+                </ul>
+
+                <h4>Para criação de conteúdo:</h4>
+                <ul>
+                    <li>"Crie um título chamativo para..."</li>
+                    <li>"Transforme este texto técnico em linguagem simples"</li>
+                    <li>"Escreva um post para LinkedIn sobre..."</li>
+                </ul>
+
+                <h4>Para resolução de problemas:</h4>
+                <ul>
+                    <li>"Meu problema é X, quais são 5 possíveis soluções?"</li>
+                    <li>"Como posso melhorar este processo?"</li>
+                    <li>"Que alternativas eu não considerei?"</li>
+                </ul>
+            </div>
+
+            <div class="faq-section">
+                <h2>7. Perguntas que todo iniciante faz</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">É realmente grátis?</div>
+                    <p>Sim! A versão gratuita já é muito poderosa e inclui GPT-3.5, análise de imagens e geração de imagens. O plano pago (cerca de $20/mês) oferece GPT-4, respostas mais rápidas e recursos extras.</p>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Posso confiar 100% nas respostas?</div>
+                    <p>O ChatGPT é muito preciso, mas não é infalível. Para decisões importantes, sempre confirme informações críticas e use seu bom senso. É uma ferramenta poderosa de apoio, não um substituto do seu julgamento.</p>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Funciona no celular?</div>
+                    <p>Perfeitamente! Existe app oficial para iOS e Android, ou você pode usar pelo navegador móvel. A experiência é otimizada para celular.</p>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Meus dados estão seguros?</div>
+                    <p>A OpenAI tem políticas de privacidade rigorosas. Conversas gratuitas não são usadas para treinar o modelo. Mesmo assim, evite compartilhar informações muito sensíveis como senhas ou dados pessoais críticos.</p>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Como sei se estou usando bem?</div>
+                    <p>Se você está economizando tempo, obtendo ideias úteis e resolvendo problemas mais rapidamente, está no caminho certo. Comece simples e vá evoluindo conforme ganha confiança.</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <div class="tip-title">🚀 Seu primeiro desafio</div>
+                <p>Antes de sair deste tutorial, faça este teste prático:</p>
+                <ol>
+                    <li>Acesse <a href="https://chat.openai.com" target="_blank">chat.openai.com</a></li>
+                    <li>Copie um dos prompts deste guia</li>
+                    <li>Adapte para sua situação específica</li>
+                    <li>Envie e analise a resposta</li>
+                    <li>Faça uma pergunta de seguimento para melhorar o resultado</li>
+                </ol>
+                <p>Parabéns! Você acabou de ter sua primeira conversa produtiva com IA.</p>
+            </div>
+
+            <h2>8. Próximos passos para evoluir</h2>
+
+            <p>Agora que você domina o básico, aqui estão os próximos níveis da sua jornada:</p>
+
+            <h3>Nível Iniciante (você está aqui!) ✅</h3>
+            <ul>
+                <li>Fazer perguntas básicas e obter respostas úteis</li>
+                <li>Usar prompts simples para tarefas do dia a dia</li>
+                <li>Entender a interface e funcionalidades principais</li>
+            </ul>
+
+            <h3>Nível Intermediário</h3>
+            <ul>
+                <li>Criar prompts mais específicos e detalhados</li>
+                <li>Usar técnicas como role-playing ("Atue como um consultor...")</li>
+                <li>Combinar múltiplas tarefas em uma conversa</li>
+                <li>Desenvolver templates de prompts para uso recorrente</li>
+            </ul>
+
+            <h3>Nível Avançado</h3>
+            <ul>
+                <li>Dominar prompt engineering e técnicas complexas</li>
+                <li>Integrar ChatGPT com outras ferramentas e workflows</li>
+                <li>Criar sistemas de prompts para projetos específicos</li>
+                <li>Usar IA para automação e otimização de processos</li>
+            </ul>
+
+            <div style="text-align: center; margin: 40px 0; padding: 24px; background: var(--highlight-bg); border-radius: 8px;">
+                <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">
+                    <strong>A IA não veio para substituir você, mas para turbinar o seu trabalho.</strong>
+                </p>
+                <p>Use bem essa ferramenta e você ganhará horas a mais por semana. Comece hoje mesmo!</p>
+            </div
