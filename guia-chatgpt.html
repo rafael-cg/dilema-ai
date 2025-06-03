@@ -688,3 +688,37 @@
                 </p>
                 <p>Use bem essa ferramenta e você ganhará horas a mais por semana. Comece hoje mesmo!</p>
             </div
+
+    <script>
+        const sunIcon = document.getElementById('theme-toggle-sun-icon');
+        const moonIcon = document.getElementById('theme-toggle-moon-icon');
+        
+        // Carregar tema salvo ou usar padrão claro
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Inicializar ícones baseado no tema carregado
+        updateThemeIcons();
+        function updateThemeIcons() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                // Modo escuro: mostra lua
+                moonIcon.classList.add('active');
+                sunIcon.classList.remove('active');
+            } else {
+                // Modo claro: mostra sol
+                sunIcon.classList.add('active');
+                moonIcon.classList.remove('active');
+            }
+        }
+        
+        // Função para alternar tema
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons();
+        }
+    </script>
