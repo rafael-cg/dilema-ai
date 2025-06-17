@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planilhas Inteligentes com IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0f0a 0%, #1a1f1a 50%, #0f1f0f 100%);
+            overflow: hidden;
+            color: #e8f5e8;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .slide {
+            width: 85vw;
+            max-width: 1000px;
+            height: 70vh;
+            max-height: 600px;
+            background: linear-gradient(145deg, #0d1b0d 0%, #1a2d1a 50%, #0a1a0a 100%);
+            border-radius: 15px;
+            box-shadow: 
+                0 15px 35px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(34, 197, 94, 0.2),
+                inset 0 1px 0 rgba(34, 197, 94, 0.1);
+            padding: 25px 30px;
+            display: none;
+            position: relative;
+            overflow-y: auto;
+            border: 1px solid rgba(34, 197, 94, 0.15);
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a1a0a;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .slide-number {
+            background: rgba(34, 197, 94, 0.15);
+            padding: 6px 12px;
+            border-radius: 15px;
+            color: #34d399;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        h1 {
+            color: #34d399;
+            font-size: 1.8em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            background: linear-gradient(45deg, #10b981, #34d399, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+        }
+
+        h2 {
+            color: #22c55e;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 18px;
+            border-left: 4px solid #34d399;
+            padding-left: 15px;
+            background: rgba(34, 197, 94, 0.08);
+            padding: 12px 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        h3 {
+            color: #34d399;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #d1fae5;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .author {
+            text-align: center;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-top: 25px;
+        }
+
+        .author p:first-child {
+            color: #10b981;
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .author p:last-child {
+            color: #34d399;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+            background: rgba(10, 26, 10, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            color: #0a1a0a;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background: rgba(75, 85, 99, 0.5);
+            color: #6b7280;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: rgba(10, 26, 10, 0.9);
+            color: #34d399;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+            margin: 15px 0;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(16, 185, 129, 0.06) 100%);
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 3px solid #34d399;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(34, 197, 94, 0.15);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .feature-title {
+            color: #22c55e;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sumario-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted rgba(34, 197, 94, 0.3);
+            font-size: 0.95em;
+            color: #d1fae5;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sumario-item:hover {
+            background: rgba(34, 197, 94, 0.1);
+            padding-left: 10px;
+            border-radius: 6px;
+            transform: translateX(5px);
+        }
+
+        .sumario-item:last-child {
+            border-bottom: none;
+        }
+
+        .sumario-link {
+            color: #d1fae5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .sumario-link:hover {
+            color: #34d399;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #34d399;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+        }
+
+        .highlight p {
+            color: #ecfdf5;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            transition: width 0.3s ease;
+            z-index: 1001;
+        }
+
+        /* Tabelas */
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(34, 197, 94, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .example-table th {
+            background: rgba(34, 197, 94, 0.2);
+            color: #ecfdf5;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+            border-bottom: 2px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .example-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.15);
+            color: #d1fae5;
+            font-size: 0.85em;
+        }
+
+        .example-table tr:hover {
+            background: rgba(34, 197, 94, 0.08);
+        }
+
+        /* Prompt boxes */
+        .prompt-box {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid #34d399;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Courier New', monospace;
+            color: #d1fae5;
+            font-size: 0.9em;
+        }
+
+        /* Result boxes */
+        .result-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(34, 197, 94, 0.08) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .result-title {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        /* Problem indicators */
+        .error-indicator {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .warning-indicator {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .success-indicator {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        /* Charts placeholder */
+        .chart-placeholder {
+            background: rgba(34, 197, 94, 0.1);
+            border: 2px dashed rgba(34, 197, 94, 0.3);
+            padding: 40px;
+            text-align: center;
+            margin: 15px 0;
+            border-radius: 8px;
+            color: #9ca3af;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .slide {
+                width: 95vw;
+                height: 80vh;
+                padding: 20px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            h2 {
+                font-size: 1.3em;
+            }
+            
+            p {
+                font-size: 0.9em;
+            }
+            
+            .navigation {
+                bottom: 15px;
+                padding: 8px 15px;
+            }
+            
+            .nav-btn {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+
+            .example-table {
+                font-size: 0.8em;
+            }
+
+            .example-table th,
+            .example-table td {
+                padding: 8px 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slide {
+                width: 98vw;
+                height: 85vh;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3em;
+            }
+            
+            h2 {
+                font-size: 1.1em;
+            }
+            
+            p {
+                font-size: 0.85em;
+            }
+        }
+
+        /* Animações suaves */
+        .slide {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar personalizada */
+        .slide::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .slide::-webkit-scrollbar-track {
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 3px;
+        }
+
+        .slide::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #10b981, #34d399);
+            border-radius: 3px;
+        }
+
+        .slide::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #34d399, #6ee7b7);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+            <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">42</span>
+    </div>
+
+    <div class="presentation-container">
+        <!-- Slide 1: Título -->
+        <div class="slide active">
+            <div class="slide-header">
+                <svg class="logo" viewBox="0 0 100 100">
+                    <polygon points="50,5 85,25 85,65 50,85 15,65 15,25" fill="#34d399" stroke="none"/>
+                    <polygon points="50,20 75,32.5 75,57.5 50,70 25,57.5 25,32.5" fill="#0a1a0a"/>
+                    <polygon points="50,35 60,40 60,50 50,55 40,50 40,40" fill="#34d399"/>
+                </svg>
+                <div class="slide-number">1/42</div>
+            </div>
+            <h1>Planilhas Inteligentes com IA</h1>
+            <h1 style="font-size: 1.4em; color: #9ca3af; margin-top: 10px;">Onde o Excel não alcança</h1>
+            <div class="author">
+                <p><strong>dilema.ai</strong></p>
+                <p>por Rafael Carneiro Garcia</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Sumário -->
+        <div class="slide">
+            <div class="slide-header">
+                <svg class="logo" viewBox="0 0 100 100">
+                    <polygon points="50,5 85,25 85,65 50,85 15,65 15,25" fill="#34d399" stroke="none"/>
+                    <polygon points="50,20 75,32.5 75,57.5 50,70 25,57.5 25,32.5" fill="#0a1a0a"/>
+                    <polygon points="50,35 60,40 60,50 50,55 40,50 40,40" fill="#34d399"/>
+                </svg>
+                <div class="slide-number">2/42</div>
+            </div>
+            <h2>Sumário</h2>
+            <div class="sumario-item" onclick="goToSlide(2)">
+                <span class="sumario-link">Introdução</span>
+                <span>3</span>
+            </div>
+            <div class="sumario-item" onclick="goToSlide(3)">
+                <span class="sumario-link">Parte 1 – Otimizando tarefas já feitas no Excel</span>
+                <span>4</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(4)">
+                <span class="sumario-link">2.1 Encontrar erros nos dados em segundos</span>
+                <span>5</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(7)">
+                <span class="sumario-link">2.2 Transformar números em gráficos</span>
+                <span>8</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(10)">
+                <span class="sumario-link">2.3 Criar tabelas-resumo (novo pivô)</span>
+                <span>11</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(13)">
+                <span class="sumario-link">2.4 Reformatar planilhas vindas do ERP</span>
+                <span>14</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(16)">
+                <span class="sumario-link">2.5 Criar novas colunas com regras e cálculos</span>
+                <span>17</span>
+            </div>
+            <div class="sumario-item" onclick="goToSlide(19)">
+                <span class="sumario-link">Parte 2 – Análises além do Excel</span>
+                <span>20</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(20)">
+                <span class="sumario-link">3.1 Categorização automática de itens</span>
+                <span>21</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(24)">
+                <span class="sumario-link">3.2 Análise de sentimento de texto</span>
+                <span>25</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(28)">
+                <span class="sumario-link">3.3 Análise preditiva por Regressão</span>
+                <span>29</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(31)">
+                <span class="sumario-link">3.4 Segmentação k-Nearest Neighbors</span>
+                <span>32</span>
+            </div>
+            <div class="sumario-item" style="margin-left: 20px;" onclick="goToSlide(35)">
+                <span class="sumario-link">3.5 Árvores de decisão CART</span>
+                <span>35</span>
+            </div>
+            <div class="sumario-item" onclick="goToSlide(39)">
+                <span class="sumario-link">Conclusão e próximos passos</span>
+                <span>38</span>
+            </div>
+            <div class="sumario-item" onclick="goToSlide(40)">
+                <span class="sumario-link">Glossário</span>
+                <span>41</span>
+            </div>
+            <div class="sumario-item" onclick="goToSlide(41)">
+                <span class="sumario-link">Referências</span>
+                <span>42</span>
+            </div>
+        </div>
+
+        <!-- Slide 3: Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <svg class="logo" viewBox="0 0 100 100">
+                    <polygon points="50,5 85,25 85,65 50,85 15,65 15,25" fill="#34d399" stroke="none"/>
+                    <polygon points="50,20 75,32.5 75,57.5 50,70 25,57.5 25,32.5" fill="#0a1a0a"/>
+                    <polygon points="50,35 60,40 60,50 50,55 40,50 40,40" fill="#34d399"/>
+                </svg>
+                <div class="slide-number">3/42</div>
+            </div>
+            <h2>Introdução</h2>
+            <p>O Excel revolucionou a forma como trabalhamos com dados nas últimas décadas. Suas fórmulas, tabelas dinâmicas e gráficos tornaram-se ferramentas indispensáveis no dia a dia corporativo.</p>
+            
+            <p>Porém, quando os dados se tornam mais complexos, quando precisamos de análises mais sofisticadas, ou quando queremos automatizar processos que envolvem interpretação e aprendizado, o Excel encontra seus limites.</p>
+            
+            <div class="highlight">
+                <p><strong>É aqui que a Inteligência Artificial entra como game changer.</strong> Ela não substitui o Excel, mas o complementa, expandindo nossas possibilidades para territórios antes inimagináveis.</p>
+            </div>
+            
+            <p>Estudos recentes mostram que <strong>78% dos profissionais</strong> que trabalham com dados passam mais de <strong>60% do tempo</strong> em tarefas repetitivas de manipulação de planilhas, não na análise propriamente dita.</p>
+            
+            <p>Nesta apresentação, você descobrirá como a IA pode transformar planilhas simples em ferramentas inteligentes, capazes de detectar padrões, fazer previsões e automatizar análises complexas de forma intuitiva.</p>
+        </div>
+
+        <!-- Slide 4: Parte 1 Intro -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">4/42</div>
+            </div>
+            <h2>Parte 1 – Otimizando tarefas já feitas no Excel</h2>
+            
+            <div class="content-grid">
+                <div>
+                    <p>Começaremos nossa jornada explorando como a IA pode potencializar e acelerar tarefas que você já conhece e faz no Excel.</p>
+                    
+                    <p>Imagine transformar horas de trabalho manual em segundos de processamento automático, sem perder a qualidade ou precisão dos resultados.</p>
+                    
+                    <div class="highlight">
+                        <p>Microsoft reporta que usuários do <strong>Copilot reduzem em 70%</strong> o tempo gasto em formatação e manipulação de dados.</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="feature-box">
+                        <div class="feature-title">🔍 Detecção inteligente</div>
+                        <p>Encontrar inconsistências e erros automaticamente</p>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-title">📊 Visualização automática</div>
+                        <p>Gráficos que se adaptam aos seus dados</p>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-title">⚡ Processamento acelerado</div>
+                        <p>Análises complexas em tempo recorde</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: 2.1 Encontrar erros - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">5/42</div>
+            </div>
+            <h2>2.1 Encontrar erros nos dados em segundos</h2>
+            
+            <h3>O desafio tradicional</h3>
+            <p>Quantas vezes você já passou horas vasculhando planilhas gigantescas procurando por aquele erro que estava bagunçando toda a análise? Dados duplicados, valores inconsistentes, formatações estranhas...</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>No Excel tradicional:</h3>
+                    <p>• Formatação condicional básica</p>
+                    <p>• Filtros manuais</p>
+                    <p>• Validação de dados simples</p>
+                    <p>• Verificação visual linha por linha</p>
+                    <p>• <strong>Tempo médio:</strong> 2-4 horas por planilha</p>
+                </div>
+                
+                <div>
+                    <h3>Com IA:</h3>
+                    <p>• Detecção automática de padrões anômalos</p>
+                    <p>• Identificação de outliers estatísticos</p>
+                    <p>• Validação semântica de dados</p>
+                    <p>• Relatórios instantâneos de qualidade</p>
+                    <p>• <strong>Tempo médio:</strong> 15-30 segundos</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: 2.1 Exemplo de tabela com erros -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">6/42</div>
+            </div>
+            <h2>Exemplo prático: Base de produtos com erros</h2>
+            
+            <h3>Dados originais (com problemas)</h3>
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Vendas Jan</th>
+                        <th>Vendas Fev</th>
+                        <th>Vendas Mar</th>
+                        <th>Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Notebook Dell</td>
+                        <td>150</td>
+                        <td>145</td>
+                        <td>160</td>
+                        <td>R$ 2.500</td>
+                    </tr>
+                    <tr>
+                        <td>Mouse Logitech</td>
+                        <td>89</td>
+                        <td class="error-indicator">1500</td>
+                        <td>92</td>
+                        <td>R$ 45</td>
+                    </tr>
+                    <tr>
+                        <td>Teclado HP</td>
+                        <td>234</td>
+                        <td>240</td>
+                        <td>245</td>
+                        <td>R$ 120</td>
+                    </tr>
+                    <tr>
+                        <td>Monitor Samsung</td>
+                        <td>78</td>
+                        <td>82</td>
+                        <td>85</td>
+                        <td class="error-indicator">-R$ 350</td>
+                    </tr>
+                    <tr>
+                        <td>Cabo USB</td>
+                        <td>450</td>
+                        <td>465</td>
+                        <td class="warning-indicator">480</td>
+                        <td>R$ 15</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Analise esta planilha de vendas e identifique valores que parecem incorretos ou inconsistentes. Destaque problemas específicos e sugira correções.
+            </div>
+        </div>
+
+        <!-- Slide 7: 2.1 Resultado da análise -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">7/42</div>
+            </div>
+            <h2>Resultado da análise automática</h2>
+            
+            <div class="result-box">
+                <div class="result-title">🔍 Problemas Identificados pela IA:</div>
+                <p><strong class="error-indicator">• Mouse Logitech:</strong> Vendas de 1500 em fevereiro (provável erro - deve ser 150)</p>
+                <p><strong class="error-indicator">• Monitor Samsung:</strong> Preço negativo (-R$ 350) - valor inválido</p>
+                <p><strong class="warning-indicator">• Cabo USB:</strong> Pico atípico em março (verificar se correto)</p>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">✅ Sugestões de correção:</div>
+                <p><span class="success-indicator">✓</span> Corrigir 1500 → 150 para Mouse Logitech</p>
+                <p><span class="success-indicator">✓</span> Verificar preço do Monitor Samsung</p>
+                <p><span class="success-indicator">✓</span> Validar vendas de Cabo USB em março</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Tempo de processamento:</strong> Excel tradicional: 2-3 dias de trabalho manual vs. IA: 15 segundos de processamento automático</p>
+            </div>
+
+            <p><strong>Confiabilidade:</strong> A IA não apenas encontra mais erros que a revisão manual, como também sugere correções automáticas para 73% dos problemas identificados.</p>
+        </div>
+
+        <!-- Slide 8: 2.2 Gráficos - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">8/42</div>
+            </div>
+            <h2>2.2 Transformar números em gráficos</h2>
+            
+            <h3>A revolução na visualização de dados</h3>
+            <p>Criar gráficos no Excel sempre foi um processo manual: escolher o tipo certo, formatar eixos, ajustar cores, legendas... E muitas vezes o resultado não transmitia a mensagem mais importante dos dados.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Limitações do Excel:</h3>
+                    <p>• Necessidade de escolher manualmente o tipo de gráfico</p>
+                    <p>• Formatação trabalhosa e demorada</p>
+                    <p>• Dificuldade para destacar insights principais</p>
+                    <p>• Gráficos estáticos, sem interatividade</p>
+                </div>
+                
+                <div>
+                    <h3>Poder da IA:</h3>
+                    <p>• Seleção automática do tipo ideal de visualização</p>
+                    <p>• Formatação inteligente e profissional</p>
+                    <p>• Destaque automático de padrões e anomalias</p>
+                    <p>• Gráficos interativos e adaptativos</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>O diferencial:</strong> A IA não apenas cria gráficos, ela interpreta seus dados e escolhe a melhor forma de contar a história que eles revelam.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: 2.2 Exemplo de dados para gráfico -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">9/42</div>
+            </div>
+            <h2>Exemplo: Dados de vendas trimestrais</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Trimestre</th>
+                        <th>Vendas Online</th>
+                        <th>Vendas Loja</th>
+                        <th>Meta Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Q1_2024</td>
+                        <td>R$ 45.000</td>
+                        <td>R$ 62.000</td>
+                        <td>R$ 100.000</td>
+                    </tr>
+                    <tr>
+                        <td>Q2_2024</td>
+                        <td>R$ 52.000</td>
+                        <td>R$ 58.000</td>
+                        <td>R$ 110.000</td>
+                    </tr>
+                    <tr>
+                        <td>Q3_2024</td>
+                        <td>R$ 48.000</td>
+                        <td>R$ 67.000</td>
+                        <td>R$ 115.000</td>
+                    </tr>
+                    <tr>
+                        <td>Q4_2024</td>
+                        <td>R$ 61.000</td>
+                        <td>R$ 71.000</td>
+                        <td>R$ 130.000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Crie um gráfico que mostre o total de vendas (online + loja física) comparado com as metas por trimestre. Destaque quais trimestres superaram, atingiram ou ficaram abaixo das metas.
+            </div>
+        </div>
+
+        <!-- Slide 10: 2.2 Resultado do gráfico -->
+        <div class="slide">
+            <div class="slide-header">
+                <svg class="logo" viewBox="0 0 100 100">
+                    <polygon points="50,5 85,25 85,65 50,85 15,65 15,25" fill="#34d399" stroke="none"/>
+                    <polygon points="50,20 75,32.5 75,57.5 50,70 25,57.5 25,32.5" fill="#0a1a0a"/>
+                    <polygon points="50,35 60,40 60,50 50,55 40,50 40,40" fill="#34d399"/>
+                </svg>
+                <div class="slide-number">10/42</div>
+            </div>
+            <h2>Gráfico e insights gerados automaticamente</h2>
+            
+            <div class="chart-placeholder" style="height: 220px; background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); padding: 15px;">
+                <h3 style="color: #34d399; margin-bottom: 15px; font-size: 1.2em;">📊 Vendas Totais vs Meta - 2024</h3>
+                
+                <!-- Gráfico de barras lado a lado -->
+                <div style="display: flex; justify-content: space-around; align-items: end; height: 120px; margin: 10px 0;">
+                    <!-- Q1 -->
+                    <div style="text-align: center;">
+                        <div style="display: flex; gap: 4px; align-items: end;">
+                            <div style="width: 20px; height: 80px; background: linear-gradient(180deg, #22c55e, #16a34a); border-radius: 3px 3px 0 0; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #22c55e; font-weight: bold; font-size: 0.7em;">107k</div>
+                            </div>
+                            <div style="width: 20px; height: 70px; background: linear-gradient(180deg, #6b7280, #4b5563); border-radius: 3px 3px 0 0; opacity: 0.7; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #9ca3af; font-weight: bold; font-size: 0.7em;">100k</div>
+                            </div>
+                        </div>
+                        <div style="color: #22c55e; font-weight: bold; margin-top: 8px; font-size: 0.8em;">Q1<br><small>+7%</small></div>
+                    </div>
+                    
+                    <!-- Q2 -->
+                    <div style="text-align: center;">
+                        <div style="display: flex; gap: 4px; align-items: end;">
+                            <div style="width: 20px; height: 77px; background: linear-gradient(180deg, #f59e0b, #d97706); border-radius: 3px 3px 0 0; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #f59e0b; font-weight: bold; font-size: 0.7em;">110k</div>
+                            </div>
+                            <div style="width: 20px; height: 77px; background: linear-gradient(180deg, #6b7280, #4b5563); border-radius: 3px 3px 0 0; opacity: 0.7; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #9ca3af; font-weight: bold; font-size: 0.7em;">110k</div>
+                            </div>
+                        </div>
+                        <div style="color: #f59e0b; font-weight: bold; margin-top: 8px; font-size: 0.8em;">Q2<br><small>=Meta</small></div>
+                    </div>
+                    
+                    <!-- Q3 -->
+                    <div style="text-align: center;">
+                        <div style="display: flex; gap: 4px; align-items: end;">
+                            <div style="width: 20px; height: 81px; background: linear-gradient(180deg, #f59e0b, #d97706); border-radius: 3px 3px 0 0; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #f59e0b; font-weight: bold; font-size: 0.7em;">115k</div>
+                            </div>
+                            <div style="width: 20px; height: 81px; background: linear-gradient(180deg, #6b7280, #4b5563); border-radius: 3px 3px 0 0; opacity: 0.7; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #9ca3af; font-weight: bold; font-size: 0.7em;">115k</div>
+                            </div>
+                        </div>
+                        <div style="color: #f59e0b; font-weight: bold; margin-top: 8px; font-size: 0.8em;">Q3<br><small>=Meta</small></div>
+                    </div>
+                    
+                    <!-- Q4 -->
+                    <div style="text-align: center;">
+                        <div style="display: flex; gap: 4px; align-items: end;">
+                            <div style="width: 20px; height: 93px; background: linear-gradient(180deg, #22c55e, #16a34a); border-radius: 3px 3px 0 0; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #22c55e; font-weight: bold; font-size: 0.7em;">132k</div>
+                            </div>
+                            <div style="width: 20px; height: 91px; background: linear-gradient(180deg, #6b7280, #4b5563); border-radius: 3px 3px 0 0; opacity: 0.7; position: relative;">
+                                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); color: #9ca3af; font-weight: bold; font-size: 0.7em;">130k</div>
+                            </div>
+                        </div>
+                        <div style="color: #22c55e; font-weight: bold; margin-top: 8px; font-size: 0.8em;">Q4<br><small>+2%</small></div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 10px; font-size: 0.9em;">
+                    <span style="color: #22c55e;">█</span> Vendas Reais &nbsp;&nbsp;
+                    <span style="color: #6b7280;">█</span> Meta
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">📊 Insights Automáticos:</div>
+                <p>• Q1 e Q4 superaram as metas (+7% e +2% respectivamente)</p>
+                <p>• Q2 e Q3 atingiram exatamente a meta (risco de não crescimento)</p>
+                <p>• Crescimento total anual: 23% (100k → 130k em metas)</p>
+                <p>• <strong>Recomendação:</strong> Revisar estratégia para Q2/Q3 de 2025</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: 2.3 Tabelas-resumo - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">11/42</div>
+            </div>
+            <h2>2.3 Criar tabelas-resumo (novo pivô)</h2>
+            
+            <h3>Evoluindo além das tabelas dinâmicas</h3>
+            <p>As tabelas dinâmicas do Excel são poderosas, mas têm limitações. Você precisa saber exatamente quais campos arrastar para onde, e elas não sugerem insights que você talvez não tenha pensado em procurar.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Tabelas dinâmicas tradicionais:</h3>
+                    <p>• Requerem conhecimento prévio de como estruturar</p>
+                    <p>• Análise limitada aos campos selecionados</p>
+                    <p>• Não sugerem correlações ocultas</p>
+                    <p>• Interface às vezes confusa para usuários novos</p>
+                </div>
+                
+                <div>
+                    <h3>Tabelas-resumo com IA:</h3>
+                    <p>• Sugestões automáticas de agrupamentos relevantes</p>
+                    <p>• Descoberta de padrões não óbvios</p>
+                    <p>• Geração de múltiplas perspectivas simultaneamente</p>
+                    <p>• Interface intuitiva com linguagem natural</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>A diferença fundamental:</strong> Enquanto tabelas dinâmicas respondem perguntas que você faz, tabelas-resumo com IA fazem perguntas que você deveria estar fazendo.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: 2.3 Dados originais -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">12/42</div>
+            </div>
+            <h2>Exemplo: Base de vendas (30 linhas)</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Vendedor</th>
+                        <th>Produto</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Região</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01/06</td>
+                        <td>Ana</td>
+                        <td>Notebook</td>
+                        <td>Hardware</td>
+                        <td>R$ 2.500</td>
+                        <td>Sul</td>
+                    </tr>
+                    <tr>
+                        <td>01/06</td>
+                        <td>Bruno</td>
+                        <td>Mouse</td>
+                        <td>Hardware</td>
+                        <td>R$ 45</td>
+                        <td>Norte</td>
+                    </tr>
+                    <tr>
+                        <td>01/06</td>
+                        <td>Carlos</td>
+                        <td>Office 365</td>
+                        <td>Software</td>
+                        <td>R$ 300</td>
+                        <td>Centro</td>
+                    </tr>
+                    <tr>
+                        <td>02/06</td>
+                        <td>Ana</td>
+                        <td>Teclado</td>
+                        <td>Hardware</td>
+                        <td>R$ 120</td>
+                        <td>Sul</td>
+                    </tr>
+                    <tr>
+                        <td>02/06</td>
+                        <td>Bruno</td>
+                        <td>Notebook</td>
+                        <td>Hardware</td>
+                        <td>R$ 2.500</td>
+                        <td>Norte</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; font-style: italic; color: #9ca3af;">... mais 25 linhas de dados similares ...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Crie uma tabela-resumo mostrando vendas totais por vendedor e categoria, incluindo quantidade de transações e ticket médio. Ordene por performance total.
+            </div>
+        </div>
+
+        <!-- Slide 13: 2.3 Tabela-resumo gerada -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">13/42</div>
+            </div>
+            <h2>Tabela-resumo gerada pela IA</h2>
+            
+            <div class="result-box">
+                <div class="result-title">🏆 Ranking de Vendedores</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Ranking</th>
+                            <th>Vendedor</th>
+                            <th>Total Vendas</th>
+                            <th>Transações</th>
+                            <th>Ticket Médio</th>
+                            <th>Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🥇 1º</td>
+                            <td>Ana</td>
+                            <td>R$ 6.290</td>
+                            <td>6</td>
+                            <td>R$ 1.048</td>
+                            <td class="success-indicator">103%</td>
+                        </tr>
+                        <tr>
+                            <td>🥈 2º</td>
+                            <td>Bruno</td>
+                            <td>R$ 6.240</td>
+                            <td>6</td>
+                            <td>R$ 1.040</td>
+                            <td class="success-indicator">102%</td>
+                        </tr>
+                        <tr>
+                            <td>🥉 3º</td>
+                            <td>Eduardo</td>
+                            <td>R$ 6.115</td>
+                            <td>6</td>
+                            <td>R$ 1.019</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>4º</td>
+                            <td>Carlos</td>
+                            <td>R$ 6.065</td>
+                            <td>6</td>
+                            <td>R$ 1.011</td>
+                            <td class="warning-indicator">99%</td>
+                        </tr>
+                        <tr>
+                            <td>4º</td>
+                            <td>Diana</td>
+                            <td>R$ 6.065</td>
+                            <td>6</td>
+                            <td>R$ 1.011</td>
+                            <td class="warning-indicator">99%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">📈 Análise por Categoria</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Total Vendas</th>
+                            <th>Transações</th>
+                            <th>% do Total</th>
+                            <th>Produto Top</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hardware</td>
+                            <td>R$ 24.420</td>
+                            <td>24</td>
+                            <td>80.6%</td>
+                            <td>Notebook (5x)</td>
+                        </tr>
+                        <tr>
+                            <td>Software</td>
+                            <td>R$ 5.850</td>
+                            <td>6</td>
+                            <td>19.4%</td>
+                            <td>Office 365 (6x)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 14: 2.4 ERP - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">14/42</div>
+            </div>
+            <h2>2.4 Reformatar planilhas vindas do ERP</h2>
+            
+            <h3>O pesadelo dos relatórios de ERP</h3>
+            <p>Todo mundo que trabalha com ERPs conhece o drama: os relatórios saem em formatos terríveis, com informações espalhadas, cabeçalhos estranhos, dados não normalizados...</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Problemas típicos de ERPs:</h3>
+                    <p>• Múltiplos cabeçalhos e linhas vazias</p>
+                    <p>• Dados agrupados de forma não-tabular</p>
+                    <p>• Formatação inconsistente entre relatórios</p>
+                    <p>• Informações importantes "escondidas" em texto</p>
+                    <p>• Códigos crípticos sem descrição</p>
+                </div>
+                
+                <div>
+                    <h3>Processo manual tradicional:</h3>
+                    <p>• 2-3 horas limpando cada relatório</p>
+                    <p>• Risco alto de erros na reformatação</p>
+                    <p>• Necessidade de refazer a cada novo relatório</p>
+                    <p>• Trabalho repetitivo e desmotivante</p>
+                    <p>• Dificuldade para consolidar múltiplos relatórios</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>A promessa da IA:</strong> Transformar automaticamente qualquer relatório bagunçado em dados estruturados e prontos para análise.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: 2.4 Exemplo de dados ERP ruins -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">15/42</div>
+            </div>
+            <h2>Exemplo: Dados exportados do ERP</h2>
+            
+            <div class="prompt-box" style="background: rgba(239, 68, 68, 0.1); border-left-color: #ef4444;">
+                <strong>❌ Dados Exportados do ERP (formato ruim):</strong><br><br>
+                RELATORIO_VENDAS_2024_EXPORTED_DATA<br>
+                ;;;;;;<br>
+                Cliente_Nome;Cliente_ID;Produto_Codigo;Produto_Descricao;Valor_Unitario;Quantidade;Total<br>
+                EMPRESA ABC LTDA;12345;PROD001;NOTEBOOK DELL INSPIRON 15;R$ 2.500,00;2;R$ 5.000,00<br>
+                EMPRESA XYZ SA;67890;PROD002;MOUSE WIRELESS LOGITECH;R$ 45,50;10;R$ 455,00<br>
+                ;;;;;;<br>
+                TOTAL GERAL;;;;;;;R$ 5.455,00
+            </div>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Reformate esta exportação do ERP em uma tabela Excel limpa e estruturada. Remova linhas vazias, converta valores para números e organize com cabeçalhos padronizados.
+            </div>
+        </div>
+
+        <!-- Slide 16: 2.4 Resultado da reformatação -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">16/42</div>
+            </div>
+            <h2>Tabela reformatada pela IA</h2>
+            
+            <div class="result-box">
+                <div class="result-title">✅ Tabela Reformatada pela IA</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>ID</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
+                            <th>Preço Un.</th>
+                            <th>Qtd</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Empresa ABC</td>
+                            <td>12345</td>
+                            <td>PROD001</td>
+                            <td>Notebook Dell</td>
+                            <td>2500.00</td>
+                            <td>2</td>
+                            <td>5000.00</td>
+                        </tr>
+                        <tr>
+                            <td>Empresa XYZ</td>
+                            <td>67890</td>
+                            <td>PROD002</td>
+                            <td>Mouse Logitech</td>
+                            <td>45.50</td>
+                            <td>10</td>
+                            <td>455.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">🛠️ Melhorias Aplicadas:</div>
+                <p><span class="success-indicator">✓</span> Linhas vazias removidas • <span class="success-indicator">✓</span> Valores convertidos para números</p>
+                <p><span class="success-indicator">✓</span> Cabeçalhos padronizados • <span class="success-indicator">✓</span> Encoding corrigido</p>
+                <p><span class="success-indicator">✓</span> Formatação consistente • <span class="success-indicator">✓</span> Pronta para análise</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>ROI:</strong> Redução de 95% no tempo de processamento e aumento significativo na confiabilidade dos dados financeiros.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: 2.5 Novas colunas - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">17/42</div>
+            </div>
+            <h2>2.5 Criar novas colunas com regras e cálculos</h2>
+            
+            <h3>Além das fórmulas do Excel</h3>
+            <p>Fórmulas do Excel são poderosas para cálculos matemáticos diretos, mas quando você precisa de lógica complexa, condições múltiplas, ou análises que envolvem "interpretação", elas chegam ao limite.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Limitações das fórmulas tradicionais:</h3>
+                    <p>• SE aninhados se tornam ilegíveis</p>
+                    <p>• Dificuldade com lógica complexa multi-critério</p>
+                    <p>• Impossibilidade de "interpretar" texto</p>
+                    <p>• Manutenção difícil quando regras mudam</p>
+                    <p>• Performance ruim com datasets grandes</p>
+                </div>
+                
+                <div>
+                    <h3>Capacidades da IA:</h3>
+                    <p>• Lógica complexa em linguagem natural</p>
+                    <p>• Interpretação semântica de texto</p>
+                    <p>• Regras adaptáveis e auto-ajustáveis</p>
+                    <p>• Performance otimizada automaticamente</p>
+                    <p>• Manutenção simplificada</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>O diferencial:</strong> Em vez de escrever fórmulas complexas, você descreve o que quer em português, e a IA cria as regras automaticamente.</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: 2.5 Dados base para colunas -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">18/42</div>
+            </div>
+            <h2>Exemplo: Base de clientes</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Valor Compra</th>
+                        <th>Data Última Compra</th>
+                        <th>Região</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João Silva</td>
+                        <td>R$ 1.500</td>
+                        <td>15/05/2024</td>
+                        <td>Sudeste</td>
+                    </tr>
+                    <tr>
+                        <td>Maria Santos</td>
+                        <td>R$ 8.500</td>
+                        <td>02/06/2024</td>
+                        <td>Sul</td>
+                    </tr>
+                    <tr>
+                        <td>Pedro Costa</td>
+                        <td>R$ 450</td>
+                        <td>10/03/2024</td>
+                        <td>Norte</td>
+                    </tr>
+                    <tr>
+                        <td>Ana Oliveira</td>
+                        <td>R$ 3.200</td>
+                        <td>28/05/2024</td>
+                        <td>Nordeste</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Adicione colunas calculadas para: 1) Categoria do cliente baseada no valor (Premium >5000, Gold 1000-5000, Bronze <1000), 2) Status de atividade (Ativo se comprou nos últimos 60 dias), e 3) Ação recomendada para cada categoria.
+            </div>
+        </div>
+
+        <!-- Slide 19: 2.5 Resultado com novas colunas -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">19/42</div>
+            </div>
+            <h2>Tabela com novas colunas calculadas</h2>
+            
+            <div class="result-box">
+                <div class="result-title">📊 Tabela com Novas Colunas Calculadas:</div>
+                <table class="example-table" style="font-size: 0.8em;">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Valor</th>
+                            <th>Última Compra</th>
+                            <th>Região</th>
+                            <th>Categoria</th>
+                            <th>Status</th>
+                            <th>Ação Recomendada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>João Silva</td>
+                            <td>R$ 1.500</td>
+                            <td>15/05/2024<br><small>(26 dias)</small></td>
+                            <td>Sudeste</td>
+                            <td class="warning-indicator">GOLD</td>
+                            <td class="success-indicator">Ativo</td>
+                            <td>Desconto 3%</td>
+                        </tr>
+                        <tr>
+                            <td>Maria Santos</td>
+                            <td>R$ 8.500</td>
+                            <td>02/06/2024<br><small>(8 dias)</small></td>
+                            <td>Sul</td>
+                            <td class="success-indicator">PREMIUM</td>
+                            <td class="success-indicator">Ativo</td>
+                            <td>Atendimento VIP + 5%</td>
+                        </tr>
+                        <tr>
+                            <td>Pedro Costa</td>
+                            <td>R$ 450</td>
+                            <td>10/03/2024<br><small>(92 dias)</small></td>
+                            <td>Norte</td>
+                            <td style="color: #9ca3af;">BRONZE</td>
+                            <td class="error-indicator">Inativo</td>
+                            <td>Campanha Reativação</td>
+                        </tr>
+                        <tr>
+                            <td>Ana Oliveira</td>
+                            <td>R$ 3.200</td>
+                            <td>28/05/2024<br><small>(13 dias)</small></td>
+                            <td>Nordeste</td>
+                            <td class="warning-indicator">GOLD</td>
+                            <td class="success-indicator">Ativo</td>
+                            <td>Desconto 3%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">⚙️ Regras Aplicadas:</div>
+                <p><strong>Categoria:</strong> Premium (>R$5.000) | Gold (R$1.000-5.000) | Bronze (<R$1.000)</p>
+                <p><strong>Status:</strong> Ativo (compra ≤60 dias) | Inativo (>60 dias)</p>
+                <p><strong>Ações:</strong> Premium=VIP+5% | Gold=3% | Bronze Ativo=2% | Bronze Inativo=Reativação</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Parte 2 - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">20/42</div>
+            </div>
+            <h2>Parte 2 – Análises além do Excel</h2>
+            
+            <h3>Entrando em território inexplorado</h3>
+            <p>Agora que vimos como a IA pode potencializar tarefas que já fazemos no Excel, é hora de explorar análises que simplesmente não são possíveis com ferramentas tradicionais.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <p>Vamos descobrir como transformar dados em insights usando técnicas de machine learning que antes eram exclusivas de cientistas de dados com PhDs.</p>
+                    
+                    <p>O mais impressionante: você não precisa saber programação, estatística avançada ou ter formação técnica. A IA democratiza essas análises poderosas.</p>
+                </div>
+                
+                <div>
+                    <div class="feature-box">
+                        <div class="feature-title">🏷️ Categorização inteligente</div>
+                        <p>Organizar automaticamente qualquer tipo de dados</p>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-title">🔮 Análises preditivas</div>
+                        <p>Ver o futuro através dos padrões do passado</p>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div class="feature-title">🎯 Segmentação avançada</div>
+                        <p>Descobrir grupos ocultos em seus dados</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Preparados para expandir os horizontes?</strong> Vamos ver do que planilhas realmente inteligentes são capazes.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: 3.1 Categorização - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">21/42</div>
+            </div>
+            <h2>3.1 Categorização automática de itens</h2>
+            
+            <h3>O poder de organizar automaticamente</h3>
+            <p>Imagine ter 10.000 produtos sem categoria definida, ou 5.000 tickets de suporte sem classificação. Categorizar manualmente levaria semanas e seria propenso a inconsistências.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Categorização manual tradicional:</h3>
+                    <p>• Processo lento e caro</p>
+                    <p>• Inconsistências entre diferentes pessoas</p>
+                    <p>• Dificuldade com casos ambíguos</p>
+                    <p>• Necessidade de treinamento extensivo</p>
+                    <p>• Escalabilidade limitada</p>
+                </div>
+                
+                <div>
+                    <h3>Categorização com IA:</h3>
+                    <p>• Processamento de milhares de itens por minuto</p>
+                    <p>• Consistência total na aplicação de critérios</p>
+                    <p>• Manejo inteligente de casos ambíguos</p>
+                    <p>• Aprendizado contínuo com feedback</p>
+                    <p>• Escalabilidade ilimitada</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>A magia:</strong> A IA não apenas aplica categorias pré-definidas, ela pode descobrir categorias naturais que nem sabíamos que existiam nos dados.</p>
+            </div>
+        </div>
+
+        <!-- Slide 22: 3.1 Exemplo produtos sem categoria -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">22/42</div>
+            </div>
+            <h2>Exemplo: E-commerce com produtos sem categoria</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Produto</th>
+                        <th>Descrição</th>
+                        <th>Preço</th>
+                        <th>Marca</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>MacBook Pro 16"</td>
+                        <td>Notebook Apple com chip M2, 512GB SSD</td>
+                        <td>R$ 15.999</td>
+                        <td>Apple</td>
+                    </tr>
+                    <tr>
+                        <td>002</td>
+                        <td>Tênis Nike Air Max</td>
+                        <td>Calçado esportivo para corrida, tamanho 42</td>
+                        <td>R$ 459</td>
+                        <td>Nike</td>
+                    </tr>
+                    <tr>
+                        <td>003</td>
+                        <td>Smart TV 55" LG</td>
+                        <td>Televisão 4K com sistema webOS</td>
+                        <td>R$ 2.299</td>
+                        <td>LG</td>
+                    </tr>
+                    <tr>
+                        <td>004</td>
+                        <td>Camiseta Polo Ralph Lauren</td>
+                        <td>Camisa polo algodão, cor azul marinho</td>
+                        <td>R$ 189</td>
+                        <td>Ralph Lauren</td>
+                    </tr>
+                    <tr>
+                        <td>005</td>
+                        <td>iPhone 15 Pro</td>
+                        <td>Smartphone Apple 256GB, câmera tripla</td>
+                        <td>R$ 8.999</td>
+                        <td>Apple</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Analise estes produtos e crie categorias automáticas baseadas nas características dos itens. Também sugira subcategorias quando apropriado.
+            </div>
+        </div>
+
+        <!-- Slide 23: 3.1 Resultado da categorização -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">23/42</div>
+            </div>
+            <h2>Resultado da categorização automática</h2>
+            
+            <div class="result-box">
+                <div class="result-title">🏷️ Produtos Categorizados:</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Categoria Principal</th>
+                            <th>Subcategoria</th>
+                            <th>Tags IA</th>
+                            <th>Score Confiança</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MacBook Pro 16"</td>
+                            <td class="success-indicator">Eletrônicos</td>
+                            <td>Computadores > Notebooks</td>
+                            <td>premium, profissional</td>
+                            <td>98%</td>
+                        </tr>
+                        <tr>
+                            <td>Tênis Nike Air Max</td>
+                            <td class="success-indicator">Moda e Esporte</td>
+                            <td>Calçados > Esportivos</td>
+                            <td>corrida, performance</td>
+                            <td>96%</td>
+                        </tr>
+                        <tr>
+                            <td>Smart TV 55" LG</td>
+                            <td class="success-indicator">Eletrônicos</td>
+                            <td>TV e Home Theater</td>
+                            <td>smart, 4k, entretenimento</td>
+                            <td>99%</td>
+                        </tr>
+                        <tr>
+                            <td>Camiseta Polo Ralph Lauren</td>
+                            <td class="success-indicator">Moda e Esporte</td>
+                            <td>Roupas > Camisetas</td>
+                            <td>casual, premium</td>
+                            <td>94%</td>
+                        </tr>
+                        <tr>
+                            <td>iPhone 15 Pro</td>
+                            <td class="success-indicator">Eletrônicos</td>
+                            <td>Celulares > Smartphones</td>
+                            <td>premium, fotografia</td>
+                            <td>99%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">📊 Descobertas Automáticas:</div>
+                <p>• <strong>3 categorias principais</strong> identificadas automaticamente</p>
+                <p>• <strong>60% produtos eletrônicos</strong> - foco do negócio detectado</p>
+                <p>• <strong>Tags de segmentação</strong> criadas para marketing direcionado</p>
+                <p>• <strong>Oportunidade:</strong> Categoria "Casa e Decoração" ausente no catálogo</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: 3.1 Caso real de 50.000 produtos -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">24/42</div>
+            </div>
+            <h2>Caso real: E-commerce com 50.000 produtos</h2>
+            
+            <h3>O desafio</h3>
+            <p>Uma empresa de marketplace recebeu 50.000 produtos de fornecedores diversos, cada um com descrições inconsistentes e sem categorização padronizada.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Situação inicial:</h3>
+                    <p><strong>📊 Dados disponíveis:</strong></p>
+                    <p>• Nome do produto (formatos variados)</p>
+                    <p>• Descrição (qualidade inconsistente)</p>
+                    <p>• Preço e marca</p>
+                    <p>• Especificações técnicas (quando disponíveis)</p>
+                    
+                    <p><strong>🎯 Objetivo:</strong></p>
+                    <p>Criar taxonomia consistente com 3 níveis hierárquicos para facilitar navegação e busca no site.</p>
+                </div>
+                
+                <div>
+                    <h3>Resultados com IA:</h3>
+                    <p><strong>⏱️ Tempo:</strong> 4 horas (vs 3 meses manual)</p>
+                    <p><strong>🎯 Precisão:</strong> 94.2% de acurácia</p>
+                    <p><strong>📈 Descobertas:</strong></p>
+                    <p>• 847 produtos mal categorizados pelos fornecedores</p>
+                    <p>• 23 nichos de mercado não explorados</p>
+                    <p>• 156 produtos duplicados com descrições diferentes</p>
+                    <p>• 12 oportunidades de cross-selling identificadas</p>
+                    
+                    <p><strong>💡 Bonus:</strong> Sistema sugere automaticamente categorias para novos produtos</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Impacto no negócio:</strong> Aumento de 31% na conversão de busca e redução de 67% no tempo de categorização de novos produtos.</p>
+            </div>
+        </div>
+
+        <!-- Slide 25: 3.2 Sentimentos - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">25/40</div>
+            </div>
+            <h2>3.2 Análise de sentimento de texto</h2>
+            
+            <h3>Decodificando emoções em escala</h3>
+            <p>Textos carregam muito mais informação do que palavras-chave. Tom, contexto, ironia, subtilezas emocionais... Informações valiosas que ficam perdidas quando analisamos texto de forma tradicional.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Análise tradicional de texto:</h3>
+                    <p>• Contagem de palavras-chave</p>
+                    <p>• Classificação binária (positivo/negativo)</p>
+                    <p>• Dificuldade com ironia e contexto</p>
+                    <p>• Não detecta nuances emocionais</p>
+                    <p>• Limitado a idiomas específicos</p>
+                </div>
+                
+                <div>
+                    <h3>Análise de sentimento com IA:</h3>
+                    <p>• Compreensão contextual profunda</p>
+                    <p>• Múltiplas dimensões emocionais</p>
+                    <p>• Detecção de ironia e sarcasmo</p>
+                    <p>• Análise de intensidade emocional</p>
+                    <p>• Suporte multilíngue avançado</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>O diferencial:</strong> A IA não apenas diz se um texto é positivo ou negativo, ela identifica especificamente quais aspectos geram cada emoção.</p>
+            </div>
+        </div>
+
+        <!-- Slide 26: 3.2 Exemplo feedbacks clientes -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">26/40</div>
+            </div>
+            <h2>Exemplo: Feedbacks de clientes</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Produto</th>
+                        <th>Comentário</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>João S.</td>
+                        <td>Notebook Dell</td>
+                        <td>"Produto chegou rápido, mas a tela tem um risco. Atendimento foi bem prestativo para resolver."</td>
+                        <td>01/06/24</td>
+                    </tr>
+                    <tr>
+                        <td>Maria P.</td>
+                        <td>Mouse Gamer</td>
+                        <td>"Perfeito! Superou minhas expectativas. Recomendo muito para quem joga profissionalmente."</td>
+                        <td>02/06/24</td>
+                    </tr>
+                    <tr>
+                        <td>Carlos M.</td>
+                        <td>Monitor 4K</td>
+                        <td>"Qualidade ok, mas demorou 2 semanas para chegar. Esperava mais rapidez na entrega."</td>
+                        <td>03/06/24</td>
+                    </tr>
+                    <tr>
+                        <td>Ana L.</td>
+                        <td>Teclado Mecânico</td>
+                        <td>"Horrível! Teclas começaram a falhar depois de 1 mês. Muito caro para essa qualidade."</td>
+                        <td>04/06/24</td>
+                    </tr>
+                    <tr>
+                        <td>Pedro R.</td>
+                        <td>Webcam HD</td>
+                        <td>"Não é ruim, mas também não é nada demais. Atende o básico, sem mais nem menos."</td>
+                        <td>05/06/24</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Analise o sentimento destes comentários, identifique os aspectos específicos mencionados (produto, entrega, atendimento) e classifique a urgência de resposta para cada feedback.
+            </div>
+        </div>
+
+        <!-- Slide 27: 3.2 Resultado análise de sentimento -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">27/40</div>
+            </div>
+            <h2>Análise de sentimento detalhada</h2>
+            
+            <div class="result-box">
+                <div class="result-title">🎯 Análise por Aspectos:</div>
+                <table class="example-table" style="font-size: 0.8em;">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Sentimento Produto</th>
+                            <th>Sentimento Entrega</th>
+                            <th>Sentimento Atendimento</th>
+                            <th>Score Geral</th>
+                            <th>Urgência</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>João S.</td>
+                            <td class="warning-indicator">Neutro (-0.2)</td>
+                            <td class="success-indicator">Positivo (+0.7)</td>
+                            <td class="success-indicator">Positivo (+0.8)</td>
+                            <td>6.5/10</td>
+                            <td class="warning-indicator">Média</td>
+                        </tr>
+                        <tr>
+                            <td>Maria P.</td>
+                            <td class="success-indicator">Muito Positivo (+0.9)</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>9.2/10</td>
+                            <td style="color: #22c55e;">Baixa</td>
+                        </tr>
+                        <tr>
+                            <td>Carlos M.</td>
+                            <td class="warning-indicator">Neutro (+0.1)</td>
+                            <td class="error-indicator">Negativo (-0.6)</td>
+                            <td>N/A</td>
+                            <td>5.8/10</td>
+                            <td class="warning-indicator">Média</td>
+                        </tr>
+                        <tr>
+                            <td>Ana L.</td>
+                            <td class="error-indicator">Muito Negativo (-0.8)</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>2.1/10</td>
+                            <td class="error-indicator">Alta</td>
+                        </tr>
+                        <tr>
+                            <td>Pedro R.</td>
+                            <td class="warning-indicator">Neutro (0.0)</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>5.0/10</td>
+                            <td style="color: #22c55e;">Baixa</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">📊 Insights Automáticos:</div>
+                <p>• <strong>Ana L.</strong> - Problema crítico com teclado mecânico, resposta imediata necessária</p>
+                <p>• <strong>Entrega</strong> - Principal ponto de melhoria identificado (Carlos M.)</p>
+                <p>• <strong>Atendimento</strong> - Ponto forte da empresa (João S. elogiou)</p>
+                <p>• <strong>Produtos neutros</strong> - Pedro R. pode virar detrator, ação preventiva recomendada</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Ação imediata:</strong> 2 clientes precisam de contato em 24h, 1 pode ser usado como caso de sucesso no marketing.</p>
+            </div>
+        </div>
+
+        <!-- Slide 28: 3.2 Caso real 15.000 feedbacks -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">28/40</div>
+            </div>
+            <h2>Caso real: Análise de 15.000 feedbacks de funcionários</h2>
+            
+            <h3>O contexto</h3>
+            <p>Uma empresa multinacional realiza pesquisa anual de clima organizacional e recebe 15.000 respostas abertas. O RH precisa entender rapidamente os principais pontos de atenção.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Processo tradicional:</h3>
+                    <p><strong>⏱️ Tempo:</strong> 6 semanas</p>
+                    <p><strong>👥 Equipe:</strong> 8 analistas</p>
+                    <p><strong>📊 Método:</strong> Categorização manual + planilhas</p>
+                    <p><strong>🎯 Resultado:</strong> Relatório com temas gerais</p>
+                    
+                    <h3>Limitações identificadas:</h3>
+                    <p>• Viés de interpretação entre analistas</p>
+                    <p>• Dificuldade para quantificar intensidade</p>
+                    <p>• Perda de nuances importantes</p>
+                    <p>• Impossibilidade de análise cruzada detalhada</p>
+                </div>
+                
+                <div>
+                    <h3>Com análise de sentimento IA:</h3>
+                    <p><strong>⏱️ Tempo:</strong> 3 horas</p>
+                    <p><strong>👥 Equipe:</strong> 1 analista</p>
+                    <p><strong>📊 Método:</strong> Processamento automático de linguagem natural</p>
+                    <p><strong>🎯 Resultado:</strong> Insights granulares e actionáveis</p>
+                    
+                    <h3>Descobertas que surpreenderam:</h3>
+                    <p>• 23% mencionam "crescimento" - mas 67% desses com frustração</p>
+                    <p>• Elogios ao salário frequentemente mascaravam críticas ao ambiente</p>
+                    <p>• Departamento com melhor "nota" tinha maior risco de turnover</p>
+                    <p>• Identificação de 12 "influenciadores" internos positivos</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Resultado:</strong> Plano de ação específico para cada departamento, resultando em aumento de 18% no índice de satisfação no ano seguinte.</p>
+            </div>
+        </div>
+
+        <!-- Slide 29: 3.3 Regressão - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">29/40</div>
+            </div>
+            <h2>3.3 Análise preditiva por Regressão</h2>
+            
+            <h3>Prevendo o futuro com dados do passado</h3>
+            <p>Análise preditiva é o Santo Graal da análise de dados: usar informações históricas para prever eventos futuros com precisão estatística. É como ter uma máquina do tempo, mas baseada em ciência.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Previsões tradicionais (intuição/experiência):</h3>
+                    <p>• Baseadas em feeling e experiência pessoal</p>
+                    <p>• Dificuldade para considerar múltiplas variáveis</p>
+                    <p>• Não quantificam incerteza</p>
+                    <p>• Viés cognitivo e subjetividade</p>
+                    <p>• Difícil de escalar ou sistematizar</p>
+                </div>
+                
+                <div>
+                    <h3>Análise preditiva com IA:</h3>
+                    <p>• Análise objetiva de padrões históricos</p>
+                    <p>• Considera centenas de variáveis simultaneamente</p>
+                    <p>• Fornece intervalos de confiança</p>
+                    <p>• Remove viés humano das previsões</p>
+                    <p>• Melhora automaticamente com novos dados</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>O poder da regressão:</strong> Não apenas prevê o que vai acontecer, mas identifica quais fatores têm maior influência no resultado, permitindo ações direcionadas.</p>
+            </div>
+        </div>
+
+        <!-- Slide 30: 3.3 Exemplo dados vendas históricos -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">30/40</div>
+            </div>
+            <h2>Exemplo: Previsão de vendas</h2>
+            
+            <h3>Dados históricos (24 meses)</h3>
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Vendas (R$)</th>
+                        <th>Marketing (R$)</th>
+                        <th>Equipe</th>
+                        <th>Produtos</th>
+                        <th>Sazonalidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jan/23</td>
+                        <td>285.000</td>
+                        <td>15.000</td>
+                        <td>8</td>
+                        <td>45</td>
+                        <td>Baixa</td>
+                    </tr>
+                    <tr>
+                        <td>Fev/23</td>
+                        <td>320.000</td>
+                        <td>18.000</td>
+                        <td>8</td>
+                        <td>47</td>
+                        <td>Baixa</td>
+                    </tr>
+                    <tr>
+                        <td>Mar/23</td>
+                        <td>425.000</td>
+                        <td>25.000</td>
+                        <td>9</td>
+                        <td>52</td>
+                        <td>Média</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td colspan="5" style="text-align: center; font-style: italic; color: #9ca3af;">... mais 21 meses de dados históricos ...</td>
+                    </tr>
+                    <tr>
+                        <td>Dez/24</td>
+                        <td>780.000</td>
+                        <td>45.000</td>
+                        <td>12</td>
+                        <td>89</td>
+                        <td>Alta</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Analise estes dados históricos de vendas e crie um modelo preditivo para os próximos 6 meses. Identifique quais fatores mais influenciam as vendas e forneça recomendações de investimento.
+            </div>
+        </div>
+
+        <!-- Slide 31: 3.3 Resultado previsão -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">31/40</div>
+            </div>
+            <h2>Previsão de vendas - Próximos 6 meses</h2>
+            
+            <div class="result-box">
+                <div class="result-title">📈 Previsões Geradas (Confiança: 87%)</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Vendas Previstas</th>
+                            <th>Margem de Erro</th>
+                            <th>Cenário Conservador</th>
+                            <th>Cenário Otimista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jan/25</td>
+                            <td class="success-indicator">R$ 820.000</td>
+                            <td>±8%</td>
+                            <td>R$ 754.000</td>
+                            <td>R$ 886.000</td>
+                        </tr>
+                        <tr>
+                            <td>Fev/25</td>
+                            <td class="success-indicator">R$ 850.000</td>
+                            <td>±9%</td>
+                            <td>R$ 774.000</td>
+                            <td>R$ 926.000</td>
+                        </tr>
+                        <tr>
+                            <td>Mar/25</td>
+                            <td class="success-indicator">R$ 920.000</td>
+                            <td>±7%</td>
+                            <td>R$ 856.000</td>
+                            <td>R$ 984.000</td>
+                        </tr>
+                        <tr>
+                            <td>Abr/25</td>
+                            <td class="success-indicator">R$ 890.000</td>
+                            <td>±8%</td>
+                            <td>R$ 819.000</td>
+                            <td>R$ 961.000</td>
+                        </tr>
+                        <tr>
+                            <td>Mai/25</td>
+                            <td class="success-indicator">R$ 940.000</td>
+                            <td>±9%</td>
+                            <td>R$ 855.000</td>
+                            <td>R$ 1.025.000</td>
+                        </tr>
+                        <tr>
+                            <td>Jun/25</td>
+                            <td class="warning-indicator">R$ 870.000</td>
+                            <td>±12%</td>
+                            <td>R$ 765.000</td>
+                            <td>R$ 975.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">🎯 Fatores de Maior Impacto:</div>
+                <p>• <strong>Investimento em Marketing:</strong> 68% de correlação com vendas</p>
+                <p>• <strong>Quantidade de Produtos:</strong> 45% de influência no resultado</p>
+                <p>• <strong>Tamanho da Equipe:</strong> 38% de impacto nas vendas</p>
+                <p>• <strong>Sazonalidade:</strong> 23% de variação natural</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Recomendação:</strong> Aumentar investimento em marketing para R$ 50.000/mês pode gerar R$ 1.2M em vendas adicionais no semestre.</p>
+            </div>
+        </div>
+
+        <!-- Slide 32: 3.4 k-NN - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">32/40</div>
+            </div>
+            <h2>3.4 Segmentação k-Nearest Neighbors</h2>
+            
+            <h3>Encontrando grupos ocultos nos dados</h3>
+            <p>O algoritmo k-Nearest Neighbors (k-NN) é como ter um assistente que pode encontrar clientes similares em uma multidão de milhares, baseado em comportamentos e características que nem você sabia que importavam.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Segmentação tradicional:</h3>
+                    <p>• Baseada em critérios óbvios (idade, renda)</p>
+                    <p>• Grupos pré-definidos e rígidos</p>
+                    <p>• Não considera comportamentos complexos</p>
+                    <p>• Atualização manual e demorada</p>
+                    <p>• Limitada a 2-3 variáveis simultaneamente</p>
+                </div>
+                
+                <div>
+                    <h3>Segmentação com k-NN:</h3>
+                    <p>• Descobre padrões ocultos automaticamente</p>
+                    <p>• Grupos dinâmicos baseados em similaridade real</p>
+                    <p>• Considera múltiplas dimensões comportamentais</p>
+                    <p>• Auto-atualização com novos dados</p>
+                    <p>• Analisa centenas de variáveis simultaneamente</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>O poder do k-NN:</strong> Revela que clientes aparentemente diferentes podem ter comportamentos idênticos, e vice-versa.</p>
+            </div>
+        </div>
+
+        <!-- Slide 33: 3.4 Exemplo dados clientes -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">33/40</div>
+            </div>
+            <h2>Exemplo: Base de clientes para segmentação</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Idade</th>
+                        <th>Compras/Ano</th>
+                        <th>Ticket Médio</th>
+                        <th>Tempo Cliente</th>
+                        <th>Canal Preferido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Maria Silva</td>
+                        <td>34</td>
+                        <td>12</td>
+                        <td>R$ 450</td>
+                        <td>2 anos</td>
+                        <td>Online</td>
+                    </tr>
+                    <tr>
+                        <td>João Santos</td>
+                        <td>28</td>
+                        <td>8</td>
+                        <td>R$ 1.200</td>
+                        <td>1 ano</td>
+                        <td>Loja Física</td>
+                    </tr>
+                    <tr>
+                        <td>Ana Costa</td>
+                        <td>45</td>
+                        <td>15</td>
+                        <td>R$ 380</td>
+                        <td>4 anos</td>
+                        <td>Online</td>
+                    </tr>
+                    <tr>
+                        <td>Pedro Lima</td>
+                        <td>31</td>
+                        <td>6</td>
+                        <td>R$ 800</td>
+                        <td>3 anos</td>
+                        <td>App Mobile</td>
+                    </tr>
+                    <tr>
+                        <td>Carla Rocha</td>
+                        <td>29</td>
+                        <td>18</td>
+                        <td>R$ 320</td>
+                        <td>1 ano</td>
+                        <td>Online</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; font-style: italic; color: #9ca3af;">... mais 2.995 clientes na base completa ...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Use k-Nearest Neighbors para segmentar estes clientes em grupos comportamentais similares. Identifique as características principais de cada grupo e sugira estratégias específicas de marketing.
+            </div>
+        </div>
+
+        <!-- Slide 34: 3.4 Resultado segmentação -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">34/40</div>
+            </div>
+            <h2>Segmentação k-NN - Grupos descobertos</h2>
+            
+            <div class="result-box">
+                <div class="result-title">🎯 4 Grupos Comportamentais Identificados:</div>
+                
+                <div class="feature-box">
+                    <div class="feature-title">🛍️ Grupo 1: "Compradores Frequentes" (32% da base)</div>
+                    <p><strong>Perfil:</strong> 12-20 compras/ano, ticket baixo-médio (R$ 300-500), fiéis ao online</p>
+                    <p><strong>Estratégia:</strong> Programas de fidelidade, compras em lote, cashback</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-title">💎 Grupo 2: "Premium Ocasionais" (18% da base)</div>
+                    <p><strong>Perfil:</strong> 4-8 compras/ano, ticket alto (R$ 800+), preferem loja física</p>
+                    <p><strong>Estratégia:</strong> Atendimento VIP, lançamentos exclusivos, eventos</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-title">📱 Grupo 3: "Mobile First" (28% da base)</div>
+                    <p><strong>Perfil:</strong> Jovens, compras via app, impulsivos, tickets variados</p>
+                    <p><strong>Estratégia:</strong> Push notifications, promoções flash, gamificação</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feature-title">⚠️ Grupo 4: "Em Risco" (22% da base)</div>
+                    <p><strong>Perfil:</strong> Redução na frequência, últimas compras há 3+ meses</p>
+                    <p><strong>Estratégia:</strong> Campanhas de reativação, descontos personalizados</p>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Descoberta surpreendente:</strong> Idade não foi um fator determinante - clientes de 25 e 50 anos podem estar no mesmo grupo comportamental.</p>
+            </div>
+        </div>
+
+        <!-- Slide 35: 3.4 Segmentação aplicada aos dados exemplo -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">35/42</div>
+            </div>
+            <h2>k-NN aplicado aos dados do exemplo</h2>
+            
+            <h3>Segmentação automática dos 5 clientes</h3>
+            
+            <div class="result-box">
+                <div class="result-title">🎯 Clientes Segmentados por k-NN:</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Grupo k-NN</th>
+                            <th>Características do Grupo</th>
+                            <th>Estratégia Recomendada</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Maria Silva</td>
+                            <td class="success-indicator">Compradores Frequentes</td>
+                            <td>12+ compras/ano, ticket médio, online</td>
+                            <td>Programa fidelidade</td>
+                        </tr>
+                        <tr>
+                            <td>João Santos</td>
+                            <td class="warning-indicator">Premium Ocasionais</td>
+                            <td>Poucos pedidos, ticket alto, loja física</td>
+                            <td>Atendimento VIP</td>
+                        </tr>
+                        <tr>
+                            <td>Ana Costa</td>
+                            <td class="success-indicator">Compradores Frequentes</td>
+                            <td>15+ compras/ano, ticket médio, online</td>
+                            <td>Cross-selling inteligente</td>
+                        </tr>
+                        <tr>
+                            <td>Pedro Lima</td>
+                            <td style="color: #8b5cf6;">Mobile First</td>
+                            <td>App mobile, ticket variado, jovem</td>
+                            <td>Push notifications</td>
+                        </tr>
+                        <tr>
+                            <td>Carla Rocha</td>
+                            <td class="success-indicator">Compradores Frequentes</td>
+                            <td>18 compras/ano, alta frequência</td>
+                            <td>Ofertas exclusivas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">📊 Insights da Segmentação:</div>
+                <p>• <strong>60% dos clientes</strong> pertencem ao grupo "Compradores Frequentes"</p>
+                <p>• <strong>João</strong> é único no grupo Premium - merece atenção especial</p>
+                <p>• <strong>Pedro</strong> representa oportunidade mobile - testar campanhas app</p>
+                <p>• <strong>Similaridade:</strong> Maria e Ana têm comportamentos quase idênticos</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Ação imediata:</strong> Criar 3 campanhas diferentes para os 3 grupos identificados, com mensagens e canais específicos para cada perfil.</p>
+            </div>
+        </div>
+
+        <!-- Slide 36: 3.5 CART - Introdução -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">36/42</div>
+            </div>
+            <h2>3.5 Árvores de decisão CART</h2>
+            
+            <h3>Criando regras de negócio inteligentes</h3>
+            <p>CART (Classification and Regression Trees) é como ter um consultor experiente que pode criar regras de decisão complexas baseadas em todos os cenários possíveis que ele já viu antes.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>Regras de negócio tradicionais:</h3>
+                    <p>• Baseadas na experiência de poucos especialistas</p>
+                    <p>• Regras simples e lineares</p>
+                    <p>• Dificuldade para lidar com exceções</p>
+                    <p>• Atualização manual quando cenário muda</p>
+                    <p>• Não consideram interações complexas</p>
+                </div>
+                
+                <div>
+                    <h3>Árvores de decisão CART:</h3>
+                    <p>• Baseadas em padrões de milhares de casos</p>
+                    <p>• Regras complexas e hierárquicas</p>
+                    <p>• Manejo automático de casos especiais</p>
+                    <p>• Auto-otimização com novos dados</p>
+                    <p>• Considera múltiplas variáveis simultaneamente</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>O diferencial do CART:</strong> Cria uma "árvore de perguntas" que leva à melhor decisão, explicando o raciocínio por trás de cada recomendação.</p>
+            </div>
+        </div>
+
+        <!-- Slide 37: 3.5 Exemplo dados para CART -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">37/42</div>
+            </div>
+            <h2>Exemplo: Aprovação de crédito</h2>
+            
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Renda</th>
+                        <th>Score CPF</th>
+                        <th>Tempo Emprego</th>
+                        <th>Valor Solicitado</th>
+                        <th>Histórico</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cliente A</td>
+                        <td>R$ 5.000</td>
+                        <td>750</td>
+                        <td>2 anos</td>
+                        <td>R$ 15.000</td>
+                        <td>Limpo</td>
+                        <td class="success-indicator">Aprovado</td>
+                    </tr>
+                    <tr>
+                        <td>Cliente B</td>
+                        <td>R$ 3.200</td>
+                        <td>580</td>
+                        <td>6 meses</td>
+                        <td>R$ 25.000</td>
+                        <td>1 atraso</td>
+                        <td class="error-indicator">Negado</td>
+                    </tr>
+                    <tr>
+                        <td>Cliente C</td>
+                        <td>R$ 8.000</td>
+                        <td>820</td>
+                        <td>5 anos</td>
+                        <td>R$ 30.000</td>
+                        <td>Limpo</td>
+                        <td class="success-indicator">Aprovado</td>
+                    </tr>
+                    <tr>
+                        <td>Cliente D</td>
+                        <td>R$ 2.800</td>
+                        <td>680</td>
+                        <td>1 ano</td>
+                        <td>R$ 8.000</td>
+                        <td>Limpo</td>
+                        <td class="warning-indicator">Condicional</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" style="text-align: center; font-style: italic; color: #9ca3af;">... mais 5.000 casos históricos para treinamento ...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="prompt-box">
+                <strong>Prompt:</strong> Use CART para criar um modelo de aprovação de crédito baseado nos dados históricos. Gere uma árvore de decisão explicável que possa ser usada pelos analistas.
+            </div>
+        </div>
+
+        <!-- Slide 38: 3.5 Árvore de decisão gerada -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">38/42</div>
+            </div>
+            <h2>Árvore de decisão CART gerada</h2>
+            
+            <div class="chart-placeholder">
+                <h3 style="color: #34d399; margin-bottom: 20px;">🌳 Árvore de Decisão - Aprovação de Crédito</h3>
+                <div style="text-align: left; font-family: monospace; line-height: 1.8;">
+                    <p><strong style="color: #22c55e;">Início</strong></p>
+                    <p>├─ Score CPF ≥ 700?</p>
+                    <p>│  ├─ <span style="color: #22c55e;">SIM</span>: Renda ≥ R$ 4.000?</p>
+                    <p>│  │  ├─ <span style="color: #22c55e;">SIM</span>: <strong class="success-indicator">APROVADO</strong> (95% confiança)</p>
+                    <p>│  │  └─ <span style="color: #ef4444;">NÃO</span>: Valor ≤ R$ 10.000?</p>
+                    <p>│  │     ├─ <span style="color: #22c55e;">SIM</span>: <strong class="warning-indicator">CONDICIONAL</strong> (78% confiança)</p>
+                    <p>│  │     └─ <span style="color: #ef4444;">NÃO</span>: <strong class="error-indicator">NEGADO</strong> (88% confiança)</p>
+                    <p>│  └─ <span style="color: #ef4444;">NÃO</span>: Tempo emprego ≥ 2 anos?</p>
+                    <p>│     ├─ <span style="color: #22c55e;">SIM</span>: Renda ≥ R$ 6.000?</p>
+                    <p>│     │  ├─ <span style="color: #22c55e;">SIM</span>: <strong class="warning-indicator">CONDICIONAL</strong> (65% confiança)</p>
+                    <p>│     │  └─ <span style="color: #ef4444;">NÃO</span>: <strong class="error-indicator">NEGADO</strong> (82% confiança)</p>
+                    <p>│     └─ <span style="color: #ef4444;">NÃO</span>: <strong class="error-indicator">NEGADO</strong> (91% confiança)</p>
+                </div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">📊 Regras Descobertas:</div>
+                <p>• <strong>Score CPF</strong> é o fator mais importante (70% da decisão)</p>
+                <p>• <strong>Renda alta</strong> pode compensar score mediano</p>
+                <p>• <strong>Tempo de emprego</strong> é crucial para scores baixos</p>
+                <p>• <strong>Valor solicitado</strong> impacta apenas casos limítrofes</p>
+            </div>
+        </div>
+
+        <!-- Slide 39: 3.5 CART aplicado aos dados exemplo -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">39/42</div>
+            </div>
+            <h2>CART aplicado aos clientes do exemplo</h2>
+            
+            <h3>Decisões automáticas para os 4 clientes</h3>
+            
+            <div class="result-box">
+                <div class="result-title">⚖️ Análise CART - Aprovação de Crédito:</div>
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Caminho na Árvore</th>
+                            <th>Decisão Final</th>
+                            <th>Confiança</th>
+                            <th>Justificativa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cliente A</td>
+                            <td>Score ≥700 → Renda ≥4k</td>
+                            <td class="success-indicator">APROVADO</td>
+                            <td>95%</td>
+                            <td>Score 750 + Renda 5k = Perfil ideal</td>
+                        </tr>
+                        <tr>
+                            <td>Cliente B</td>
+                            <td>Score <700 → Tempo <2 anos</td>
+                            <td class="error-indicator">NEGADO</td>
+                            <td>91%</td>
+                            <td>Score baixo + pouco tempo emprego</td>
+                        </tr>
+                        <tr>
+                            <td>Cliente C</td>
+                            <td>Score ≥700 → Renda ≥4k</td>
+                            <td class="success-indicator">APROVADO</td>
+                            <td>95%</td>
+                            <td>Score 820 + Renda 8k = Excelente</td>
+                        </tr>
+                        <tr>
+                            <td>Cliente D</td>
+                            <td>Score <700 → Tempo ≥2 anos → Renda <6k</td>
+                            <td class="error-indicator">NEGADO</td>
+                            <td>82%</td>
+                            <td>Score médio + renda insuficiente</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="result-box">
+                <div class="result-title">🎯 Insights da Aplicação:</div>
+                <p>• <strong>Score CPF 700+</strong> é praticamente garantia de aprovação com renda adequada</p>
+                <p>• <strong>Cliente D</strong> poderia ser aprovado se renda fosse R$ 6.000+</p>
+                <p>• <strong>Cliente B</strong> tem chance se ficar mais tempo no emprego</p>
+                <p>• <strong>Automatização:</strong> 100% das decisões seguiram a árvore</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Vantagem do CART:</strong> Decisões explicáveis e auditáveis, permitindo que analistas entendam exatamente por que cada cliente foi aprovado ou negado.</p>
+            </div>
+        </div>
+
+        <!-- Slide 40: Conclusão -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">40/42</div>
+            </div>
+            <h2>Conclusão e próximos passos</h2>
+            
+            <h3>Uma nova era de análise de dados</h3>
+            <p>Chegamos ao fim de nossa jornada explorando como a Inteligência Artificial transforma planilhas simples em ferramentas poderosas de análise e insights.</p>
+            
+            <div class="content-grid">
+                <div>
+                    <h3>🚀 O que vimos:</h3>
+                    <p>• Otimização de tarefas conhecidas do Excel</p>
+                    <p>• Detecção automática de erros e inconsistências</p>
+                    <p>• Visualizações inteligentes e adaptativas</p>
+                    <p>• Análises avançadas antes impossíveis</p>
+                    <p>• Democratização de técnicas de machine learning</p>
+                </div>
+                
+                <div>
+                    <h3>💡 Próximos passos:</h3>
+                    <p>• Identifique suas maiores dores com dados</p>
+                    <p>• Comece com projetos piloto pequenos</p>
+                    <p>• Meça o impacto e documente os ganhos</p>
+                    <p>• Expanda gradualmente para outras áreas</p>
+                    <p>• Invista em capacitação da equipe</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>Lembre-se:</strong> A IA não substitui sua expertise, ela a amplifica. Você continua sendo o especialista no seu negócio, mas agora com superpoderes analíticos.</p>
+            </div>
+            
+            <div class="result-box">
+                <div class="result-title">📈 Impacto Comprovado:</div>
+                <p>• <strong>70% redução</strong> no tempo de manipulação de dados</p>
+                <p>• <strong>94% precisão</strong> em tarefas automatizadas</p>
+                <p>• <strong>5.8x ROI</strong> em campanhas baseadas em IA</p>
+                <p>• <strong>31% aumento</strong> na conversão de negócios</p>
+            </div>
+        </div>
+
+        <!-- Slide 41: Glossário -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">41/42</div>
+            </div>
+            <h2>Glossário</h2>
+            
+            <div class="feature-box">
+                <div class="feature-title">🤖 Inteligência Artificial (IA)</div>
+                <p>Sistemas computacionais capazes de executar tarefas que normalmente requerem inteligência humana, como reconhecimento de padrões e tomada de decisões.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">🧠 Machine Learning</div>
+                <p>Subcampo da IA onde algoritmos aprendem e melhoram automaticamente através da experiência, sem serem explicitamente programados para cada tarefa.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">📊 k-Nearest Neighbors (k-NN)</div>
+                <p>Algoritmo que classifica dados baseado na similaridade com os k vizinhos mais próximos, usado para segmentação e recomendações.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">🌳 CART (Classification and Regression Trees)</div>
+                <p>Método que cria árvores de decisão para classificação e previsão, gerando regras interpretáveis para tomada de decisão.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">📈 Análise Preditiva</div>
+                <p>Uso de dados históricos, algoritmos e machine learning para identificar a probabilidade de resultados futuros baseados em dados históricos.</p>
+            </div>
+
+            <div class="feature-box">
+                <div class="feature-title">💭 Processamento de Linguagem Natural (NLP)</div>
+                <p>Capacidade da IA de compreender, interpretar e gerar linguagem humana de forma significativa e útil.</p>
+            </div>
+        </div>
+
+        <!-- Slide 42: Referências -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="logo">D</div>
+                <div class="slide-number">42/42</div>
+            </div>
+            <h2>Referências</h2>
+            
+            <h3>Estudos e Pesquisas</h3>
+            <p>• Microsoft. "The Future of Work with AI and Copilot". Relatório de Produtividade 2024.</p>
+            <p>• McKinsey Global Institute. "The Age of AI: Artificial Intelligence and the Future of Work". 2024.</p>
+            <p>• Forrester Research. "The Business Impact of AI-Powered Analytics". Q2 2024.</p>
+            
+            <h3>Ferramentas Mencionadas</h3>
+            <p>• Microsoft Copilot for Excel</p>
+            <p>• ChatGPT (OpenAI)</p>
+            <p>• Claude (Anthropic)</p>
+            <p>• Google Gemini</p>
+            
+            <h3>Metodologias</h3>
+            <p>• k-Nearest Neighbors Algorithm</p>
+            <p>• CART (Classification and Regression Trees)</p>
+            <p>• Natural Language Processing (NLP)</p>
+            <p>• Sentiment Analysis Techniques</p>
+            
+            <div class="author">
+                <p><strong>dilema.ai - Transformando dados em decisões inteligentes</strong></p>
+                <p><strong>Rafael Carneiro Garcia</strong></p>
+                <p>Website: <a href="https://dilema.ai" style="color: #34d399;">https://dilema.ai</a></p>
+                <p>Email: <a href="mailto:rafaelcarneirogarcia@gmail.com" style="color: #34d399;">rafaelcarneirogarcia@gmail.com</a></p>
+                <p>LinkedIn: <a href="https://www.linkedin.com/in/rafael-cg/" style="color: #34d399;">Rafael Carneiro Garcia</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Anterior</button>
+        <button class="nav-btn" id="summaryBtn" onclick="goToSummary()">📑 Sumário</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Próximo →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+        
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+            
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+        
+        function goToSummary() {
+            showSlide(1); // Slide 2 é o sumário (índice 1)
+        }
+        
+        function goToSlide(slideNumber) {
+            showSlide(slideNumber);
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSummary();
+            }
+        });
+        
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
