@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enviar RFQ por WhatsApp</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 480px; margin: 3rem auto; }
+    fieldset { border: 1px solid #ccc; padding: 1rem; }
+    button { margin-top: 1rem; padding: 0.5rem 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>Solicitar Cotação</h1>
+  <form id="rfqForm">
+    <label>
+      Produto:&nbsp;
+      <input type="text" name="product" required />
+    </label>
+    <fieldset>
+      <legend>Fornecedores</legend>
+      <label><input type="checkbox" name="suppliers" value="5592999991111" /> Queiroz</label><br />
+      <label><input type="checkbox" name="suppliers" value="5592999992222" /> Atacadão</label><br />
+      <label><input type="checkbox" name="suppliers" value="5592999993333" /> Distribuidora Analin</label><br />
+      <label><input type="checkbox" name="suppliers" value="5592999994444" /> Centralimp</label><br />
+      <label><input type="checkbox" name="suppliers" value="5592999995555" /> Distribuidora Metro</label>
+    </fieldset>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('rfqForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const product = data.get('product');
+      const suppliers = data.getAll('suppliers');
+      if (!suppliers.length) {
+        alert('Selecione pelo menos um fornecedor.');
+        return;
+      }
+      try {
+        const resp = await fetch('http://localhost:5678/webhook/send-rfq', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product, suppliers })
+        });
+        if (resp.ok) {
+          alert('Solicitação enviada com sucesso!');
+          form.reset();
+        } else {
+          alert('Erro ao enviar: ' + resp.statusText);
+        }
+      } catch (err) {
+        alert('Falha de rede: ' + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
