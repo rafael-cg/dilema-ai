@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enviar RFQ por WhatsApp</title>
+  <title>Solicitar Cotação - RFQ WhatsApp</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,24 +13,24 @@
     
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 600px; 
+      max-width: 500px; 
       margin: 2rem auto; 
       padding: 1rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
       min-height: 100vh;
     }
     
     .container {
       background: white;
-      border-radius: 12px;
+      border-radius: 15px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
     
     h1 {
-      color: #333;
+      color: #128C7E;
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       font-size: 1.8rem;
     }
     
@@ -42,60 +42,58 @@
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 600;
-      color: #555;
+      color: #333;
     }
     
-    input[type="text"], textarea {
+    textarea {
       width: 100%;
       padding: 0.75rem;
       border: 2px solid #e1e5e9;
       border-radius: 8px;
       font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
       transition: border-color 0.3s ease;
     }
     
-    input[type="text"]:focus, textarea:focus {
+    textarea:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-      font-family: inherit;
+      border-color: #25D366;
+      box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
     }
     
     fieldset { 
       border: 2px solid #e1e5e9; 
       border-radius: 8px;
-      padding: 1.5rem;
+      padding: 1rem;
       margin-bottom: 1.5rem;
     }
     
     legend {
       font-weight: 600;
-      color: #333;
+      color: #128C7E;
       padding: 0 0.5rem;
     }
     
-    .supplier-item {
+    .fornecedor-item {
       display: flex;
       align-items: center;
       padding: 0.5rem 0;
       border-bottom: 1px solid #f0f0f0;
     }
     
-    .supplier-item:last-child {
+    .fornecedor-item:last-child {
       border-bottom: none;
     }
     
-    .supplier-item input[type="checkbox"] {
+    .fornecedor-item input[type="checkbox"] {
       margin-right: 0.75rem;
       transform: scale(1.2);
+      accent-color: #25D366;
     }
     
-    .supplier-item label {
+    .fornecedor-item label {
       margin-bottom: 0;
       font-weight: normal;
       cursor: pointer;
@@ -104,9 +102,8 @@
     
     button { 
       width: 100%;
-      margin-top: 1rem; 
-      padding: 1rem 1.5rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 1rem;
+      background: #25D366;
       color: white;
       border: none;
       border-radius: 8px;
@@ -117,8 +114,9 @@
     }
     
     button:hover {
+      background: #128C7E;
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
     }
     
     button:disabled {
@@ -132,36 +130,41 @@
       display: none;
       text-align: center;
       margin-top: 1rem;
-      color: #667eea;
+      color: #25D366;
       font-weight: 600;
     }
     
-    .result {
+    .resultado {
       margin-top: 1rem;
       padding: 1rem;
       border-radius: 8px;
       display: none;
     }
     
-    .result.success {
+    .resultado.sucesso {
       background: #d4edda;
       border: 1px solid #c3e6cb;
       color: #155724;
     }
     
-    .result.error {
+    .resultado.erro {
       background: #f8d7da;
       border: 1px solid #f5c6cb;
       color: #721c24;
     }
     
-    .help-text {
-      font-size: 0.9rem;
+    .ajuda {
+      font-size: 0.85rem;
       color: #666;
       margin-top: 0.25rem;
     }
     
-    @media (max-width: 640px) {
+    .whatsapp-icon {
+      display: inline-block;
+      margin-right: 0.5rem;
+    }
+    
+    @media (max-width: 600px) {
       body {
         margin: 1rem;
         padding: 0.5rem;
@@ -179,92 +182,101 @@
 </head>
 <body>
   <div class="container">
-    <h1>🛒 Solicitar Cotação por WhatsApp</h1>
+    <h1>
+      <span class="whatsapp-icon">📱</span>
+      Solicitar Cotação
+    </h1>
     
-    <form id="rfqForm">
+    <form id="formRfq">
       <div class="form-group">
-        <label for="product">
-          📦 Produto(s):
+        <label for="produto">
+          📦 Produto(s) para Cotação:
         </label>
         <textarea 
-          id="product" 
-          name="product" 
+          id="produto" 
+          name="produto" 
           placeholder="Digite o produto ou lista de produtos (um por linha)..." 
           required
         ></textarea>
-        <div class="help-text">
+        <div class="ajuda">
           💡 Para múltiplos produtos, digite um por linha
         </div>
       </div>
 
       <fieldset>
         <legend>👥 Fornecedores</legend>
-        <div class="supplier-item">
-          <input type="checkbox" id="supplier1" name="suppliers" value="5511998821973" />
-          <label for="supplier1">🏢 Queiroz Distribuidora</label>
+        
+        <div class="fornecedor-item">
+          <input type="checkbox" id="fornecedor1" name="fornecedores" value="5511998821973" />
+          <label for="fornecedor1">🧪 Teste - Seu Número (5511998821973)</label>
         </div>
-        <div class="supplier-item">
-          <input type="checkbox" id="supplier2" name="suppliers" value="5592985960527" />
-          <label for="supplier2">🏪 Atacadão</label>
+        
+        <div class="fornecedor-item">
+          <input type="checkbox" id="fornecedor2" name="fornecedores" value="5592999991111" />
+          <label for="fornecedor2">🏢 Queiroz Distribuidora</label>
         </div>
-        <div class="supplier-item">
-          <input type="checkbox" id="supplier3" name="suppliers" value="5511998821973" />
-          <label for="supplier3">📦 Distribuidora Analin</label>
+        
+        <div class="fornecedor-item">
+          <input type="checkbox" id="fornecedor3" name="fornecedores" value="5592999992222" />
+          <label for="fornecedor3">🏪 Atacadão</label>
         </div>
-        <div class="supplier-item">
-          <input type="checkbox" id="supplier4" name="suppliers" value="5592985960527" />
-          <label for="supplier4">🚚 Centralimp</label>
+        
+        <div class="fornecedor-item">
+          <input type="checkbox" id="fornecedor4" name="fornecedores" value="5592999993333" />
+          <label for="fornecedor4">📦 Distribuidora Analin</label>
         </div>
-        <div class="supplier-item">
-          <input type="checkbox" id="supplier5" name="suppliers" value="5511998821973" />
-          <label for="supplier5">🏬 Distribuidora Metro</label>
+        
+        <div class="fornecedor-item">
+          <input type="checkbox" id="fornecedor5" name="fornecedores" value="5592999994444" />
+          <label for="fornecedor5">🚚 Centralimp</label>
         </div>
       </fieldset>
 
-      <button type="submit" id="submitBtn">
-        📱 Enviar RFQ por WhatsApp
+      <button type="submit" id="btnEnviar">
+        <span class="whatsapp-icon">💬</span>
+        Enviar RFQ por WhatsApp
       </button>
     </form>
 
     <div class="loading" id="loading">
-      ⏳ Enviando mensagens... Por favor, aguarde.
+      ⏳ Enviando mensagens... Aguarde.
     </div>
 
-    <div class="result" id="result"></div>
+    <div class="resultado" id="resultado"></div>
   </div>
 
   <script>
-    const form = document.getElementById('rfqForm');
+    const form = document.getElementById('formRfq');
     const loading = document.getElementById('loading');
-    const result = document.getElementById('result');
-    const submitBtn = document.getElementById('submitBtn');
+    const resultado = document.getElementById('resultado');
+    const btnEnviar = document.getElementById('btnEnviar');
 
-    // URL do webhook n8n - ALTERE PARA SEU AMBIENTE
-    const WEBHOOK_URL = 'http://localhost:5678/webhook/send-rfq';
+    // URL do webhook n8n - ALTERE se necessário
+    const WEBHOOK_URL = 'http://localhost:5678/webhook/rfq-webhook';
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       // Coletar dados do formulário
       const formData = new FormData(form);
-      const product = formData.get('product').trim();
-      const suppliers = formData.getAll('suppliers');
+      const produto = formData.get('produto').trim();
+      const fornecedores = formData.getAll('fornecedores');
       
       // Validações
-      if (!product) {
-        showResult('Por favor, digite pelo menos um produto.', 'error');
+      if (!produto) {
+        mostrarResultado('Por favor, digite pelo menos um produto.', 'erro');
         return;
       }
       
-      if (!suppliers.length) {
-        showResult('Selecione pelo menos um fornecedor.', 'error');
+      if (!fornecedores.length) {
+        mostrarResultado('Selecione pelo menos um fornecedor.', 'erro');
         return;
       }
       
       // Preparar dados para envio
-      const requestData = {
-        product: product,
-        suppliers: suppliers
+      const dadosEnvio = {
+        produto: produto,
+        fornecedores: fornecedores
       };
       
       try {
@@ -278,34 +290,23 @@
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify(requestData)
+          body: JSON.stringify(dadosEnvio)
         });
         
         const responseData = await response.json();
         
         if (response.ok) {
-          const message = responseData.message || 'RFQ enviada com sucesso!';
-          const details = responseData.details || [];
-          
-          let resultMessage = `✅ ${message}`;
-          if (details.length > 0) {
-            resultMessage += `\n\n📊 Detalhes:`;
-            details.forEach(detail => {
-              const status = detail.success ? '✅' : '❌';
-              resultMessage += `\n${status} ${detail.supplier}`;
-            });
-          }
-          
-          showResult(resultMessage, 'success');
+          const mensagem = responseData.mensagem || 'RFQ enviada com sucesso!';
+          mostrarResultado(`✅ ${mensagem}`, 'sucesso');
           form.reset();
         } else {
-          const errorMessage = responseData.message || `Erro HTTP: ${response.status}`;
-          showResult(`❌ ${errorMessage}`, 'error');
+          const errorMsg = responseData.mensagem || `Erro HTTP: ${response.status}`;
+          mostrarResultado(`❌ ${errorMsg}`, 'erro');
         }
         
       } catch (error) {
         console.error('Erro na requisição:', error);
-        showResult(`❌ Erro de conexão: ${error.message}`, 'error');
+        mostrarResultado(`❌ Erro de conexão: ${error.message}`, 'erro');
       } finally {
         setLoading(false);
       }
@@ -314,39 +315,39 @@
     function setLoading(isLoading) {
       if (isLoading) {
         loading.style.display = 'block';
-        submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Enviando...';
-        result.style.display = 'none';
+        btnEnviar.disabled = true;
+        btnEnviar.innerHTML = '<span class="whatsapp-icon">⏳</span> Enviando...';
+        resultado.style.display = 'none';
       } else {
         loading.style.display = 'none';
-        submitBtn.disabled = false;
-        submitBtn.textContent = '📱 Enviar RFQ por WhatsApp';
+        btnEnviar.disabled = false;
+        btnEnviar.innerHTML = '<span class="whatsapp-icon">💬</span> Enviar RFQ por WhatsApp';
       }
     }
 
-    function showResult(message, type) {
-      result.textContent = message;
-      result.className = `result ${type}`;
-      result.style.display = 'block';
+    function mostrarResultado(mensagem, tipo) {
+      resultado.textContent = mensagem;
+      resultado.className = `resultado ${tipo}`;
+      resultado.style.display = 'block';
       
-      // Auto-hide após 10 segundos se for sucesso
-      if (type === 'success') {
+      // Auto-hide após 8 segundos se for sucesso
+      if (tipo === 'sucesso') {
         setTimeout(() => {
-          result.style.display = 'none';
-        }, 10000);
+          resultado.style.display = 'none';
+        }, 8000);
       }
     }
 
-    // Adicionar funcionalidade de "Selecionar Todos"
+    // Adicionar botão "Selecionar Todos"
     const legend = document.querySelector('legend');
-    const selectAllBtn = document.createElement('button');
-    selectAllBtn.type = 'button';
-    selectAllBtn.textContent = '✅ Selecionar Todos';
-    selectAllBtn.style.cssText = `
+    const btnSelecionarTodos = document.createElement('button');
+    btnSelecionarTodos.type = 'button';
+    btnSelecionarTodos.textContent = '✅ Todos';
+    btnSelecionarTodos.style.cssText = `
       float: right;
       background: none;
-      border: 1px solid #667eea;
-      color: #667eea;
+      border: 1px solid #25D366;
+      color: #25D366;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
       font-size: 0.8rem;
@@ -355,15 +356,15 @@
       margin: 0;
     `;
     
-    selectAllBtn.addEventListener('click', () => {
-      const checkboxes = document.querySelectorAll('input[name="suppliers"]');
-      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    btnSelecionarTodos.addEventListener('click', () => {
+      const checkboxes = document.querySelectorAll('input[name="fornecedores"]');
+      const todosMarcados = Array.from(checkboxes).every(cb => cb.checked);
       
-      checkboxes.forEach(cb => cb.checked = !allChecked);
-      selectAllBtn.textContent = allChecked ? '✅ Selecionar Todos' : '❌ Desmarcar Todos';
+      checkboxes.forEach(cb => cb.checked = !todosMarcados);
+      btnSelecionarTodos.textContent = todosMarcados ? '✅ Todos' : '❌ Limpar';
     });
     
-    legend.appendChild(selectAllBtn);
+    legend.appendChild(btnSelecionarTodos);
   </script>
 </body>
 </html>
