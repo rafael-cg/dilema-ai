@@ -200,10 +200,10 @@
         }
 
         .stats {
-            display: flex;
-            gap: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             margin: 20px 0;
-            flex-wrap: wrap;
         }
 
         .stat-item {
@@ -211,12 +211,11 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            flex: 1;
-            min-width: 150px;
+            min-width: 180px;
         }
 
         .stat-number {
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: bold;
             color: #667eea;
             display: block;
@@ -226,6 +225,20 @@
             color: #666;
             font-size: 0.9em;
             margin-top: 5px;
+        }
+
+        .stats-section {
+            background: #f8f9fa;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .stats-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .table-container {
@@ -350,7 +363,7 @@
             }
             
             .stats {
-                justify-content: center;
+                grid-template-columns: 1fr;
             }
             
             table {
@@ -413,6 +426,44 @@
                 </div>
             </div>
 
+            <div class="stats-section">
+                <h3>📈 Indicadores Financeiros</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="receitaPlataforma">R$ 0,00</span>
+                        <div class="stat-label">Receita Plataforma</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="receitaCDLDF">R$ 0,00</span>
+                        <div class="stat-label">Receita CDL DF</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="receitaCDLManaus">R$ 0,00</span>
+                        <div class="stat-label">Receita CDL Manaus</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="valorDebitar">R$ 0,00</span>
+                        <div class="stat-label">Valor a Debitar</div>
+                    </div>
+                </div>
+                
+                <h3>🏆 Premiações</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="premiacaoVendedor">R$ 0,00</span>
+                        <div class="stat-label">Premiação Vendedor</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="premiacaoMadrinha">R$ 0,00</span>
+                        <div class="stat-label">Premiação Madrinha</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="premiacaoIndicacao">R$ 0,00</span>
+                        <div class="stat-label">Premiação Indicação</div>
+                    </div>
+                </div>
+            </div>
+
             <div id="alertContainer"></div>
 
             <div class="table-container">
@@ -440,6 +491,9 @@
                     <button class="btn btn-warning" id="viewSheetsBtn" onclick="openSheets()" disabled>
                         👁️ Ver Planilha
                     </button>
+                    <button class="btn btn-danger" id="disconnectBtn" onclick="disconnectGoogle()" disabled>
+                        🔌 Desconectar
+                    </button>
                 </div>
 
                 <div class="alert" id="sheetsAlert" style="display: none;"></div>
@@ -450,10 +504,14 @@
     <script>
         const CLIENT_ID = '864207996280-3l9r0v8ufkqgsne3psd0ftmv2rccc74d.apps.googleusercontent.com';
         const SPREADSHEET_ID = '1zP0eUJrqm_Y1iEcaWCJ_jjdXe12rotRbUpdD_oHhQw4';
+        const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
         const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
         
         let transformedData = null;
-        let isSignedIn = false;
+        let gapi_loaded = false;
+        let gis_loaded = false;
+        let tokenClient;
+        let accessToken = null;
 
         // Upload setup
         const uploadArea = document.getElementById('uploadArea');
@@ -486,6 +544,43 @@
                 handleFile(e.target.files[0]);
             }
         });
+
+        // Google API initialization
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            await gapi.client.init({
+                discoveryDocs: [DISCOVERY_DOC],
+            });
+            gapi_loaded = true;
+            maybeEnableButtons();
+        }
+
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: (response) => {
+                    if (response.error !== undefined) {
+                        showSheetsAlert('Erro na autenticação: ' + response.error, 'error');
+                        return;
+                    }
+                    accessToken = response.access_token;
+                    updateConnectionStatus(true);
+                    showSheetsAlert('Conectado com sucesso ao Google Sheets!', 'success');
+                },
+            });
+            gis_loaded = true;
+            maybeEnableButtons();
+        }
+
+        function maybeEnableButtons() {
+            if (gapi_loaded && gis_loaded) {
+                document.getElementById('connectBtn').disabled = false;
+            }
+        }
 
         function handleFile(file) {
             if (!file.name.match(/\.(xlsx|xls)$/i)) {
@@ -641,7 +736,14 @@
                 summary: {
                     totalRecords: transformedRows.length,
                     totalRecovered: totals[10],
-                    totalCommission: totals[12]
+                    totalCommission: totals[12],
+                    receitaPlataforma: totals[12],
+                    receitaCDLDF: totals[15],
+                    receitaCDLManaus: totals[16],
+                    valorDebitar: totals[17],
+                    premiacaoVendedor: totals[20],
+                    premiacaoMadrinha: totals[21],
+                    premiacaoIndicacao: totals[22]
                 }
             };
         }
@@ -740,9 +842,19 @@
                 tableBody.appendChild(tr);
             });
 
+            // Update main stats
             document.getElementById('totalRecords').textContent = data.summary.totalRecords;
             document.getElementById('totalRecovered').textContent = formatCurrency(data.summary.totalRecovered);
             document.getElementById('totalCommission').textContent = formatCurrency(data.summary.totalCommission);
+
+            // Update new indicators
+            document.getElementById('receitaPlataforma').textContent = formatCurrency(data.summary.receitaPlataforma);
+            document.getElementById('receitaCDLDF').textContent = formatCurrency(data.summary.receitaCDLDF);
+            document.getElementById('receitaCDLManaus').textContent = formatCurrency(data.summary.receitaCDLManaus);
+            document.getElementById('valorDebitar').textContent = formatCurrency(data.summary.valorDebitar);
+            document.getElementById('premiacaoVendedor').textContent = formatCurrency(data.summary.premiacaoVendedor);
+            document.getElementById('premiacaoMadrinha').textContent = formatCurrency(data.summary.premiacaoMadrinha);
+            document.getElementById('premiacaoIndicacao').textContent = formatCurrency(data.summary.premiacaoIndicacao);
 
             document.getElementById('results').style.display = 'block';
             document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
@@ -787,22 +899,40 @@
 
         // Google Sheets functions
         function connectGoogle() {
-            showSheetsAlert('Conectando ao Google...', 'success');
-            // Simplified connection for now
-            isSignedIn = true;
-            updateConnectionStatus(true);
+            if (!gapi_loaded || !gis_loaded) {
+                showSheetsAlert('APIs do Google ainda não carregaram. Tente novamente em alguns segundos.', 'error');
+                return;
+            }
+
+            if (!accessToken) {
+                tokenClient.requestAccessToken({ prompt: 'consent' });
+            } else {
+                updateConnectionStatus(true);
+                showSheetsAlert('Já conectado ao Google Sheets!', 'success');
+            }
+        }
+
+        function disconnectGoogle() {
+            if (accessToken) {
+                google.accounts.oauth2.revoke(accessToken);
+                accessToken = null;
+            }
+            updateConnectionStatus(false);
+            showSheetsAlert('Desconectado do Google Sheets.', 'success');
         }
 
         function updateConnectionStatus(connected) {
             const statusIndicator = document.getElementById('connectionStatus');
             const statusText = document.getElementById('connectionText');
             const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
             const actionButtons = ['saveDataBtn', 'viewSheetsBtn'];
 
             if (connected) {
                 statusIndicator.classList.add('connected');
                 statusText.textContent = 'Conectado ao Google Sheets';
                 connectBtn.style.display = 'none';
+                disconnectBtn.disabled = false;
                 actionButtons.forEach(btnId => {
                     document.getElementById(btnId).disabled = false;
                 });
@@ -810,24 +940,145 @@
                 statusIndicator.classList.remove('connected');
                 statusText.textContent = 'Desconectado';
                 connectBtn.style.display = 'inline-block';
+                disconnectBtn.disabled = true;
                 actionButtons.forEach(btnId => {
                     document.getElementById(btnId).disabled = true;
                 });
             }
         }
 
-        function saveToSheets() {
+        async function saveToSheets() {
             if (!transformedData) {
                 showSheetsAlert('Processe um arquivo primeiro!', 'error');
                 return;
             }
-            showSheetsAlert('Dados salvos no Google Sheets!', 'success');
+
+            if (!accessToken) {
+                showSheetsAlert('Conecte-se ao Google primeiro!', 'error');
+                return;
+            }
+
+            try {
+                showSheetsAlert('Salvando dados no Google Sheets...', 'success');
+
+                // Prepare data for Google Sheets
+                const sheetData = [];
+                
+                // Add headers
+                sheetData.push(transformedData.headers);
+                
+                // Add totals row
+                sheetData.push(transformedData.totals);
+                
+                // Add empty row for separation
+                sheetData.push(new Array(transformedData.headers.length).fill(''));
+                
+                // Add data rows
+                transformedData.data.forEach(row => {
+                    sheetData.push(row);
+                });
+
+                // Create a new sheet with timestamp
+                const now = new Date();
+                const sheetName = `CDL_${now.getDate()}_${now.getMonth() + 1}_${now.getFullYear()}_${now.getHours()}_${now.getMinutes()}`;
+
+                // Add new sheet
+                const addSheetRequest = {
+                    requests: [{
+                        addSheet: {
+                            properties: {
+                                title: sheetName
+                            }
+                        }
+                    }]
+                };
+
+                await gapi.client.sheets.spreadsheets.batchUpdate({
+                    spreadsheetId: SPREADSHEET_ID,
+                    resource: addSheetRequest
+                });
+
+                // Write data to the new sheet
+                const updateRequest = {
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: `${sheetName}!A1`,
+                    valueInputOption: 'RAW',
+                    resource: {
+                        values: sheetData
+                    }
+                };
+
+                await gapi.client.sheets.spreadsheets.values.update(updateRequest);
+
+                // Format the sheet
+                const formatRequests = [
+                    // Header formatting
+                    {
+                        repeatCell: {
+                            range: {
+                                sheetId: await getSheetId(sheetName),
+                                startRowIndex: 0,
+                                endRowIndex: 1
+                            },
+                            cell: {
+                                userEnteredFormat: {
+                                    backgroundColor: { red: 0.2, green: 0.3, blue: 0.5 },
+                                    textFormat: { foregroundColor: { red: 1, green: 1, blue: 1 }, bold: true }
+                                }
+                            },
+                            fields: 'userEnteredFormat(backgroundColor,textFormat)'
+                        }
+                    },
+                    // Totals row formatting
+                    {
+                        repeatCell: {
+                            range: {
+                                sheetId: await getSheetId(sheetName),
+                                startRowIndex: 1,
+                                endRowIndex: 2
+                            },
+                            cell: {
+                                userEnteredFormat: {
+                                    backgroundColor: { red: 0.9, green: 0.95, blue: 1 },
+                                    textFormat: { bold: true }
+                                }
+                            },
+                            fields: 'userEnteredFormat(backgroundColor,textFormat)'
+                        }
+                    }
+                ];
+
+                await gapi.client.sheets.spreadsheets.batchUpdate({
+                    spreadsheetId: SPREADSHEET_ID,
+                    resource: { requests: formatRequests }
+                });
+
+                showSheetsAlert(`Dados salvos com sucesso na aba "${sheetName}"!`, 'success');
+                
+            } catch (error) {
+                console.error('Erro ao salvar no Google Sheets:', error);
+                showSheetsAlert('Erro ao salvar: ' + error.message, 'error');
+            }
+        }
+
+        async function getSheetId(sheetName) {
+            try {
+                const response = await gapi.client.sheets.spreadsheets.get({
+                    spreadsheetId: SPREADSHEET_ID
+                });
+                
+                const sheet = response.result.sheets.find(s => s.properties.title === sheetName);
+                return sheet ? sheet.properties.sheetId : 0;
+            } catch (error) {
+                console.error('Erro ao obter ID da aba:', error);
+                return 0;
+            }
         }
 
         function openSheets() {
             const sheetUrl = 'https://docs.google.com/spreadsheets/d/' + SPREADSHEET_ID + '/edit';
             window.open(sheetUrl, '_blank');
-            showSheetsAlert('Planilha aberta', 'success');
+            showSheetsAlert('Planilha aberta em nova aba', 'success');
         }
 
         function showSheetsAlert(message, type) {
@@ -858,14 +1109,23 @@
             alertContainer.appendChild(alert);
             
             setTimeout(() => {
-                alertContainer.removeChild(alert);
+                if (alertContainer.contains(alert)) {
+                    alertContainer.removeChild(alert);
+                }
             }, 5000);
         }
 
-        // Initialize
+        // Initialize Google APIs
+        window.gapiLoaded = gapiLoaded;
+        window.gisLoaded = gisLoaded;
+
+        // Initialize on page load
         window.addEventListener('load', () => {
             updateConnectionStatus(false);
         });
     </script>
+    
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>
 </html>
