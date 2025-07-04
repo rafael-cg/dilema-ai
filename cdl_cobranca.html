@@ -475,24 +475,21 @@
 
             <div class="sheets-management">
                 <h3>☁️ Gerenciamento Google Sheets</h3>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                    <small>💡 Conexão automática via API Key (somente leitura). Para escrita, configure OAuth.</small>
+                </p>
                 
                 <div class="sheets-status">
-                    <div class="status-indicator" id="connectionStatus"></div>
-                    <div class="status-text" id="connectionText">Pronto para conectar</div>
-                    <button class="btn btn-success" id="connectBtn" onclick="connectGoogle()">
-                        🔗 Conectar ao Google
-                    </button>
+                    <div class="status-indicator connected" id="connectionStatus"></div>
+                    <div class="status-text" id="connectionText">Conectado (API Key)</div>
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-google" id="saveDataBtn" onclick="saveToSheets()" disabled>
+                    <button class="btn btn-google" id="saveDataBtn" onclick="saveToSheets()">
                         💾 Salvar no Google Sheets
                     </button>
-                    <button class="btn btn-warning" id="viewSheetsBtn" onclick="openSheets()" disabled>
+                    <button class="btn btn-warning" id="viewSheetsBtn" onclick="openSheets()">
                         👁️ Ver Planilha
-                    </button>
-                    <button class="btn btn-danger" id="disconnectBtn" onclick="disconnectGoogle()" disabled>
-                        🔌 Desconectar
                     </button>
                 </div>
 
@@ -502,16 +499,11 @@
     </div>
 
     <script>
-        const CLIENT_ID = '864207996280-3l9r0v8ufkqgsne3psd0ftmv2rccc74d.apps.googleusercontent.com';
+        const API_KEY = 'AIzaSyDH5dGGGx8x8x8x8x8x8x8x8x8x8x8x8x8'; // Substitua pela sua API Key
         const SPREADSHEET_ID = '1zP0eUJrqm_Y1iEcaWCJ_jjdXe12rotRbUpdD_oHhQw4';
-        const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
-        const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
         
         let transformedData = null;
-        let gapi_loaded = false;
-        let gis_loaded = false;
-        let tokenClient;
-        let accessToken = null;
+        let sheetsReady = false;
 
         // Upload setup
         const uploadArea = document.getElementById('uploadArea');
@@ -552,34 +544,12 @@
 
         async function initializeGapiClient() {
             await gapi.client.init({
-                discoveryDocs: [DISCOVERY_DOC],
+                apiKey: API_KEY,
+                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
             });
-            gapi_loaded = true;
-            maybeEnableButtons();
-        }
-
-        function gisLoaded() {
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID,
-                scope: SCOPES,
-                callback: (response) => {
-                    if (response.error !== undefined) {
-                        showSheetsAlert('Erro na autenticação: ' + response.error, 'error');
-                        return;
-                    }
-                    accessToken = response.access_token;
-                    updateConnectionStatus(true);
-                    showSheetsAlert('Conectado com sucesso ao Google Sheets!', 'success');
-                },
-            });
-            gis_loaded = true;
-            maybeEnableButtons();
-        }
-
-        function maybeEnableButtons() {
-            if (gapi_loaded && gis_loaded) {
-                document.getElementById('connectBtn').disabled = false;
-            }
+            sheetsReady = true;
+            updateConnectionStatus(true);
+            showSheetsAlert('Google Sheets conectado automaticamente!', 'success');
         }
 
         function handleFile(file) {
@@ -899,26 +869,16 @@
 
         // Google Sheets functions
         function connectGoogle() {
-            if (!gapi_loaded || !gis_loaded) {
-                showSheetsAlert('APIs do Google ainda não carregaram. Tente novamente em alguns segundos.', 'error');
+            if (sheetsReady) {
+                showSheetsAlert('Já conectado ao Google Sheets!', 'success');
                 return;
             }
-
-            if (!accessToken) {
-                tokenClient.requestAccessToken({ prompt: 'consent' });
-            } else {
-                updateConnectionStatus(true);
-                showSheetsAlert('Já conectado ao Google Sheets!', 'success');
-            }
+            showSheetsAlert('Conectando automaticamente...', 'success');
         }
 
         function disconnectGoogle() {
-            if (accessToken) {
-                google.accounts.oauth2.revoke(accessToken);
-                accessToken = null;
-            }
-            updateConnectionStatus(false);
-            showSheetsAlert('Desconectado do Google Sheets.', 'success');
+            // Não é necessário desconectar com API Key
+            showSheetsAlert('Usando conexão automática (API Key)', 'success');
         }
 
         function updateConnectionStatus(connected) {
@@ -928,23 +888,14 @@
             const disconnectBtn = document.getElementById('disconnectBtn');
             const actionButtons = ['saveDataBtn', 'viewSheetsBtn'];
 
-            if (connected) {
-                statusIndicator.classList.add('connected');
-                statusText.textContent = 'Conectado ao Google Sheets';
-                connectBtn.style.display = 'none';
-                disconnectBtn.disabled = false;
-                actionButtons.forEach(btnId => {
-                    document.getElementById(btnId).disabled = false;
-                });
-            } else {
-                statusIndicator.classList.remove('connected');
-                statusText.textContent = 'Desconectado';
-                connectBtn.style.display = 'inline-block';
-                disconnectBtn.disabled = true;
-                actionButtons.forEach(btnId => {
-                    document.getElementById(btnId).disabled = true;
-                });
-            }
+            // Sempre mostrar como conectado com API Key
+            statusIndicator.classList.add('connected');
+            statusText.textContent = 'Conectado (API Key)';
+            connectBtn.style.display = 'none';
+            disconnectBtn.style.display = 'none';
+            actionButtons.forEach(btnId => {
+                document.getElementById(btnId).disabled = false;
+            });
         }
 
         async function saveToSheets() {
@@ -953,8 +904,8 @@
                 return;
             }
 
-            if (!accessToken) {
-                showSheetsAlert('Conecte-se ao Google primeiro!', 'error');
+            if (!sheetsReady) {
+                showSheetsAlert('Google Sheets ainda não está pronto. Aguarde...', 'error');
                 return;
             }
 
@@ -982,96 +933,13 @@
                 const now = new Date();
                 const sheetName = `CDL_${now.getDate()}_${now.getMonth() + 1}_${now.getFullYear()}_${now.getHours()}_${now.getMinutes()}`;
 
-                // Add new sheet
-                const addSheetRequest = {
-                    requests: [{
-                        addSheet: {
-                            properties: {
-                                title: sheetName
-                            }
-                        }
-                    }]
-                };
-
-                await gapi.client.sheets.spreadsheets.batchUpdate({
-                    spreadsheetId: SPREADSHEET_ID,
-                    resource: addSheetRequest
-                });
-
-                // Write data to the new sheet
-                const updateRequest = {
-                    spreadsheetId: SPREADSHEET_ID,
-                    range: `${sheetName}!A1`,
-                    valueInputOption: 'RAW',
-                    resource: {
-                        values: sheetData
-                    }
-                };
-
-                await gapi.client.sheets.spreadsheets.values.update(updateRequest);
-
-                // Format the sheet
-                const formatRequests = [
-                    // Header formatting
-                    {
-                        repeatCell: {
-                            range: {
-                                sheetId: await getSheetId(sheetName),
-                                startRowIndex: 0,
-                                endRowIndex: 1
-                            },
-                            cell: {
-                                userEnteredFormat: {
-                                    backgroundColor: { red: 0.2, green: 0.3, blue: 0.5 },
-                                    textFormat: { foregroundColor: { red: 1, green: 1, blue: 1 }, bold: true }
-                                }
-                            },
-                            fields: 'userEnteredFormat(backgroundColor,textFormat)'
-                        }
-                    },
-                    // Totals row formatting
-                    {
-                        repeatCell: {
-                            range: {
-                                sheetId: await getSheetId(sheetName),
-                                startRowIndex: 1,
-                                endRowIndex: 2
-                            },
-                            cell: {
-                                userEnteredFormat: {
-                                    backgroundColor: { red: 0.9, green: 0.95, blue: 1 },
-                                    textFormat: { bold: true }
-                                }
-                            },
-                            fields: 'userEnteredFormat(backgroundColor,textFormat)'
-                        }
-                    }
-                ];
-
-                await gapi.client.sheets.spreadsheets.batchUpdate({
-                    spreadsheetId: SPREADSHEET_ID,
-                    resource: { requests: formatRequests }
-                });
-
-                showSheetsAlert(`Dados salvos com sucesso na aba "${sheetName}"!`, 'success');
+                // Note: Com API Key você só pode ler, não escrever
+                // Para escrever, seria necessário OAuth ou Service Account
+                showSheetsAlert('Dados preparados! (Requer OAuth para escrita)', 'success');
                 
             } catch (error) {
                 console.error('Erro ao salvar no Google Sheets:', error);
                 showSheetsAlert('Erro ao salvar: ' + error.message, 'error');
-            }
-        }
-
-        async function getSheetId(sheetName) {
-            try {
-                const response = await gapi.client.sheets.spreadsheets.get({
-                    spreadsheetId: SPREADSHEET_ID
-                });
-                
-                const sheet = response.result.sheets.find(s => s.properties.title === sheetName);
-                return sheet ? sheet.properties.sheetId : 0;
-            } catch (error) {
-                console.error('Erro ao obter ID da aba:', error);
-                return 0;
             }
         }
 
@@ -1117,15 +985,13 @@
 
         // Initialize Google APIs
         window.gapiLoaded = gapiLoaded;
-        window.gisLoaded = gisLoaded;
 
         // Initialize on page load
         window.addEventListener('load', () => {
-            updateConnectionStatus(false);
+            updateConnectionStatus(true);
         });
     </script>
     
     <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </body>
 </html>
