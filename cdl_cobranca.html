@@ -6,6 +6,8 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <title>Transformador de Relatórios - CDL Manaus</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};initGapi();" onreadystatechange="if (this.readyState==='complete') this.onload()"></script>
+
     <style>
         * {
             margin: 0;
@@ -489,9 +491,8 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-download" id="downloadBtn" onclick="downloadFile()">
-                        💾 Baixar Relatório Excel
-                    </button>
+                    <button class="btn btn-download" id="downloadBtn" onclick="downloadFile()">💾 Baixar Relatório Excel</button>
+                    <button class="btn" id="uploadSheetsBtn" onclick="uploadToSheets()">📤 Enviar para Google Sheets</button>
                 </div>
             </div>
 
@@ -928,6 +929,79 @@
                 }
             }, 6000);
         }
+    </script>
+    <script>
+        /*******************************
+         * CONFIGURAÇÃO GOOGLE SHEETS *
+         *******************************/
+        // ↳ SUBSTITUA pelos seus valores reais antes de publicar
+        const CLIENT_ID = "Y864207996280-3l9r0v8ufkqgsne3psd0ftmv2rccc74d.apps.googleusercontent.com";
+        const API_KEY   = "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";          // opcional, mas recomendado
+        const SHEET_ID  = "1zP0eUJrqm_Y1iEcaWCJ_jjdXe12rotRbUpdD_oHhQw4";          // encontrado na URL da planilha
+
+        const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+        let gapiInited = false;
+
+        function initGapi() {
+            gapi.load("client", async () => {
+                await gapi.client.init({
+                    apiKey: API_KEY,
+                    clientId: CLIENT_ID,
+                    scope: SCOPES,
+                    discoveryDocs: [
+                        "https://sheets.googleapis.com/$discovery/rest?version=v4"
+                    ]
+                });
+                gapiInited = true;
+            });
+        }
+
+        async function ensureSignedIn() {
+            if (!gapiInited) throw new Error("Google API ainda não carregada");
+            const auth = gapi.auth2.getAuthInstance();
+            if (!auth.isSignedIn.get()) {
+                await auth.signIn();
+            }
+        }
+
+        /*******************************
+         * VARIÁVEIS E FUNÇÕES EXISTENTES (sem alterações) *
+         *******************************/
+        let transformedData = null;             // ← já existia
+        //  … todo o restante do JS original (upload, transformação, download, utilitários)…
+
+        /*******************************
+         * ENVIO PARA GOOGLE SHEETS    *
+         *******************************/
+        async function uploadToSheets() {
+            try {
+                if (!transformedData) {
+                    showAlert("❌ Processe um arquivo primeiro!", "error");
+                    return;
+                }
+                await ensureSignedIn();
+
+                // Junta cabeçalho, totais e linhas de dados
+                const rows = [transformedData.headers, transformedData.totals, ...transformedData.data];
+
+                const response = await gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: SHEET_ID,
+                    range: "Página1!A1",          // aba/célula de destino
+                    valueInputOption: "USER_ENTERED",
+                    resource: { values: rows }
+                });
+
+                showAlert(`✅ ${rows.length - 1} linhas enviadas ao Google Sheets!`, "success");
+                console.log("Sheets response", response);
+            } catch (err) {
+                console.error(err);
+                showAlert("❌ Erro ao enviar para o Sheets: " + err.message, "error");
+            }
+        }
+
+        /*******************************
+         *  RESTANTE DAS FUNÇÕES (formatCurrency, showAlert, etc.) – sem mudanças *
+         *******************************/
     </script>
 </body>
 </html>
