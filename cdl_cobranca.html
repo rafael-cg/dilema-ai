@@ -986,44 +986,7 @@
             }
         }
         
-        // Função principal para salvar no Sheets
-        async function salvarNoSheets() {
-            // Validações
-            if (!transformedData) {
-                showAlert('❌ Processe um arquivo primeiro!', 'error');
-                return;
-            }
-        
-            if (!gapiInited || !gisInited) {
-                showAlert('⏳ Sistema ainda carregando. Aguarde...', 'error');
-                return;
-            }
-        
-            // Configurar callback de autorização
-            tokenClient.callback = async (response) => {
-                if (response.error !== undefined) {
-                    showAlert('❌ Erro na autorização: ' + response.error, 'error');
-                    return;
-                }
-                
-                // Salvar token e executar salvamento
-                accessToken = response.access_token;
-                console.log('✅ Autorização concedida');
-                await executarSalvamentoSheets();
-            };
-        
-            // Verificar se já tem token válido
-            if (accessToken) {
-                // Tentar usar token existente
-                await executarSalvamentoSheets();
-            } else {
-                // Solicitar autorização
-                console.log('🔐 Solicitando autorização...');
-                tokenClient.requestAccessToken({ prompt: 'consent' });
-            }
-        }
-        
-        // Executar salvamento no Sheets
+       // Executar salvamento no Sheets
         async function executarSalvamentoSheets() {
             showLoading(true);
             const loadingText = document.querySelector('.loading-text');
@@ -1033,54 +996,48 @@
                 // Configurar token no cliente
                 gapi.client.setToken({ access_token: accessToken });
         
-                // Preparar metadados
-                const agora = new Date();
-                const timestamp = agora.toLocaleString('pt-BR');
-                const idRelatorio = Date.now();
-                const nomeArquivo = document.getElementById('fileInput').files[0]?.name || 'relatorio.xlsx';
+                // Verificar se a aba "Base" existe, senão criar
+                await garantirAbaBase();
         
-                // Montar dados para salvar
-                const dadosCompletos = [];
+                // Verificar se é o primeiro upload (se já tem headers)
+                const isPrimeiroUpload = await verificarPrimeiroUpload();
+        
+                // Preparar dados para salvar
+                const dadosParaSalvar = [];
                 
-                // Cabeçalho do relatório
-                dadosCompletos.push(['═══════════════════════════════════════════════════════════════════════']);
-                dadosCompletos.push([`RELATÓRIO CDL MANAUS - ID: ${idRelatorio}`]);
-                dadosCompletos.push([`Data de Processamento: ${timestamp}`]);
-                dadosCompletos.push([`Arquivo Original: ${nomeArquivo}`]);
-                dadosCompletos.push(['═══════════════════════════════════════════════════════════════════════']);
-                dadosCompletos.push([]); // Linha vazia
+                // Se for o primeiro upload, adicionar headers
+                if (isPrimeiroUpload) {
+                    dadosParaSalvar.push(transformedData.headers);
+                }
                 
-                // Dados do relatório
-                dadosCompletos.push(transformedData.headers);
-                dadosCompletos.push(transformedData.totals);
-                
-                // Adicionar todos os dados
+                // Adicionar apenas os dados (sem a linha de totais)
                 transformedData.data.forEach(row => {
-                    dadosCompletos.push(row);
+                    dadosParaSalvar.push(row);
                 });
-                
-                // Rodapé
-                dadosCompletos.push([]); // Linha vazia
-                dadosCompletos.push(['═══════════════════════════════════════════════════════════════════════']);
-                dadosCompletos.push([`Total de Registros: ${transformedData.data.length}`]);
-                dadosCompletos.push([`Processado por: Sistema Web CDL Manaus`]);
+        
+                // Determinar o range correto
+                let range = 'Base!A:AA'; // Por padrão, append normal
+                if (isPrimeiroUpload) {
+                    range = 'Base!A1'; // Começar do A1 se for o primeiro
+                }
         
                 // Fazer a requisição para o Sheets
                 console.log('📤 Enviando dados para Google Sheets...');
                 const response = await gapi.client.sheets.spreadsheets.values.append({
                     spreadsheetId: SPREADSHEET_ID,
-                    range: 'A:AA', // Cobre todas as colunas necessárias
+                    range: range,
                     valueInputOption: 'USER_ENTERED',
                     insertDataOption: 'INSERT_ROWS',
                     resource: {
-                        values: dadosCompletos
+                        values: dadosParaSalvar
                     }
                 });
         
                 console.log('✅ Resposta:', response);
                 
                 // Sucesso!
-                showAlert(`✅ Relatório salvo com sucesso! ID: ${idRelatorio}`, 'success');
+                const totalRegistros = transformedData.data.length;
+                showAlert(`✅ ${totalRegistros} registros salvos com sucesso na aba "Base"!`, 'success');
                 
                 // Adicionar botão para abrir planilha
                 adicionarBotaoAbrirPlanilha();
@@ -1105,6 +1062,66 @@
             }
         }
         
+        // Função para garantir que a aba "Base" existe
+        async function garantirAbaBase() {
+            try {
+                // Buscar informações da planilha
+                const response = await gapi.client.sheets.spreadsheets.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                });
+        
+                // Verificar se a aba "Base" existe
+                const sheets = response.result.sheets || [];
+                const baseExists = sheets.some(sheet => sheet.properties.title === 'Base');
+        
+                if (!baseExists) {
+                    console.log('📝 Criando aba "Base"...');
+                    
+                    // Criar a aba "Base"
+                    await gapi.client.sheets.spreadsheets.batchUpdate({
+                        spreadsheetId: SPREADSHEET_ID,
+                        resource: {
+                            requests: [{
+                                addSheet: {
+                                    properties: {
+                                        title: 'Base',
+                                        gridProperties: {
+                                            rowCount: 10000,
+                                            columnCount: 30
+                                        }
+                                    }
+                                }
+                            }]
+                        }
+                    });
+                    
+                    console.log('✅ Aba "Base" criada com sucesso');
+                }
+            } catch (error) {
+                console.error('Erro ao verificar/criar aba:', error);
+                // Se houver erro, continuar mesmo assim (pode ser que já exista)
+            }
+        }
+        
+        // Função para verificar se é o primeiro upload
+        async function verificarPrimeiroUpload() {
+            try {
+                // Tentar ler a célula A1 da aba Base
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'Base!A1',
+                });
+        
+                // Se não houver valores ou estiver vazio, é o primeiro upload
+                const values = response.result.values;
+                return !values || values.length === 0 || !values[0][0];
+                
+            } catch (error) {
+                // Se der erro (provavelmente aba não existe), é o primeiro upload
+                return true;
+            }
+        }
+                
         // Adicionar botão para abrir planilha
         function adicionarBotaoAbrirPlanilha() {
             const btnContainer = document.querySelector('.results-header > div:last-child');
