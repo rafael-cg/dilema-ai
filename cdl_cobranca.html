@@ -7,7 +7,7 @@
     <title>Transformador de Relatórios - CDL Manaus</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};initGapi();" onreadystatechange="if (this.readyState==='complete') this.onload()"></script>
-
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
     <style>
         * {
             margin: 0;
@@ -492,7 +492,7 @@
                 </div>
                 <div>
                     <button class="btn btn-download" id="downloadBtn" onclick="downloadFile()">💾 Baixar Relatório Excel</button>
-                    <button class="btn" id="uploadSheetsBtn" onclick="uploadToSheets()">📤 Enviar para Google Sheets</button>
+                    <button class="btn" onclick="salvarNoSheets()">💾 Salvar no Google Sheets</button>
                 </div>
             </div>
 
@@ -928,6 +928,200 @@
                     alertContainer.removeChild(alert);
                 }
             }, 6000);
+        }
+
+        let gapiInited = false;
+        let tokenClient;
+
+        function initGapi() {
+            gapi.load('client', async () => {
+                await gapi.client.init({
+                    apiKey: API_KEY,
+                    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+                });
+                gapiInited = true;
+            });
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPE,
+                callback: '', // será definido depois
+            });
+        }
+        // ===== CONFIGURAÇÃO DO GOOGLE SHEETS =====
+        // ATENÇÃO: Para produção, considere usar variáveis de ambiente ou proxy
+        const CLIENT_ID = '864207996280-pae0biro5qi6t2r8f1mpvik3kmh5vhda.apps.googleusercontent.com';
+        const API_KEY = 'AIzaSy...'; // NUNCA exponha a API_KEY completa!
+        const SPREADSHEET_ID = '1pJ-NoEfH1NUacygxBkN-nFayTZu7l2Q0VOtENMZlk5U';
+        const SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+        const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
+        
+        let gapiInited = false;
+        let gisInited = false;
+        let tokenClient;
+        
+        // Inicialização do GAPI
+        function initGapi() {
+            gapi.load('client', async () => {
+                try {
+                    await gapi.client.init({
+                        apiKey: API_KEY,
+                        discoveryDocs: [DISCOVERY_DOC],
+                    });
+                    gapiInited = true;
+                    console.log('GAPI inicializado com sucesso');
+                    checkIfReady();
+                } catch (error) {
+                    console.error('Erro ao inicializar GAPI:', error);
+                }
+            });
+        }
+        
+        // Inicialização do Google Identity Services
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPE,
+                callback: '', // será definido depois
+            });
+            gisInited = true;
+            console.log('GIS inicializado com sucesso');
+            checkIfReady();
+        }
+        
+        // Verifica se tudo está pronto
+        function checkIfReady() {
+            if (gapiInited && gisInited) {
+                console.log('Google Sheets API pronta para uso');
+            }
+        }
+        
+        // Função principal para salvar no Sheets
+        async function salvarNoSheets() {
+            if (!transformedData) {
+                showAlert('❌ Processe um arquivo primeiro!', 'error');
+                return;
+            }
+        
+            if (!gapiInited || !gisInited) {
+                showAlert('⏳ Google API ainda está carregando. Tente novamente em alguns segundos.', 'error');
+                return;
+            }
+        
+            // Configura o callback para após a autorização
+            tokenClient.callback = async (resp) => {
+                if (resp.error !== undefined) {
+                    showAlert('❌ Erro na autorização: ' + resp.error, 'error');
+                    return;
+                }
+                await executarSalvamentoSheets();
+            };
+        
+            // Solicita autorização
+            if (gapi.client.getToken() === null) {
+                // Primeira autorização
+                tokenClient.requestAccessToken({prompt: 'consent'});
+            } else {
+                // Já autorizado
+                tokenClient.requestAccessToken({prompt: ''});
+            }
+        }
+        
+        // Executa o salvamento após autorização
+        async function executarSalvamentoSheets() {
+            showLoading(true);
+            const loadingText = document.querySelector('.loading-text');
+            loadingText.textContent = 'Salvando dados no Google Sheets...';
+        
+            try {
+                // Verifica/cria estrutura da planilha
+                await verificarEstruturaPlanilha();
+        
+                // Prepara os dados
+                const agora = new Date();
+                const timestamp = agora.toLocaleString('pt-BR');
+                const idRelatorio = Date.now();
+                const nomeArquivo = document.getElementById('fileInput').files[0]?.name || 'relatorio.xlsx';
+        
+                // Dados para salvar
+                const dadosCompletos = [];
+                
+                // Adiciona metadados no início
+                dadosCompletos.push(['ID_RELATORIO', idRelatorio]);
+                dadosCompletos.push(['DATA_UPLOAD', timestamp]);
+                dadosCompletos.push(['ARQUIVO', nomeArquivo]);
+                dadosCompletos.push([]); // Linha vazia
+                
+                // Adiciona os dados do relatório
+                dadosCompletos.push(transformedData.headers);
+                dadosCompletos.push(transformedData.totals);
+                transformedData.data.forEach(row => {
+                    dadosCompletos.push(row);
+                });
+        
+                // Salva na planilha
+                const response = await gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'A:Z', // Ajusta automaticamente
+                    valueInputOption: 'USER_ENTERED',
+                    insertDataOption: 'INSERT_ROWS',
+                    resource: {
+                        values: dadosCompletos
+                    }
+                });
+        
+                showAlert('✅ Relatório salvo no Google Sheets com sucesso! ID: ' + idRelatorio, 'success');
+                
+                // Adiciona botões de ação
+                adicionarBotoesSheets();
+        
+            } catch (error) {
+                console.error('Erro detalhado:', error);
+                showAlert('❌ Erro ao salvar no Sheets: ' + (error.result?.error?.message || error.message), 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // Verifica estrutura da planilha
+        async function verificarEstruturaPlanilha() {
+            try {
+                // Tenta ler a primeira célula para verificar se a planilha existe e está acessível
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'A1',
+                });
+                console.log('Planilha acessível');
+            } catch (error) {
+                console.error('Erro ao acessar planilha:', error);
+                throw new Error('Não foi possível acessar a planilha. Verifique se o ID está correto e se você tem permissão.');
+            }
+        }
+        
+        // Adiciona botões após salvar
+        function adicionarBotoesSheets() {
+            const btnContainer = document.querySelector('.results-header > div:last-child');
+            
+            // Botão para abrir planilha
+            if (!document.getElementById('openSheetsBtn')) {
+                const openBtn = document.createElement('button');
+                openBtn.id = 'openSheetsBtn';
+                openBtn.className = 'btn';
+                openBtn.innerHTML = '📊 Abrir no Google Sheets';
+                openBtn.onclick = () => {
+                    window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}`, '_blank');
+                };
+                btnContainer.appendChild(openBtn);
+            }
+        }
+        
+        // Adiciona separador visual antes de salvar
+        function adicionarSeparadorVisual() {
+            return [
+                ['═══════════════════════════════════════════════════════════════════'],
+                [`RELATÓRIO GERADO EM: ${new Date().toLocaleString('pt-BR')}`],
+                ['═══════════════════════════════════════════════════════════════════'],
+                []
+            ];
         }
     </script>
 </body>
