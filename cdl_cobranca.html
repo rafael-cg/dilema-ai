@@ -1122,33 +1122,7 @@
             }
         }
                 
-        // Adicionar botão para abrir planilha
-        function adicionarBotaoAbrirPlanilha() {
-            const btnContainer = document.querySelector('.results-header > div:last-child');
-            
-            // Verificar se já existe
-            if (!document.getElementById('openSheetsBtn')) {
-                const openBtn = document.createElement('button');
-                openBtn.id = 'openSheetsBtn';
-                openBtn.className = 'btn';
-                openBtn.innerHTML = '📊 Abrir no Google Sheets';
-                openBtn.onclick = () => {
-                    window.open(`https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit`, '_blank');
-                };
-                btnContainer.appendChild(openBtn);
-                
-                // Animação de entrada
-                openBtn.style.opacity = '0';
-                setTimeout(() => {
-                    openBtn.style.transition = 'opacity 0.3s ease-in';
-                    openBtn.style.opacity = '1';
-                }, 100);
-            }
-        }
-        
-        // Log para debug
-        console.log('📊 Sistema CDL Manaus carregado');
-        console.log('📍 Planilha ID:', SPREADSHEET_ID);
+
     </script>
 </body>
 </html>
