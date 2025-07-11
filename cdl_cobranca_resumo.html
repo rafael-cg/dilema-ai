@@ -970,81 +970,33 @@
             Object.values(charts).forEach(chart => {
                 if (chart) chart.destroy();
             });
-            
-            // Gráfico de evolução mensal
-            criarGraficoEvolucaoMensal();
-            
-            // Gráfico de distribuição de receitas
-            criarGraficoReceitas();
-            
-            // Gráfico top associados
-            criarGraficoTopAssociados();
-            
-            // Gráfico de premiações
-            criarGraficoPremiacoes();
+            // Gráfico de evolução mensal (agora só mostra o total recuperado)
+            criarGraficoEvolucaoSimples();
+            // Gráfico de distribuição de receitas (pizza simples)
+            criarGraficoReceitasSimples();
+            // Gráfico top associados (top 3, barra simples)
+            criarGraficoTopAssociadosSimples();
+            // Gráfico de premiações (pizza simples)
+            criarGraficoPremiacoesSimples();
         }
 
-        // Criar gráfico de evolução mensal
-        function criarGraficoEvolucaoMensal() {
-            const dadosMensais = {};
-            
-            filteredData.forEach(row => {
-                const dataPagamento = row['Data pagamento'];
-                if (dataPagamento) {
-                    const [dia, mes, ano] = dataPagamento.split('/');
-                    const mesAno = `${mes}/${ano}`;
-                    
-                    if (!dadosMensais[mesAno]) {
-                        dadosMensais[mesAno] = {
-                            valorRecuperado: 0,
-                            receitaCDLManaus: 0
-                        };
-                    }
-                    
-                    dadosMensais[mesAno].valorRecuperado += parseFloat(row['Valor recuperado'] || 0);
-                    dadosMensais[mesAno].receitaCDLManaus += parseFloat(row['Receita CDL Manaus (negociação)'] || 0);
-                }
-            });
-            
-            // Ordenar meses
-            const mesesOrdenados = Object.keys(dadosMensais).sort((a, b) => {
-                const [mesA, anoA] = a.split('/');
-                const [mesB, anoB] = b.split('/');
-                return (anoA + mesA) - (anoB + mesB);
-            });
-            
+        function criarGraficoEvolucaoSimples() {
+            const totais = calcularTotais(filteredData);
             const ctx = document.getElementById('chartRecuperado').getContext('2d');
             charts.evolucao = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: mesesOrdenados.map(mes => formatarMesAno(mes)),
-                    datasets: [
-                        {
-                            label: 'Valor Recuperado',
-                            data: mesesOrdenados.map(mes => dadosMensais[mes].valorRecuperado),
-                            borderColor: '#1e3c72',
-                            backgroundColor: 'rgba(30, 60, 114, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: 'Receita CDL Manaus',
-                            data: mesesOrdenados.map(mes => dadosMensais[mes].receitaCDLManaus),
-                            borderColor: '#4CAF50',
-                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }
-                    ]
+                    labels: ['Total Recuperado'],
+                    datasets: [{
+                        label: 'Valor Recuperado',
+                        data: [totais.valorRecuperado],
+                        backgroundColor: '#1e3c72',
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         y: {
                             beginAtZero: true,
@@ -1059,13 +1011,11 @@
             });
         }
 
-        // Criar gráfico de distribuição de receitas
-        function criarGraficoReceitas() {
+        function criarGraficoReceitasSimples() {
             const totais = calcularTotais(filteredData);
-            
             const ctx = document.getElementById('chartReceitas').getContext('2d');
             charts.receitas = new Chart(ctx, {
-                type: 'doughnut',
+                type: 'pie',
                 data: {
                     labels: ['CDL Manaus', 'CDL DF', 'Valor a Debitar'],
                     datasets: [{
@@ -1074,11 +1024,7 @@
                             totais.receitaCDLDF,
                             totais.valorDebitar
                         ],
-                        backgroundColor: [
-                            '#4CAF50',
-                            '#2196F3',
-                            '#FF9800'
-                        ],
+                        backgroundColor: ['#4CAF50', '#2196F3', '#FF9800'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -1086,69 +1032,40 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.parsed;
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return context.label + ': R$ ' + value.toLocaleString('pt-BR') + ' (' + percentage + '%)';
-                                }
-                            }
-                        }
-                    }
+                    plugins: { legend: { position: 'bottom' } }
                 }
             });
         }
 
-        // Criar gráfico top associados
-        function criarGraficoTopAssociados() {
+        function criarGraficoTopAssociadosSimples() {
+            // Top 3 associados por valor recuperado
             const associados = {};
-            
             filteredData.forEach(row => {
-                const associado = row['Associado'];
-                const valorRecuperado = parseFloat(row['Valor recuperado'] || 0);
-                
-                if (associado) {
-                    if (!associados[associado]) {
-                        associados[associado] = 0;
-                    }
-                    associados[associado] += valorRecuperado;
-                }
+                const associado = row['Associado'] || 'Desconhecido';
+                const valorRecuperado = calcularTotais([row]).valorRecuperado;
+                if (!associados[associado]) associados[associado] = 0;
+                associados[associado] += valorRecuperado;
             });
-            
-            // Ordenar e pegar top 10
-            const topAssociados = Object.entries(associados)
+            const top = Object.entries(associados)
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
-            
+                .slice(0, 3);
             const ctx = document.getElementById('chartTopAssociados').getContext('2d');
             charts.topAssociados = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: topAssociados.map(([nome]) => nome.length > 20 ? nome.substring(0, 20) + '...' : nome),
+                    labels: top.map(([nome]) => nome),
                     datasets: [{
                         label: 'Valor Recuperado',
-                        data: topAssociados.map(([, valor]) => valor),
+                        data: top.map(([, valor]) => valor),
                         backgroundColor: '#1e3c72',
-                        borderRadius: 8
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: {
+                        y: {
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
@@ -1161,10 +1078,8 @@
             });
         }
 
-        // Criar gráfico de premiações
-        function criarGraficoPremiacoes() {
+        function criarGraficoPremiacoesSimples() {
             const totais = calcularTotais(filteredData);
-            
             const ctx = document.getElementById('chartPremiacoes').getContext('2d');
             charts.premiacoes = new Chart(ctx, {
                 type: 'pie',
@@ -1176,11 +1091,7 @@
                             totais.premiacaoMadrinha,
                             totais.premiacaoIndicacao
                         ],
-                        backgroundColor: [
-                            '#9C27B0',
-                            '#E91E63',
-                            '#3F51B5'
-                        ],
+                        backgroundColor: ['#9C27B0', '#E91E63', '#3F51B5'],
                         borderWidth: 2,
                         borderColor: '#ffffff'
                     }]
@@ -1188,21 +1099,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.parsed;
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return context.label + ': R$ ' + value.toLocaleString('pt-BR') + ' (' + percentage + '%)';
-                                }
-                            }
-                        }
-                    }
+                    plugins: { legend: { position: 'bottom' } }
                 }
             });
         }
