@@ -556,9 +556,21 @@
                 </div>
                 
                 <div class="summary-card">
-                    <div class="card-icon">🏆</div>
-                    <div class="card-value" id="totalPremiacoes">R$ 0,00</div>
-                    <div class="card-label">Total Premiações</div>
+                    <div class="card-icon">🏅</div>
+                    <div class="card-value" id="premiacaoVendedor">R$ 0,00</div>
+                    <div class="card-label">Premiação Vendedor</div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">👩‍💼</div>
+                    <div class="card-value" id="premiacaoMadrinha">R$ 0,00</div>
+                    <div class="card-label">Premiação Madrinha</div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-value" id="premiacaoIndicacao">R$ 0,00</div>
+                    <div class="card-label">Premiação Indicação</div>
                 </div>
                 
                 <div class="summary-card">
@@ -894,6 +906,10 @@
 
         // Calcular totais
         function calcularTotais(data) {
+            const toNumber = v => {
+                const n = parseFloat((v || '').toString().replace(',', '.'));
+                return isNaN(n) ? 0 : n;
+            };
             const totais = {
                 valorRecuperado: 0,
                 receitaPlataforma: 0,
@@ -906,23 +922,19 @@
                 totalRegistros: data.length,
                 percentualTotal: 0
             };
-            
             data.forEach(row => {
-                totais.valorRecuperado += parseFloat(row['Valor recuperado'] || 0);
-                totais.receitaPlataforma += parseFloat(row['Receita da Plataforma (negociação)'] || 0);
-                totais.receitaCDLDF += parseFloat(row['Receita CDL DF (negociação)'] || 0);
-                totais.receitaCDLManaus += parseFloat(row['Receita CDL Manaus (negociação)'] || 0);
-                totais.valorDebitar += parseFloat(row['Valor a debitar na fatura do cliente'] || 0);
-                totais.premiacaoVendedor += parseFloat(row['Vendedor'] || 0);
-                totais.premiacaoMadrinha += parseFloat(row['Madrinha'] || 0);
-                totais.premiacaoIndicacao += parseFloat(row['Indicação'] || 0);
+                totais.valorRecuperado += toNumber(row['Valor recuperado']);
+                totais.receitaPlataforma += toNumber(row['Receita da Plataforma (negociação)']);
+                totais.receitaCDLDF += toNumber(row['Receita CDL DF (negociação)']);
+                totais.receitaCDLManaus += toNumber(row['Receita CDL Manaus (negociação)']);
+                totais.valorDebitar += toNumber(row['Valor a debitar na fatura do cliente']);
+                totais.premiacaoVendedor += toNumber(row['Vendedor']);
+                totais.premiacaoMadrinha += toNumber(row['Madrinha']);
+                totais.premiacaoIndicacao += toNumber(row['Indicação']);
             });
-            
-            // Calcular percentual médio
             if (totais.valorRecuperado > 0) {
                 totais.percentualTotal = (totais.receitaPlataforma / totais.valorRecuperado) * 100;
             }
-            
             return totais;
         }
 
@@ -933,9 +945,9 @@
             document.getElementById('receitaCDLDF').textContent = formatCurrency(totais.receitaCDLDF);
             document.getElementById('receitaCDLManaus').textContent = formatCurrency(totais.receitaCDLManaus);
             document.getElementById('valorDebitar').textContent = formatCurrency(totais.valorDebitar);
-            
-            const totalPremiacoes = totais.premiacaoVendedor + totais.premiacaoMadrinha + totais.premiacaoIndicacao;
-            document.getElementById('totalPremiacoes').textContent = formatCurrency(totalPremiacoes);
+            document.getElementById('premiacaoVendedor').textContent = formatCurrency(totais.premiacaoVendedor);
+            document.getElementById('premiacaoMadrinha').textContent = formatCurrency(totais.premiacaoMadrinha);
+            document.getElementById('premiacaoIndicacao').textContent = formatCurrency(totais.premiacaoIndicacao);
             
             document.getElementById('percentualMedio').textContent = totais.percentualTotal.toFixed(2) + '%';
             document.getElementById('totalRegistros').textContent = totais.totalRegistros.toLocaleString('pt-BR');
