@@ -780,6 +780,9 @@
 
                 // Processar dados
                 const headers = values[0];
+                // Adicionar log e alerta para debug
+                console.log('Colunas carregadas:', headers);
+                showAlert('Colunas carregadas: ' + headers.join(' | '), 'info');
                 allData = values.slice(1).map(row => {
                     const obj = {};
                     headers.forEach((header, index) => {
@@ -906,9 +909,17 @@
 
         // Calcular totais
         function calcularTotais(data) {
+            // Corrigir para remover 'R$', espaços e trocar vírgula por ponto
             const toNumber = v => {
-                const n = parseFloat((v || '').toString().replace(',', '.'));
-                return isNaN(n) ? 0 : n;
+                if (!v) return 0;
+                if (typeof v === 'number') return v;
+                return parseFloat(
+                    v.toString()
+                     .replace(/R\$\s?/g, '')
+                     .replace(/\./g, '') // remove separador de milhar
+                     .replace(/,/g, '.')
+                     .trim()
+                ) || 0;
             };
             const totais = {
                 valorRecuperado: 0,
