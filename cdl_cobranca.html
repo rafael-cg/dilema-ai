@@ -985,6 +985,44 @@
                 if (btnSheets) btnSheets.disabled = false;
             }
         }
+
+        // Função principal para salvar no Sheets
+        async function salvarNoSheets() {
+            // Validações
+            if (!transformedData) {
+                showAlert('❌ Processe um arquivo primeiro!', 'error');
+                return;
+            }
+        
+            if (!gapiInited || !gisInited) {
+                showAlert('⏳ Sistema ainda carregando. Aguarde...', 'error');
+                return;
+            }
+        
+            // Configurar callback de autorização
+            tokenClient.callback = async (response) => {
+                if (response.error !== undefined) {
+                    showAlert('❌ Erro na autorização: ' + response.error, 'error');
+                    return;
+                }
+                
+                // Salvar token e executar salvamento
+                accessToken = response.access_token;
+                console.log('✅ Autorização concedida');
+                await executarSalvamentoSheets();
+            };
+        
+            // Verificar se já tem token válido
+            if (accessToken) {
+                // Tentar usar token existente
+                await executarSalvamentoSheets();
+            } else {
+                // Solicitar autorização
+                console.log('🔐 Solicitando autorização...');
+                tokenClient.requestAccessToken({ prompt: 'consent' });
+            }
+        }
+        
         
        // Executar salvamento no Sheets
         async function executarSalvamentoSheets() {
