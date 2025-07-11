@@ -187,6 +187,42 @@
             box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
         }
 
+        .btn-connect {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-connect:hover {
+            background: linear-gradient(135deg, #F57C00 0%, #E65100 100%);
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-connected {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .connection-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        .status-disconnected {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .status-connected {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
         .loading {
             display: none;
             text-align: center;
@@ -464,6 +500,17 @@
             <button class="btn" onclick="document.getElementById('fileInput').click()">
                 📤 Selecionar Arquivo Excel
             </button>
+            
+            <!-- Seção de conexão Google Sheets -->
+            <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e8eef7;">
+                <h3 style="color: #1e3c72; margin-bottom: 20px;">🌐 Conexão Google Sheets</h3>
+                <button class="btn btn-connect" id="connectBtn" onclick="conectarGoogleSheets()">
+                    🔗 Conectar ao Google Sheets
+                </button>
+                <span class="connection-status status-disconnected" id="connectionStatus">
+                    ❌ Desconectado
+                </span>
+            </div>
         </div>
 
         <div class="loading" id="loading">
@@ -492,7 +539,7 @@
                 </div>
                 <div>
                     <button class="btn btn-download" id="downloadBtn" onclick="downloadFile()">💾 Baixar Relatório Excel</button>
-                    <button class="btn" onclick="salvarNoSheets()">💾 Salvar no Google Sheets</button>
+                    <button class="btn" id="saveToSheetsBtn" onclick="salvarNoSheets()" disabled>💾 Salvar no Google Sheets</button>
                 </div>
             </div>
 
@@ -555,6 +602,7 @@
 
     <script>
         let transformedData = null;
+        let isConnectedToSheets = false;
 
         // Upload setup
         const uploadArea = document.getElementById('uploadArea');
@@ -946,7 +994,6 @@
             gapi.load('client', async () => {
                 try {
                     await gapi.client.init({
-                        // NÃO precisa de API Key com OAuth!
                         discoveryDocs: [DISCOVERY_DOC],
                     });
                     gapiInited = true;
@@ -980,49 +1027,75 @@
         function checkIfReady() {
             if (gapiInited && gisInited) {
                 console.log('✅ Sistema de Google Sheets pronto!');
-                // Habilitar botão se necessário
-                const btnSheets = document.querySelector('button[onclick="salvarNoSheets()"]');
-                if (btnSheets) btnSheets.disabled = false;
+                document.getElementById('connectBtn').disabled = false;
             }
         }
 
-        // Função principal para salvar no Sheets
-        async function salvarNoSheets() {
-            // Validações
-            if (!transformedData) {
-                showAlert('❌ Processe um arquivo primeiro!', 'error');
-                return;
-            }
-        
+        // Função para conectar ao Google Sheets
+        function conectarGoogleSheets() {
             if (!gapiInited || !gisInited) {
                 showAlert('⏳ Sistema ainda carregando. Aguarde...', 'error');
                 return;
             }
-        
+
             // Configurar callback de autorização
             tokenClient.callback = async (response) => {
                 if (response.error !== undefined) {
                     showAlert('❌ Erro na autorização: ' + response.error, 'error');
+                    updateConnectionStatus(false);
                     return;
                 }
                 
-                // Salvar token e executar salvamento
+                // Salvar token e atualizar status
                 accessToken = response.access_token;
-                console.log('✅ Autorização concedida');
-                await executarSalvamentoSheets();
+                isConnectedToSheets = true;
+                updateConnectionStatus(true);
+                console.log('✅ Conectado ao Google Sheets');
+                showAlert('✅ Conectado ao Google Sheets com sucesso!', 'success');
             };
-        
-            // Verificar se já tem token válido
-            if (accessToken) {
-                // Tentar usar token existente
-                await executarSalvamentoSheets();
+
+            // Solicitar autorização
+            console.log('🔐 Solicitando autorização...');
+            tokenClient.requestAccessToken({ prompt: 'consent' });
+        }
+
+        // Atualizar status da conexão
+        function updateConnectionStatus(connected) {
+            const statusElement = document.getElementById('connectionStatus');
+            const connectBtn = document.getElementById('connectBtn');
+            const saveBtn = document.getElementById('saveToSheetsBtn');
+            
+            if (connected) {
+                statusElement.textContent = '✅ Conectado';
+                statusElement.className = 'connection-status status-connected';
+                connectBtn.textContent = '✅ Conectado ao Google Sheets';
+                connectBtn.className = 'btn btn-connected';
+                connectBtn.disabled = true;
+                saveBtn.disabled = false;
             } else {
-                // Solicitar autorização
-                console.log('🔐 Solicitando autorização...');
-                tokenClient.requestAccessToken({ prompt: 'consent' });
+                statusElement.textContent = '❌ Desconectado';
+                statusElement.className = 'connection-status status-disconnected';
+                connectBtn.textContent = '🔗 Conectar ao Google Sheets';
+                connectBtn.className = 'btn btn-connect';
+                connectBtn.disabled = false;
+                saveBtn.disabled = true;
             }
         }
-        
+
+        // Função para salvar no Sheets (agora separada da conexão)
+        async function salvarNoSheets() {
+            if (!transformedData) {
+                showAlert('❌ Processe um arquivo primeiro!', 'error');
+                return;
+            }
+
+            if (!isConnectedToSheets || !accessToken) {
+                showAlert('❌ Conecte-se ao Google Sheets primeiro!', 'error');
+                return;
+            }
+
+            await executarSalvamentoSheets();
+        }
         
        // Executar salvamento no Sheets
         async function executarSalvamentoSheets() {
@@ -1087,7 +1160,9 @@
                 if (error.status === 401) {
                     // Token expirado
                     accessToken = null;
-                    showAlert('⚠️ Sessão expirada. Clique novamente para reautorizar.', 'error');
+                    isConnectedToSheets = false;
+                    updateConnectionStatus(false);
+                    showAlert('⚠️ Sessão expirada. Conecte-se novamente.', 'error');
                 } else if (error.status === 403) {
                     showAlert('❌ Sem permissão. Verifique se a planilha está compartilhada.', 'error');
                 } else if (error.status === 404) {
@@ -1160,7 +1235,7 @@
             }
         }
                 
-                // Adicionar botão para abrir planilha
+        // Adicionar botão para abrir planilha
         function adicionarBotaoAbrirPlanilha() {
             const btnContainer = document.querySelector('.results-header > div:last-child');
             
@@ -1183,6 +1258,9 @@
                 }, 100);
             }
         }
+        
+        // Inicializar status da conexão como desconectado
+        updateConnectionStatus(false);
         
         // Log para debug
         console.log('📊 Sistema CDL Manaus carregado');
