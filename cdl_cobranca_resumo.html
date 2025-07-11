@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>Resumo Financeiro - CDL Manaus</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #e3e8f0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1e3c72, #4CAF50, #2a5298);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .cdl-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .controls-section {
+            padding: 30px 40px;
+            background: #f8fafe;
+            border-bottom: 1px solid #e8eef7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-container label {
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        .filter-container select {
+            padding: 10px 15px;
+            border: 2px solid #e8eef7;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            color: #333;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-container select:hover {
+            border-color: #2a5298;
+        }
+
+        .filter-container select:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(46, 82, 152, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 82, 152, 0.4);
+            background: linear-gradient(135deg, #1a356b 0%, #26508f 100%);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 6px rgba(46, 82, 152, 0.2);
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-refresh:hover {
+            background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-connect {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-connect:hover {
+            background: linear-gradient(135deg, #F57C00 0%, #E65100 100%);
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-connected {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .connection-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        .status-disconnected {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        .status-connected {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            background: #f8fafe;
+        }
+
+        .spinner {
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #2a5298;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #4a5568;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .summary-section {
+            padding: 40px;
+            background: #ffffff;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f8fafe 0%, #ffffff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e8eef7;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(46, 82, 152, 0.15);
+        }
+
+        .summary-card.highlight {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f9f0 100%);
+            border-color: #c8e6c9;
+        }
+
+        .summary-card.highlight::before {
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+        }
+
+        .card-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .card-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .card-label {
+            color: #4a5568;
+            font-size: 0.95em;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-change {
+            font-size: 0.85em;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .change-positive {
+            color: #4CAF50;
+        }
+
+        .change-negative {
+            color: #f44336;
+        }
+
+        .charts-section {
+            padding: 0 40px 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+        }
+
+        .chart-container {
+            background: #f8fafe;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e8eef7;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .chart-container h3 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .details-section {
+            padding: 0 40px 40px;
+        }
+
+        .details-table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e8eef7;
+        }
+
+        .details-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .details-table th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+
+        .details-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #333;
+        }
+
+        .details-table tbody tr:hover {
+            background-color: #f8fafe;
+        }
+
+        .details-table tbody tr:nth-child(even) {
+            background-color: #fafbfc;
+        }
+
+        .currency {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .percentage {
+            color: #2a5298;
+            font-weight: 600;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            margin: 20px 40px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #f0f9f4;
+            border-color: #4CAF50;
+            color: #1a5d1a;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+
+        .alert-info {
+            background: #e6f3ff;
+            border-color: #2a5298;
+            color: #1e3c72;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px;
+            color: #718096;
+        }
+
+        .no-data-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .footer-info {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 0;
+        }
+
+        .footer-info p {
+            margin: 5px 0;
+            opacity: 0.9;
+        }
+
+        .footer-info .contact {
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .controls-section {
+                padding: 20px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+            
+            .summary-section {
+                padding: 20px;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+                padding: 0 20px 20px;
+            }
+            
+            .details-section {
+                padding: 0 20px 20px;
+            }
+            
+            .details-table {
+                overflow-x: auto;
+            }
+            
+            .details-table table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Resumo Financeiro - CDL Manaus</h1>
+            <p>Análise consolidada dos relatórios de cobrança</p>
+            <div class="cdl-badge">
+                Câmara de Dirigentes Lojistas de Manaus
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <div class="filter-container">
+                <label for="monthFilter">📅 Filtrar por Mês:</label>
+                <select id="monthFilter" onchange="filterByMonth()">
+                    <option value="">Todos os meses</option>
+                </select>
+                <button class="btn btn-refresh" onclick="carregarDados()" id="refreshBtn">
+                    🔄 Atualizar Dados
+                </button>
+            </div>
+            <div>
+                <button class="btn btn-connect" id="connectBtn" onclick="conectarGoogleSheets()">
+                    🔗 Conectar ao Google Sheets
+                </button>
+                <span class="connection-status status-disconnected" id="connectionStatus">
+                    ❌ Desconectado
+                </span>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Carregando dados do Google Sheets...</div>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <div class="summary-section" id="summarySection" style="display: none;">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-value" id="totalRecuperado">R$ 0,00</div>
+                    <div class="card-label">Total Recuperado</div>
+                </div>
+                
+                <div class="summary-card highlight">
+                    <div class="card-icon">🏢</div>
+                    <div class="card-value" id="receitaCDLManaus">R$ 0,00</div>
+                    <div class="card-label">Receita CDL Manaus</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-value" id="receitaPlataforma">R$ 0,00</div>
+                    <div class="card-label">Receita Plataforma</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-value" id="receitaCDLDF">R$ 0,00</div>
+                    <div class="card-label">Receita CDL DF</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">💸</div>
+                    <div class="card-value" id="valorDebitar">R$ 0,00</div>
+                    <div class="card-label">Valor a Debitar</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">🏆</div>
+                    <div class="card-value" id="totalPremiacoes">R$ 0,00</div>
+                    <div class="card-label">Total Premiações</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-value" id="percentualMedio">0%</div>
+                    <div class="card-label">% Médio Comissão</div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">📋</div>
+                    <div class="card-value" id="totalRegistros">0</div>
+                    <div class="card-label">Total de Registros</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts-section" id="chartsSection" style="display: none;">
+            <div class="chart-container">
+                <h3>📊 Evolução Mensal - Valores Recuperados</h3>
+                <canvas id="chartRecuperado"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>💰 Distribuição de Receitas</h3>
+                <canvas id="chartReceitas"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>📈 Top 10 Associados - Por Valor Recuperado</h3>
+                <canvas id="chartTopAssociados"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h3>🏆 Distribuição de Premiações</h3>
+                <canvas id="chartPremiacoes"></canvas>
+            </div>
+        </div>
+
+        <div class="details-section" id="detailsSection" style="display: none;">
+            <h3 style="color: #1e3c72; margin-bottom: 20px; font-size: 1.4em;">📋 Resumo Detalhado por Associado</h3>
+            <div class="details-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Associado</th>
+                            <th>Qtd. Títulos</th>
+                            <th>Valor Recuperado</th>
+                            <th>Receita CDL Manaus</th>
+                            <th>% Médio</th>
+                            <th>Premiações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                        <!-- Dados serão inseridos aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="no-data" id="noDataSection" style="display: none;">
+            <div class="no-data-icon">📭</div>
+            <h2>Nenhum dado encontrado</h2>
+            <p>Conecte-se ao Google Sheets e carregue os dados para visualizar o resumo financeiro.</p>
+        </div>
+
+        <div class="footer-info">
+            <p><strong>CDL Manaus</strong> - Câmara de Dirigentes Lojistas de Manaus</p>
+            <div class="contact">
+                <p>📍 Rua Rui Barbosa, 156 - Centro | 📞 (92) 3627-2855</p>
+                <p>💻 www.cdlmanaus.org.br | ✉️ saa@cdlmanaus.org.br</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÃO DO GOOGLE SHEETS =====
+        const CLIENT_ID = '864207996280-pae0biro5qi6t2r8f1mpvik3kmh5vhda.apps.googleusercontent.com';
+        const SPREADSHEET_ID = '1pJ-NoEfH1NUacygxBkN-nFayTZu7l2Q0VOtENMZlk5U';
+        const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
+        const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+        
+        let tokenClient;
+        let accessToken;
+        let gapiInited = false;
+        let gisInited = false;
+        let isConnectedToSheets = false;
+        let allData = [];
+        let filteredData = [];
+        let charts = {};
+
+        // Inicializar Google API Client
+        function gapiLoaded() {
+            gapi.load('client', async () => {
+                try {
+                    await gapi.client.init({
+                        discoveryDocs: [DISCOVERY_DOC],
+                    });
+                    gapiInited = true;
+                    console.log('✅ Google API Client carregado');
+                    checkIfReady();
+                } catch (error) {
+                    console.error('❌ Erro ao inicializar GAPI:', error);
+                    showAlert('Erro ao carregar Google API. Recarregue a página.', 'error');
+                }
+            });
+        }
+        
+        // Inicializar Google Identity Services
+        function gisLoaded() {
+            try {
+                tokenClient = google.accounts.oauth2.initTokenClient({
+                    client_id: CLIENT_ID,
+                    scope: SCOPES,
+                    callback: '', // será definido quando necessário
+                });
+                gisInited = true;
+                console.log('✅ Google Identity Services carregado');
+                checkIfReady();
+            } catch (error) {
+                console.error('❌ Erro ao inicializar GIS:', error);
+                showAlert('Erro ao carregar autenticação Google.', 'error');
+            }
+        }
+        
+        // Verificar se tudo está pronto
+        function checkIfReady() {
+            if (gapiInited && gisInited) {
+                console.log('✅ Sistema pronto!');
+                document.getElementById('connectBtn').disabled = false;
+            }
+        }
+
+        // Conectar ao Google Sheets
+        function conectarGoogleSheets() {
+            if (!gapiInited || !gisInited) {
+                showAlert('⏳ Sistema ainda carregando. Aguarde...', 'error');
+                return;
+            }
+
+            tokenClient.callback = async (response) => {
+                if (response.error !== undefined) {
+                    showAlert('❌ Erro na autorização: ' + response.error, 'error');
+                    updateConnectionStatus(false);
+                    return;
+                }
+                
+                accessToken = response.access_token;
+                isConnectedToSheets = true;
+                updateConnectionStatus(true);
+                console.log('✅ Conectado ao Google Sheets');
+                showAlert('✅ Conectado ao Google Sheets com sucesso!', 'success');
+                
+                // Carregar dados automaticamente após conectar
+                setTimeout(() => carregarDados(), 500);
+            };
+
+            tokenClient.requestAccessToken({ prompt: 'consent' });
+        }
+
+        // Atualizar status da conexão
+        function updateConnectionStatus(connected) {
+            const statusElement = document.getElementById('connectionStatus');
+            const connectBtn = document.getElementById('connectBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            
+            if (connected) {
+                statusElement.textContent = '✅ Conectado';
+                statusElement.className = 'connection-status status-connected';
+                connectBtn.textContent = '✅ Conectado ao Google Sheets';
+                connectBtn.className = 'btn btn-connected';
+                connectBtn.disabled = true;
+                refreshBtn.disabled = false;
+            } else {
+                statusElement.textContent = '❌ Desconectado';
+                statusElement.className = 'connection-status status-disconnected';
+                connectBtn.textContent = '🔗 Conectar ao Google Sheets';
+                connectBtn.className = 'btn btn-connect';
+                connectBtn.disabled = false;
+                refreshBtn.disabled = true;
+            }
+        }
+
+        // Carregar dados do Google Sheets
+        async function carregarDados() {
+            if (!isConnectedToSheets || !accessToken) {
+                showAlert('❌ Conecte-se ao Google Sheets primeiro!', 'error');
+                return;
+            }
+
+            showLoading(true);
+            
+            try {
+                gapi.client.setToken({ access_token: accessToken });
+                
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'Base!A:W', // Colunas A até W (todas as colunas necessárias)
+                });
+
+                const values = response.result.values;
+                
+                if (!values || values.length < 2) {
+                    showAlert('⚠️ Nenhum dado encontrado na planilha.', 'info');
+                    showNoData(true);
+                    return;
+                }
+
+                // Processar dados
+                const headers = values[0];
+                allData = values.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = row[index] || '';
+                    });
+                    return obj;
+                });
+
+                console.log(`✅ ${allData.length} registros carregados`);
+                
+                // Atualizar filtro de meses
+                atualizarFiltroMeses();
+                
+                // Processar e exibir dados
+                processarDados();
+                
+                showAlert(`✅ ${allData.length} registros carregados com sucesso!`, 'success');
+                
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                
+                if (error.status === 401) {
+                    accessToken = null;
+                    isConnectedToSheets = false;
+                    updateConnectionStatus(false);
+                    showAlert('⚠️ Sessão expirada. Conecte-se novamente.', 'error');
+                } else {
+                    showAlert('❌ Erro ao carregar dados: ' + (error.result?.error?.message || error.message), 'error');
+                }
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Atualizar filtro de meses
+        function atualizarFiltroMeses() {
+            const monthFilter = document.getElementById('monthFilter');
+            const meses = new Set();
+            
+            allData.forEach(row => {
+                const dataPagamento = row['Data pagamento'];
+                if (dataPagamento) {
+                    const [dia, mes, ano] = dataPagamento.split('/');
+                    if (mes && ano) {
+                        meses.add(`${mes}/${ano}`);
+                    }
+                }
+            });
+            
+            // Ordenar meses
+            const mesesOrdenados = Array.from(meses).sort((a, b) => {
+                const [mesA, anoA] = a.split('/');
+                const [mesB, anoB] = b.split('/');
+                return (anoB + mesB) - (anoA + mesA);
+            });
+            
+            // Limpar e adicionar opções
+            monthFilter.innerHTML = '<option value="">Todos os meses</option>';
+            mesesOrdenados.forEach(mes => {
+                const option = document.createElement('option');
+                option.value = mes;
+                option.textContent = formatarMesAno(mes);
+                monthFilter.appendChild(option);
+            });
+        }
+
+        // Formatar mês/ano para exibição
+        function formatarMesAno(mesAno) {
+            const [mes, ano] = mesAno.split('/');
+            const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            return `${meses[parseInt(mes) - 1]}/${ano}`;
+        }
+
+        // Filtrar por mês
+        function filterByMonth() {
+            const selectedMonth = document.getElementById('monthFilter').value;
+            
+            if (selectedMonth === '') {
+                filteredData = [...allData];
+            } else {
+                filteredData = allData.filter(row => {
+                    const dataPagamento = row['Data pagamento'];
+                    if (dataPagamento) {
+                        const [dia, mes, ano] = dataPagamento.split('/');
+                        return `${mes}/${ano}` === selectedMonth;
+                    }
+                    return false;
+                });
+            }
+            
+            processarDados();
+        }
+
+        // Processar dados e atualizar visualizações
+        function processarDados() {
+            if (filteredData.length === 0 && allData.length > 0) {
+                filteredData = [...allData];
+            }
+            
+            if (filteredData.length === 0) {
+                showNoData(true);
+                return;
+            }
+            
+            showNoData(false);
+            
+            // Calcular totais
+            const totais = calcularTotais(filteredData);
+            
+            // Atualizar cards
+            atualizarCards(totais);
+            
+            // Atualizar gráficos
+            atualizarGraficos();
+            
+            // Atualizar tabela detalhada
+            atualizarTabelaDetalhada();
+            
+            // Mostrar seções
+            document.getElementById('summarySection').style.display = 'block';
+            document.getElementById('chartsSection').style.display = 'block';
+            document.getElementById('detailsSection').style.display = 'block';
+        }
+
+        // Calcular totais
+        function calcularTotais(data) {
+            const totais = {
+                valorRecuperado: 0,
+                receitaPlataforma: 0,
+                receitaCDLDF: 0,
+                receitaCDLManaus: 0,
+                valorDebitar: 0,
+                premiacaoVendedor: 0,
+                premiacaoMadrinha: 0,
+                premiacaoIndicacao: 0,
+                totalRegistros: data.length,
+                percentualTotal: 0
+            };
+            
+            data.forEach(row => {
+                totais.valorRecuperado += parseFloat(row['Valor recuperado'] || 0);
+                totais.receitaPlataforma += parseFloat(row['Receita da Plataforma (negociação)'] || 0);
+                totais.receitaCDLDF += parseFloat(row['Receita CDL DF (negociação)'] || 0);
+                totais.receitaCDLManaus += parseFloat(row['Receita CDL Manaus (negociação)'] || 0);
+                totais.valorDebitar += parseFloat(row['Valor a debitar na fatura do cliente'] || 0);
+                totais.premiacaoVendedor += parseFloat(row['Vendedor'] || 0);
+                totais.premiacaoMadrinha += parseFloat(row['Madrinha'] || 0);
+                totais.premiacaoIndicacao += parseFloat(row['Indicação'] || 0);
+            });
+            
+            // Calcular percentual médio
+            if (totais.valorRecuperado > 0) {
+                totais.percentualTotal = (totais.receitaPlataforma / totais.valorRecuperado) * 100;
+            }
+            
+            return totais;
+        }
+
+        // Atualizar cards do resumo
+        function atualizarCards(totais) {
+            document.getElementById('totalRecuperado').textContent = formatCurrency(totais.valorRecuperado);
+            document.getElementById('receitaPlataforma').textContent = formatCurrency(totais.receitaPlataforma);
+            document.getElementById('receitaCDLDF').textContent = formatCurrency(totais.receitaCDLDF);
+            document.getElementById('receitaCDLManaus').textContent = formatCurrency(totais.receitaCDLManaus);
+            document.getElementById('valorDebitar').textContent = formatCurrency(totais.valorDebitar);
+            
+            const totalPremiacoes = totais.premiacaoVendedor + totais.premiacaoMadrinha + totais.premiacaoIndicacao;
+            document.getElementById('totalPremiacoes').textContent = formatCurrency(totalPremiacoes);
+            
+            document.getElementById('percentualMedio').textContent = totais.percentualTotal.toFixed(2) + '%';
+            document.getElementById('totalRegistros').textContent = totais.totalRegistros.toLocaleString('pt-BR');
+        }
+
+        // Atualizar gráficos
+        function atualizarGraficos() {
+            // Destruir gráficos existentes
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            
+            // Gráfico de evolução mensal
+            criarGraficoEvolucaoMensal();
+            
+            // Gráfico de distribuição de receitas
+            criarGraficoReceitas();
+            
+            // Gráfico top associados
+            criarGraficoTopAssociados();
+            
+            // Gráfico de premiações
+            criarGraficoPremiacoes();
+        }
+
+        // Criar gráfico de evolução mensal
+        function criarGraficoEvolucaoMensal() {
+            const dadosMensais = {};
+            
+            filteredData.forEach(row => {
+                const dataPagamento = row['Data pagamento'];
+                if (dataPagamento) {
+                    const [dia, mes, ano] = dataPagamento.split('/');
+                    const mesAno = `${mes}/${ano}`;
+                    
+                    if (!dadosMensais[mesAno]) {
+                        dadosMensais[mesAno] = {
+                            valorRecuperado: 0,
+                            receitaCDLManaus: 0
+                        };
+                    }
+                    
+                    dadosMensais[mesAno].valorRecuperado += parseFloat(row['Valor recuperado'] || 0);
+                    dadosMensais[mesAno].receitaCDLManaus += parseFloat(row['Receita CDL Manaus (negociação)'] || 0);
+                }
+            });
+            
+            // Ordenar meses
+            const mesesOrdenados = Object.keys(dadosMensais).sort((a, b) => {
+                const [mesA, anoA] = a.split('/');
+                const [mesB, anoB] = b.split('/');
+                return (anoA + mesA) - (anoB + mesB);
+            });
+            
+            const ctx = document.getElementById('chartRecuperado').getContext('2d');
+            charts.evolucao = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: mesesOrdenados.map(mes => formatarMesAno(mes)),
+                    datasets: [
+                        {
+                            label: 'Valor Recuperado',
+                            data: mesesOrdenados.map(mes => dadosMensais[mes].valorRecuperado),
+                            borderColor: '#1e3c72',
+                            backgroundColor: 'rgba(30, 60, 114, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Receita CDL Manaus',
+                            data: mesesOrdenados.map(mes => dadosMensais[mes].receitaCDLManaus),
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criar gráfico de distribuição de receitas
+        function criarGraficoReceitas() {
+            const totais = calcularTotais(filteredData);
+            
+            const ctx = document.getElementById('chartReceitas').getContext('2d');
+            charts.receitas = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['CDL Manaus', 'CDL DF', 'Valor a Debitar'],
+                    datasets: [{
+                        data: [
+                            totais.receitaCDLManaus,
+                            totais.receitaCDLDF,
+                            totais.valorDebitar
+                        ],
+                        backgroundColor: [
+                            '#4CAF50',
+                            '#2196F3',
+                            '#FF9800'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return context.label + ': R$ ' + value.toLocaleString('pt-BR') + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criar gráfico top associados
+        function criarGraficoTopAssociados() {
+            const associados = {};
+            
+            filteredData.forEach(row => {
+                const associado = row['Associado'];
+                const valorRecuperado = parseFloat(row['Valor recuperado'] || 0);
+                
+                if (associado) {
+                    if (!associados[associado]) {
+                        associados[associado] = 0;
+                    }
+                    associados[associado] += valorRecuperado;
+                }
+            });
+            
+            // Ordenar e pegar top 10
+            const topAssociados = Object.entries(associados)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+            
+            const ctx = document.getElementById('chartTopAssociados').getContext('2d');
+            charts.topAssociados = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: topAssociados.map(([nome]) => nome.length > 20 ? nome.substring(0, 20) + '...' : nome),
+                    datasets: [{
+                        label: 'Valor Recuperado',
+                        data: topAssociados.map(([, valor]) => valor),
+                        backgroundColor: '#1e3c72',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Criar gráfico de premiações
+        function criarGraficoPremiacoes() {
+            const totais = calcularTotais(filteredData);
+            
+            const ctx = document.getElementById('chartPremiacoes').getContext('2d');
+            charts.premiacoes = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Vendedor', 'Madrinha', 'Indicação'],
+                    datasets: [{
+                        data: [
+                            totais.premiacaoVendedor,
+                            totais.premiacaoMadrinha,
+                            totais.premiacaoIndicacao
+                        ],
+                        backgroundColor: [
+                            '#9C27B0',
+                            '#E91E63',
+                            '#3F51B5'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.parsed;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return context.label + ': R$ ' + value.toLocaleString('pt-BR') + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Atualizar tabela detalhada
+        function atualizarTabelaDetalhada() {
+            const associadosData = {};
+            
+            filteredData.forEach(row => {
+                const associado = row['Associado'];
+                
+                if (associado) {
+                    if (!associadosData[associado]) {
+                        associadosData[associado] = {
+                            quantidade: 0,
+                            valorRecuperado: 0,
+                            receitaCDLManaus: 0,
+                            premiacoes: 0,
+                            percentualTotal: 0
+                        };
+                    }
+                    
+                    associadosData[associado].quantidade++;
+                    associadosData[associado].valorRecuperado += parseFloat(row['Valor recuperado'] || 0);
+                    associadosData[associado].receitaCDLManaus += parseFloat(row['Receita CDL Manaus (negociação)'] || 0);
+                    associadosData[associado].premiacoes += 
+                        parseFloat(row['Vendedor'] || 0) + 
+                        parseFloat(row['Madrinha'] || 0) + 
+                        parseFloat(row['Indicação'] || 0);
+                }
+            });
+            
+            // Calcular percentuais
+            Object.values(associadosData).forEach(data => {
+                if (data.valorRecuperado > 0) {
+                    data.percentualTotal = (data.receitaCDLManaus / data.valorRecuperado) * 100;
+                }
+            });
+            
+            // Ordenar por valor recuperado
+            const associadosOrdenados = Object.entries(associadosData)
+                .sort((a, b) => b[1].valorRecuperado - a[1].valorRecuperado);
+            
+            // Atualizar tabela
+            const tbody = document.getElementById('detailsTableBody');
+            tbody.innerHTML = '';
+            
+            associadosOrdenados.forEach(([associado, data]) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${associado}</td>
+                    <td style="text-align: center;">${data.quantidade}</td>
+                    <td class="currency">${formatCurrency(data.valorRecuperado)}</td>
+                    <td class="currency">${formatCurrency(data.receitaCDLManaus)}</td>
+                    <td class="percentage">${data.percentualTotal.toFixed(2)}%</td>
+                    <td class="currency">${formatCurrency(data.premiacoes)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Funções auxiliares
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showNoData(show) {
+            document.getElementById('noDataSection').style.display = show ? 'block' : 'none';
+            
+            if (show) {
+                document.getElementById('summarySection').style.display = 'none';
+                document.getElementById('chartsSection').style.display = 'none';
+                document.getElementById('detailsSection').style.display = 'none';
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-' + type;
+            alert.textContent = message;
+            
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alertContainer.contains(alert)) {
+                    alertContainer.removeChild(alert);
+                }
+            }, 5000);
+        }
+
+        // Inicializar
+        updateConnectionStatus(false);
+        document.getElementById('refreshBtn').disabled = true;
+        
+        // Configurar altura dos gráficos
+        document.querySelectorAll('canvas').forEach(canvas => {
+            canvas.style.height = '300px';
+        });
+        
+        console.log('📊 Sistema de Resumo Financeiro CDL Manaus carregado');
+    </script>
+</body>
+</html>
