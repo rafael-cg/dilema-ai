@@ -483,109 +483,63 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏢 CDL Manaus - Transformador de Relatórios</h1>
-            <p>Sistema automatizado para conversão de relatórios de cobrança em formato executivo</p>
-            <div class="cdl-badge">
-                Câmara de Dirigentes Lojistas de Manaus
-            </div>
+            <h1 style="font-size:1.3em; margin-bottom:10px;">🏢 CDL Manaus - Transformador de Relatórios</h1>
+            <div class="cdl-badge" style="margin-bottom:0;">Câmara de Dirigentes Lojistas de Manaus</div>
         </div>
-        <div style="text-align:center; margin: 18px 0 0 0;">
-            <a href="cdl_cobranca_resumo.html" class="btn btn-download" style="display:inline-block; min-width:220px;">📈 Ver Resumo Financeiro</a>
+        <!-- Linha única de botões principais -->
+        <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin:18px 0 0 0;">
+            <button class="btn" onclick="document.getElementById('fileInput').click()">📤 Selecionar Arquivo Excel</button>
+            <button class="btn btn-download" id="downloadBtn" onclick="downloadFile()">💾 Baixar Relatório Excel</button>
+            <button class="btn" id="saveToSheetsBtn" onclick="salvarNoSheets()" disabled>💾 Salvar no Google Sheets</button>
+            <a href="cdl_cobranca_resumo.html" class="btn btn-download">📈 Ver Resumo Financeiro</a>
+            <button class="btn btn-connect" id="connectBtn" onclick="conectarGoogleSheets()">🔗 Conectar ao Google Sheets</button>
+            <span class="connection-status status-disconnected" id="connectionStatus" style="margin-left:0;">❌ Desconectado</span>
         </div>
-
-        <div class="upload-section">
-            <div class="upload-area" id="uploadArea">
+        <!-- Upload area compacta -->
+        <div class="upload-section" style="padding:18px 0 0 0; background:none; border:none;">
+            <div class="upload-area" id="uploadArea" style="padding:24px 10px; margin:10px 0;">
                 <div class="upload-icon">📋</div>
-                <div class="upload-text">Selecione ou arraste o arquivo relatorio_cru.xlsx</div>
-                <div class="upload-subtext">Formatos suportados: Excel (.xlsx, .xls) • Tamanho máximo: 50MB</div>
+                <div class="upload-text" style="font-size:1em;">Selecione ou arraste o arquivo relatorio_cru.xlsx</div>
                 <input type="file" id="fileInput" accept=".xlsx,.xls">
             </div>
-            <button class="btn" onclick="document.getElementById('fileInput').click()">
-                📤 Selecionar Arquivo Excel
-            </button>
-            
-            <!-- Seção de conexão Google Sheets -->
-            <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e8eef7;">
-                <h3 style="color: #1e3c72; margin-bottom: 20px;">🌐 Conexão Google Sheets</h3>
-                <button class="btn btn-connect" id="connectBtn" onclick="conectarGoogleSheets()">
-                    🔗 Conectar ao Google Sheets
-                </button>
-                <span class="connection-status status-disconnected" id="connectionStatus">
-                    ❌ Desconectado
-                </span>
-            </div>
         </div>
-
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <div class="loading-text">Processando relatório e aplicando transformações...</div>
+            <div class="loading-text">Processando relatório...</div>
         </div>
-
-        <div class="results-section" id="results">
-            <div class="results-header">
-                <div class="results-info">
-                    <h2>📊 Relatório Processado</h2>
-                    <div class="stats">
-                        <div class="stat-item">
-                            <span class="stat-number" id="totalRecords">0</span>
-                            <div class="stat-label">Registros</div>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number" id="totalRecovered">R$ 0,00</span>
-                            <div class="stat-label">Total Recuperado</div>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-number" id="totalCommission">R$ 0,00</span>
-                            <div class="stat-label">Total Comissões</div>
-                        </div>
-                    </div>
+        <!-- Linha única de indicadores principais -->
+        <div class="results-section" id="results" style="display:none; padding:10px 0 0 0; background:none;">
+            <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin-bottom:10px;">
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="totalRecords">0</span>
+                    <div class="stat-label">Registros</div>
                 </div>
-                <div>
-                    <button class="btn btn-download" id="downloadBtn" onclick="downloadFile()">💾 Baixar Relatório Excel</button>
-                    <button class="btn" id="saveToSheetsBtn" onclick="salvarNoSheets()" disabled>💾 Salvar no Google Sheets</button>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="totalRecovered">R$ 0,00</span>
+                    <div class="stat-label">Total Recuperado</div>
                 </div>
-            </div>
-
-            <div class="stats-section">
-                <h3>💰 Indicadores Financeiros</h3>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="receitaPlataforma">R$ 0,00</span>
-                        <div class="stat-label">Receita Plataforma</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="receitaCDLDF">R$ 0,00</span>
-                        <div class="stat-label">Receita CDL DF</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="receitaCDLManaus">R$ 0,00</span>
-                        <div class="stat-label">Receita CDL Manaus</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="valorDebitar">R$ 0,00</span>
-                        <div class="stat-label">Valor a Debitar</div>
-                    </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="totalCommission">R$ 0,00</span>
+                    <div class="stat-label">Total Comissões</div>
                 </div>
-                
-                <h3>🏆 Sistema de Premiações</h3>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="premiacaoVendedor">R$ 0,00</span>
-                        <div class="stat-label">Premiação Vendedor</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="premiacaoMadrinha">R$ 0,00</span>
-                        <div class="stat-label">Premiação Madrinha</div>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="premiacaoIndicacao">R$ 0,00</span>
-                        <div class="stat-label">Premiação Indicação</div>
-                    </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="receitaPlataforma">R$ 0,00</span>
+                    <div class="stat-label">Receita Plataforma</div>
+                </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="receitaCDLDF">R$ 0,00</span>
+                    <div class="stat-label">Receita CDL DF</div>
+                </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="receitaCDLManaus">R$ 0,00</span>
+                    <div class="stat-label">Receita CDL Manaus</div>
+                </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="valorDebitar">R$ 0,00</span>
+                    <div class="stat-label">Valor a Debitar</div>
                 </div>
             </div>
-
             <div id="alertContainer"></div>
-
             <div class="table-container">
                 <table id="resultsTable">
                     <thead id="tableHeader"></thead>
@@ -593,7 +547,6 @@
                 </table>
             </div>
         </div>
-
         <div class="footer-info">
             <p><strong>CDL Manaus</strong> - Câmara de Dirigentes Lojistas de Manaus</p>
             <div class="contact">
