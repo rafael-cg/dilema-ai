@@ -538,6 +538,18 @@
                     <span class="stat-number" id="valorDebitar">R$ 0,00</span>
                     <div class="stat-label">Valor a Debitar</div>
                 </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="premiacaoVendedor">R$ 0,00</span>
+                    <div class="stat-label">Premiação Vendedor</div>
+                </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="premiacaoMadrinha">R$ 0,00</span>
+                    <div class="stat-label">Premiação Madrinha</div>
+                </div>
+                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
+                    <span class="stat-number" id="premiacaoIndicacao">R$ 0,00</span>
+                    <div class="stat-label">Premiação Indicação</div>
+                </div>
             </div>
             <div id="alertContainer"></div>
             <div class="table-container">
@@ -866,6 +878,9 @@
             document.getElementById('receitaCDLDF').textContent = formatCurrency(data.summary.receitaCDLDF);
             document.getElementById('receitaCDLManaus').textContent = formatCurrency(data.summary.receitaCDLManaus);
             document.getElementById('valorDebitar').textContent = formatCurrency(data.summary.valorDebitar);
+            document.getElementById('premiacaoVendedor').textContent = formatCurrency(data.summary.premiacaoVendedor);
+            document.getElementById('premiacaoMadrinha').textContent = formatCurrency(data.summary.premiacaoMadrinha);
+            document.getElementById('premiacaoIndicacao').textContent = formatCurrency(data.summary.premiacaoIndicacao);
             document.getElementById('results').style.display = 'block';
             document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         }
