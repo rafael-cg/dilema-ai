@@ -508,57 +508,101 @@
             <div class="spinner"></div>
             <div class="loading-text">Processando relatório...</div>
         </div>
-        <!-- Linha única de indicadores principais -->
-        <div class="results-section" id="results" style="display:none; padding:10px 0 0 0; background:none;">
-            <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin-bottom:10px;">
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="totalRecords">0</span>
-                    <div class="stat-label">Registros</div>
+        <!-- Adicionar filtro de meses e cards do resumo financeiro -->
+        <div class="controls-section" style="margin-top:18px;">
+            <div class="filter-container">
+                <label for="monthFilter">📅 Filtrar por Mês:</label>
+                <select id="monthFilter" onchange="filterByMonth()">
+                    <option value="">Todos os meses</option>
+                </select>
+            </div>
+        </div>
+        <div class="summary-section" id="summarySection" style="display: none;">
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-value" id="totalRecuperado">R$ 0,00</div>
+                    <div class="card-label">Total Recuperado</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="totalRecovered">R$ 0,00</span>
-                    <div class="stat-label">Total Recuperado</div>
+                <div class="summary-card highlight">
+                    <div class="card-icon">🏢</div>
+                    <div class="card-value" id="receitaCDLManaus">R$ 0,00</div>
+                    <div class="card-label">Receita CDL Manaus</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="totalCommission">R$ 0,00</span>
-                    <div class="stat-label">Total Comissões</div>
+                <div class="summary-card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-value" id="receitaPlataforma">R$ 0,00</div>
+                    <div class="card-label">Receita Plataforma</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="receitaPlataforma">R$ 0,00</span>
-                    <div class="stat-label">Receita Plataforma</div>
+                <div class="summary-card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-value" id="receitaCDLDF">R$ 0,00</div>
+                    <div class="card-label">Receita CDL DF</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="receitaCDLDF">R$ 0,00</span>
-                    <div class="stat-label">Receita CDL DF</div>
+                <div class="summary-card">
+                    <div class="card-icon">💸</div>
+                    <div class="card-value" id="valorDebitar">R$ 0,00</div>
+                    <div class="card-label">Valor a Debitar</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="receitaCDLManaus">R$ 0,00</span>
-                    <div class="stat-label">Receita CDL Manaus</div>
+                <div class="summary-card">
+                    <div class="card-icon">🏅</div>
+                    <div class="card-value" id="premiacaoVendedor">R$ 0,00</div>
+                    <div class="card-label">Premiação Vendedor</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="valorDebitar">R$ 0,00</span>
-                    <div class="stat-label">Valor a Debitar</div>
+                <div class="summary-card">
+                    <div class="card-icon">👩‍💼</div>
+                    <div class="card-value" id="premiacaoMadrinha">R$ 0,00</div>
+                    <div class="card-label">Premiação Madrinha</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="premiacaoVendedor">R$ 0,00</span>
-                    <div class="stat-label">Premiação Vendedor</div>
+                <div class="summary-card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-value" id="premiacaoIndicacao">R$ 0,00</div>
+                    <div class="card-label">Premiação Indicação</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="premiacaoMadrinha">R$ 0,00</span>
-                    <div class="stat-label">Premiação Madrinha</div>
+                <div class="summary-card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-value" id="percentualMedio">0%</div>
+                    <div class="card-label">% Médio Comissão</div>
                 </div>
-                <div class="stat-item" style="padding:10px 8px; min-width:110px;">
-                    <span class="stat-number" id="premiacaoIndicacao">R$ 0,00</span>
-                    <div class="stat-label">Premiação Indicação</div>
+                <div class="summary-card">
+                    <div class="card-icon">📋</div>
+                    <div class="card-value" id="totalRegistros">0</div>
+                    <div class="card-label">Total de Registros</div>
                 </div>
             </div>
-            <div id="alertContainer"></div>
-            <div class="table-container">
-                <table id="resultsTable">
-                    <thead id="tableHeader"></thead>
-                    <tbody id="tableBody"></tbody>
+        </div>
+        <!-- Gráfico único de barras com meses no eixo X -->
+        <div class="charts-section" id="chartsSection" style="display: none;">
+            <div class="chart-container">
+                <h3>📊 Evolução Mensal - Valores Recuperados</h3>
+                <canvas id="chartRecuperado"></canvas>
+            </div>
+        </div>
+        <!-- Tabela detalhada -->
+        <div class="details-section" id="detailsSection" style="display: none;">
+            <h3 style="color: #1e3c72; margin-bottom: 20px; font-size: 1.1em;">📋 Resumo Detalhado por Associado</h3>
+            <div class="details-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Associado</th>
+                            <th>Qtd. Títulos</th>
+                            <th>Valor Recuperado</th>
+                            <th>Receita CDL Manaus</th>
+                            <th>% Médio</th>
+                            <th>Premiações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody">
+                        <!-- Dados serão inseridos aqui -->
+                    </tbody>
                 </table>
             </div>
+        </div>
+        <div class="no-data" id="noDataSection" style="display: none;">
+            <div class="no-data-icon">📭</div>
+            <h2>Nenhum dado encontrado</h2>
+            <p>Conecte-se ao Google Sheets e carregue os dados para visualizar o resumo financeiro.</p>
         </div>
         <div class="footer-info">
             <p><strong>CDL Manaus</strong> - Câmara de Dirigentes Lojistas de Manaus</p>
@@ -871,17 +915,16 @@
 
             // Update main stats
             document.getElementById('totalRecords').textContent = data.summary.totalRecords.toLocaleString('pt-BR');
-            document.getElementById('totalRecovered').textContent = formatCurrency(data.summary.totalRecovered);
-            document.getElementById('totalCommission').textContent = formatCurrency(data.summary.totalCommission);
-
-            // Update new indicators
+            document.getElementById('totalRecuperado').textContent = formatCurrency(data.summary.totalRecovered);
+            document.getElementById('receitaCDLManaus').textContent = formatCurrency(data.summary.receitaCDLManaus);
             document.getElementById('receitaPlataforma').textContent = formatCurrency(data.summary.receitaPlataforma);
             document.getElementById('receitaCDLDF').textContent = formatCurrency(data.summary.receitaCDLDF);
-            document.getElementById('receitaCDLManaus').textContent = formatCurrency(data.summary.receitaCDLManaus);
             document.getElementById('valorDebitar').textContent = formatCurrency(data.summary.valorDebitar);
             document.getElementById('premiacaoVendedor').textContent = formatCurrency(data.summary.premiacaoVendedor);
             document.getElementById('premiacaoMadrinha').textContent = formatCurrency(data.summary.premiacaoMadrinha);
             document.getElementById('premiacaoIndicacao').textContent = formatCurrency(data.summary.premiacaoIndicacao);
+            document.getElementById('percentualMedio').textContent = formatPercentage(data.summary.totalCommission / data.summary.totalRecovered);
+
             document.getElementById('results').style.display = 'block';
             document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         }
