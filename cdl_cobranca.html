@@ -577,8 +577,8 @@
             <h2 style="color:#1e3c72; text-align:center; margin-bottom:18px;">Resumo Financeiro Geral</h2>
             <div class="controls-section" style="margin-top:0;">
                 <div class="filter-container">
-                    <label for="monthFilter">📅 Filtrar por Mês:</label>
-                    <select id="monthFilter" onchange="filterByMonth()">
+                    <label for="monthFilterGeral" style="font-size:1.15em;">📅 Filtrar por Mês:</label>
+                    <select id="monthFilterGeral" onchange="filterByMonthGeral()" style="font-size:1.15em; padding:10px 16px;">
                         <option value="">Todos os meses</option>
                     </select>
                 </div>
@@ -1129,6 +1129,8 @@
                 updateConnectionStatus(true);
                 console.log('✅ Conectado ao Google Sheets');
                 showAlert('✅ Conectado ao Google Sheets com sucesso!', 'success');
+                // Após a conexão, carregar dados do Sheets
+                await carregarDadosDoSheets();
             };
 
             // Solicitar autorização
@@ -1342,6 +1344,223 @@
         // Log para debug
         console.log('📊 Sistema CDL Manaus carregado');
         console.log('📍 Planilha ID:', SPREADSHEET_ID);
+
+        // Função para carregar dados do Sheets
+        async function carregarDadosDoSheets() {
+            if (!isConnectedToSheets || !accessToken) {
+                showAlert('❌ Não conectado ao Google Sheets. Carregar dados não possível.', 'error');
+                return;
+            }
+
+            try {
+                gapi.client.setToken({ access_token: accessToken });
+
+                // Carregar dados da aba "Base"
+                const response = await gapi.client.sheets.spreadsheets.values.get({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'Base!A1:AA10000', // Carregar até 10000 linhas
+                    majorDimension: 'ROWS'
+                });
+
+                const values = response.result.values;
+                if (!values || values.length < 2) {
+                    showAlert('❌ Nenhum dado encontrado na aba "Base" ou dados incompletos.', 'warning');
+                    document.getElementById('noDataSection').style.display = 'block';
+                    document.getElementById('summarySection').style.display = 'none';
+                    document.getElementById('chartsSection').style.display = 'none';
+                    document.getElementById('detailsSection').style.display = 'none';
+                    return;
+                }
+
+                // Processar dados da aba "Base"
+                const headers = values[0];
+                const dataRows = values.slice(1);
+
+                const newHeaders = [
+                    'Data pagamento', 'Número do título', 'Associado', 'Código CDL',
+                    'Devedor', 'CNPJ', 'Meio por onde o negociação/pagamento foi concluído',
+                    'Status da cobrança', 'Valor original do título', 'Valor corrigido do título',
+                    'Valor recuperado', 'Receita Plataforma (%)', 'Receita da Plataforma (negociação)',
+                    'Taxas (custas fin cliente)', 'Valor Líq recuperado para o cliente',
+                    'Receita CDL DF (negociação)', 'Receita CDL Manaus (negociação)',
+                    'Valor a debitar na fatura do cliente', 'Data emissão do título',
+                    'Data vencimento do título', 'Vendedor', 'Madrinha', 'Indicação'
+                ];
+
+                const getColumnIndex = (columnName) => {
+                    return headers.findIndex(h => h && h.toString().toLowerCase().includes(columnName.toLowerCase()));
+                };
+
+                const indices = {
+                    data: getColumnIndex('data'),
+                    numeroTitulo: getColumnIndex('número'),
+                    associado: getColumnIndex('associado'),
+                    codigo: getColumnIndex('código'),
+                    devedor: getColumnIndex('devedor'),
+                    documento: getColumnIndex('documento'),
+                    situacao: getColumnIndex('situação'),
+                    tipoCobranca: getColumnIndex('tipo'),
+                    valorTitulo: getColumnIndex('valor do título'),
+                    saldoTitulo: getColumnIndex('saldo'),
+                    valorRecebido: getColumnIndex('valor recebido'),
+                    valorCDL: getColumnIndex('valor cdl'),
+                    taxas: getColumnIndex('taxas'),
+                    valorLiquido: getColumnIndex('valor líquido'),
+                    emissao: getColumnIndex('emissão'),
+                    vencimento: getColumnIndex('vencimento')
+                };
+
+                const transformedRows = [];
+                let totals = new Array(newHeaders.length).fill(0);
+
+                dataRows.forEach(row => {
+                    if (!row || row.length === 0) return;
+
+                    const newRow = new Array(newHeaders.length).fill('');
+                    
+                    newRow[0] = formatDate(row[indices.data]);
+                    newRow[1] = row[indices.numeroTitulo] || '';
+                    newRow[2] = row[indices.associado] || '';
+                    newRow[3] = row[indices.codigo] || '';
+                    newRow[4] = row[indices.devedor] || '';
+                    newRow[5] = row[indices.documento] || '';
+                    newRow[6] = row[indices.situacao] || '';
+                    newRow[7] = row[indices.tipoCobranca] || '';
+                    newRow[8] = parseFloat(row[indices.valorTitulo]) || 0;
+                    newRow[9] = parseFloat(row[indices.saldoTitulo]) || 0;
+                    newRow[10] = parseFloat(row[indices.valorRecebido]) || 0;
+                    newRow[12] = parseFloat(row[indices.valorCDL]) || 0;
+                    newRow[13] = parseFloat(row[indices.taxas]) || 0;
+                    newRow[14] = parseFloat(row[indices.valorLiquido]) || 0;
+                    newRow[18] = formatDate(row[indices.emissao]);
+                    newRow[19] = formatDate(row[indices.vencimento]);
+
+                    const valorRecuperado = newRow[10];
+                    const valorCDL = newRow[12];
+
+                    newRow[11] = valorRecuperado > 0 ? Math.ceil((valorCDL / valorRecuperado) * 100) / 100 : 0;
+                    newRow[15] = valorCDL * 0.4;
+                    newRow[16] = valorCDL * 0.6;
+                    newRow[17] = (row[indices.situacao] && row[indices.situacao].toString().toLowerCase().includes('cancelada')) ? valorCDL : 0;
+
+                    const basePremiacao = newRow[16] * 0.95;
+                    newRow[20] = basePremiacao * 0.10;
+                    newRow[21] = basePremiacao * 0.015;
+                    newRow[22] = basePremiacao * 0.01;
+
+                    transformedRows.push(newRow);
+
+                    [8, 9, 10, 12, 13, 14, 15, 16, 17, 20, 21, 22].forEach(i => {
+                        if (typeof newRow[i] === 'number') {
+                            totals[i] += newRow[i];
+                        }
+                    });
+                });
+
+                const totalsRow = new Array(newHeaders.length).fill('');
+                totalsRow[0] = 'TOTAIS';
+                [8, 9, 10, 12, 13, 14, 15, 16, 17, 20, 21, 22].forEach(i => {
+                    totalsRow[i] = totals[i];
+                });
+                
+                if (totals[10] > 0) {
+                    totalsRow[11] = Math.ceil((totals[12] / totals[10]) * 100) / 100;
+                }
+
+                const processedData = {
+                    headers: newHeaders,
+                    data: transformedRows,
+                    totals: totalsRow,
+                    summary: {
+                        totalRecords: transformedRows.length,
+                        totalRecovered: totals[10],
+                        totalCommission: totals[12],
+                        receitaPlataforma: totals[12],
+                        receitaCDLDF: totals[15],
+                        receitaCDLManaus: totals[16],
+                        valorDebitar: totals[17],
+                        premiacaoVendedor: totals[20],
+                        premiacaoMadrinha: totals[21],
+                        premiacaoIndicacao: totals[22]
+                    }
+                };
+
+                displayResults(processedData); // Usar a função displayResults para atualizar a tabela principal
+
+                // Atualizar os cards do resumo geral
+                document.getElementById('totalRecuperado').textContent = formatCurrency(processedData.summary.totalRecovered);
+                document.getElementById('receitaCDLManaus').textContent = formatCurrency(processedData.summary.receitaCDLManaus);
+                document.getElementById('receitaPlataforma').textContent = formatCurrency(processedData.summary.receitaPlataforma);
+                document.getElementById('receitaCDLDF').textContent = formatCurrency(processedData.summary.receitaCDLDF);
+                document.getElementById('valorDebitar').textContent = formatCurrency(processedData.summary.valorDebitar);
+                document.getElementById('premiacaoVendedor').textContent = formatCurrency(processedData.summary.premiacaoVendedor);
+                document.getElementById('premiacaoMadrinha').textContent = formatCurrency(processedData.summary.premiacaoMadrinha);
+                document.getElementById('premiacaoIndicacao').textContent = formatCurrency(processedData.summary.premiacaoIndicacao);
+                document.getElementById('percentualMedio').textContent = formatPercentage(processedData.summary.totalCommission / processedData.summary.totalRecovered);
+                document.getElementById('totalRegistros').textContent = processedData.summary.totalRecords.toLocaleString('pt-BR');
+
+                // Atualizar o filtro de mês do resumo geral
+                const monthFilterGeral = document.getElementById('monthFilterGeral');
+                monthFilterGeral.innerHTML = '<option value="">Todos os meses</option>';
+                const uniqueMonths = new Set();
+                processedData.data.forEach(row => {
+                    const dataEmissao = row[18];
+                    if (dataEmissao) {
+                        uniqueMonths.add(dataEmissao.split('/')[1]); // Mês no formato MM/YYYY
+                    }
+                });
+                Array.from(uniqueMonths).sort().forEach(month => {
+                    monthFilterGeral.innerHTML += `<option value="${month}">${month}</option>`;
+                });
+                monthFilterGeral.value = ''; // Resetar para "Todos os meses"
+                filterByMonthGeral(); // Aplicar filtro ao carregar
+
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('chartsSection').style.display = 'block';
+                document.getElementById('detailsSection').style.display = 'block';
+                document.getElementById('noDataSection').style.display = 'none';
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar dados do Sheets:', error);
+                showAlert('❌ Erro ao carregar dados do Google Sheets. Verifique a conexão e a permissão.', 'error');
+                document.getElementById('noDataSection').style.display = 'block';
+                document.getElementById('summarySection').style.display = 'none';
+                document.getElementById('chartsSection').style.display = 'none';
+                document.getElementById('detailsSection').style.display = 'none';
+            }
+        }
+
+        // Função para filtrar por mês (para a tabela principal)
+        function filterByMonth() {
+            const month = document.getElementById('monthFilter').value;
+            const monthFilter = document.getElementById('monthFilter');
+            const monthFilterGeral = document.getElementById('monthFilterGeral');
+
+            if (month) {
+                monthFilter.value = month;
+                monthFilterGeral.value = month; // Aplicar o mesmo filtro para o resumo geral
+            } else {
+                monthFilter.value = '';
+                monthFilterGeral.value = '';
+            }
+            displayResults(transformedData); // Re-renderizar a tabela com o filtro aplicado
+        }
+
+        // Função para filtrar por mês (para o resumo geral)
+        function filterByMonthGeral() {
+            const month = document.getElementById('monthFilterGeral').value;
+            const monthFilter = document.getElementById('monthFilter');
+            const monthFilterGeral = document.getElementById('monthFilterGeral');
+
+            if (month) {
+                monthFilter.value = month;
+                monthFilterGeral.value = month; // Aplicar o mesmo filtro para a tabela principal
+            } else {
+                monthFilter.value = '';
+                monthFilterGeral.value = '';
+            }
+            displayResults(transformedData); // Re-renderizar a tabela com o filtro aplicado
+        }
     </script>
 </body>
 </html>
