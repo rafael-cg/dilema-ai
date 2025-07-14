@@ -507,16 +507,7 @@
             <div class="spinner"></div>
             <div class="loading-text">Processando relatório...</div>
         </div>
-        <!-- Adicionar filtro de meses e cards do resumo financeiro -->
-        <div class="controls-section" style="margin-top:18px;">
-            <div class="filter-container">
-                <label for="monthFilter">📅 Filtrar por Mês:</label>
-                <select id="monthFilter" onchange="filterByMonth()">
-                    <option value="">Todos os meses</option>
-                </select>
-            </div>
-        </div>
-        <!-- Seção do relatório processado (mantida na mesma posição) -->
+        <!-- Seção do relatório processado (NÃO deve ter filtro de mês) -->
         <div class="results-section" id="results" style="display:none; padding:10px 0 0 0; background:none;">
             <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin-bottom:10px;">
                 <div class="stat-item" style="padding:10px 8px; min-width:110px;">
