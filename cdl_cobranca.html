@@ -877,13 +877,6 @@
                 </div>
             </div>
             <div style="margin: 40px 0;">
-              <label for="chartMetric" style="font-weight:600; color:#1e3c72;">Visualizar gráfico de:</label>
-              <select id="chartMetric" style="padding:8px 16px; border-radius:8px; margin:0 10px;">
-                <option value="valorRecuperado">Total Recuperado</option>
-                <option value="receitaPlataforma">Receita Plataforma</option>
-                <option value="receitaCDLManaus">Receita CDL Manaus</option>
-                <option value="receitaCDLDF">Receita CDL DF</option>
-              </select>
               <canvas id="resumoChart" height="80"></canvas>
             </div>
         </div>
@@ -989,6 +982,9 @@
                 }
             };
             reader.readAsArrayBuffer(file);
+
+            // Armazene o nome do arquivo
+            window.lastUploadedFileName = file.name;
         }
 
         function processFile(wb) {
@@ -1495,6 +1491,9 @@
                 // Recarregar dados do resumo geral
                 setTimeout(() => carregarDadosResumoGeral(), 1000);
         
+                // Adicionar função para salvar histórico
+                await salvarHistoricoEnvio((window.lastUploadedFileName || 'arquivo_desconhecido'), totalRegistros);
+        
             } catch (error) {
                 console.error('❌ Erro detalhado:', error);
                 
@@ -1958,6 +1957,137 @@
             let label = this.options[this.selectedIndex].text;
             atualizarGraficoResumo(labels, valores, label);
         });
+
+        // Substituir gerarDadosGraficoResumo e atualizarGraficoResumo por versão empilhada
+        function gerarDadosGraficoResumoEmpilhado() {
+            // Agrupa por mês/ano e soma todas as métricas
+            const meses = {};
+            const metrics = [
+                { key: 'valorRecuperado', label: 'Total Recuperado', color: 'rgba(76, 175, 80, 0.7)' },
+                { key: 'receitaPlataforma', label: 'Receita Plataforma', color: 'rgba(33, 150, 243, 0.7)' },
+                { key: 'receitaCDLManaus', label: 'Receita CDL Manaus', color: 'rgba(255, 193, 7, 0.7)' },
+                { key: 'receitaCDLDF', label: 'Receita CDL DF', color: 'rgba(244, 67, 54, 0.7)' }
+            ];
+            // Função robusta igual ao toNumber
+            const toNumber = v => {
+                if (!v) return 0;
+                if (typeof v === 'number') return v;
+                return parseFloat(
+                    v.toString()
+                     .replace(/R\$\s?/g, '')
+                     .replace(/\./g, '') // remove separador de milhar
+                     .replace(/,/g, '.')
+                     .trim()
+                ) || 0;
+            };
+            allSheetsData.forEach(row => {
+                const dataPagamento = row['Data pagamento'];
+                if (dataPagamento) {
+                    const [dia, mes, ano] = dataPagamento.split('/');
+                    const chave = `${mes}/${ano}`;
+                    if (!meses[chave]) meses[chave] = { valorRecuperado: 0, receitaPlataforma: 0, receitaCDLManaus: 0, receitaCDLDF: 0 };
+                    meses[chave].valorRecuperado += toNumber(row['Valor recuperado']);
+                    meses[chave].receitaPlataforma += toNumber(row['Receita da Plataforma (negociação)']);
+                    meses[chave].receitaCDLManaus += toNumber(row['Receita CDL Manaus (negociação)']);
+                    meses[chave].receitaCDLDF += toNumber(row['Receita CDL DF (negociação)']);
+                }
+            });
+            // Ordena meses
+            const mesesOrdenados = Object.keys(meses).sort((a,b)=>{
+                const [ma,aa]=a.split('/'); const [mb,ab]=b.split('/');
+                return (parseInt(aa+ma)-parseInt(ab+mb));
+            });
+            const labels = mesesOrdenados.map(m=>formatarMesAno(m));
+            // Para cada métrica, gera um array de valores por mês
+            const datasets = metrics.map(metric => ({
+                label: metric.label,
+                data: mesesOrdenados.map(m=>+meses[m][metric.key].toFixed(2)),
+                backgroundColor: metric.color,
+                stack: 'stack1',
+                borderWidth: 1
+            }));
+            // Calcular totais por mês para exibir no topo
+            const totaisPorMes = mesesOrdenados.map(m => {
+                const v = meses[m];
+                return metrics.reduce((acc, metric) => acc + v[metric.key], 0);
+            });
+            return { labels, datasets, totaisPorMes };
+        }
+        function atualizarGraficoResumoEmpilhado() {
+            const ctx = document.getElementById('resumoChart').getContext('2d');
+            if (resumoChart) resumoChart.destroy();
+            const { labels, datasets, totaisPorMes } = gerarDadosGraficoResumoEmpilhado();
+            resumoChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels, datasets },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: { display: false },
+                        tooltip: { mode: 'index', intersect: false },
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: 'end',
+                            formatter: function(value, context) {
+                                // Só mostra o total no topo da barra
+                                if (context.datasetIndex === datasets.length - 1) {
+                                    return 'Total: R$ ' + totaisPorMes[context.dataIndex].toLocaleString('pt-BR', {minimumFractionDigits:2});
+                                }
+                                return '';
+                            },
+                            color: '#222',
+                            font: { weight: 'bold' }
+                        }
+                    },
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: { stacked: true, grid: { display: false } },
+                        y: { stacked: true, beginAtZero: true, grid: { color: '#e8eef7' } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+        // Adicionar ChartDataLabels CDN no <head> se não existir
+        // <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+        // Chamar atualizarGraficoResumoEmpilhado() ao processar dados do resumo geral
+        // ... existing code ...
+        // No final de processarDadosResumoGeral:
+        atualizarGraficoResumoEmpilhado();
+        // ... existing code ...
+
+        // Adicionar função para salvar histórico na aba 'historico'
+        async function salvarHistoricoEnvio(nomeArquivo, totalRegistros) {
+            if (!isConnectedToSheets || !accessToken) return;
+            try {
+                gapi.client.setToken({ access_token: accessToken });
+                // Obter usuário autenticado
+                let usuario = '';
+                if (gapi && gapi.auth2 && gapi.auth2.getAuthInstance) {
+                    const user = gapi.auth2.getAuthInstance().currentUser.get();
+                    usuario = user.getBasicProfile().getEmail();
+                } else if (google && google.accounts && google.accounts.id) {
+                    usuario = google.accounts.id;
+                }
+                // Data e hora atual
+                const dataHora = new Date().toLocaleString('pt-BR');
+                // Montar linha de histórico
+                const linha = [[dataHora, nomeArquivo, usuario, totalRegistros]];
+                // Enviar para aba 'historico'
+                await gapi.client.sheets.spreadsheets.values.append({
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: 'historico!A:D',
+                    valueInputOption: 'USER_ENTERED',
+                    insertDataOption: 'INSERT_ROWS',
+                    resource: { values: linha }
+                });
+                console.log('Histórico de envio registrado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar histórico de envio:', error);
+            }
+        }
     </script>
 </body>
 </html>
