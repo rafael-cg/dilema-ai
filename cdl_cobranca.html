@@ -1736,10 +1736,15 @@
 
         // Calcular totais dos dados do Sheets
         function calcularTotaisSheets(data) {
+            // Função robusta para converter qualquer valor para número
             const toNumber = v => {
-                if (!v) return 0;
+                if (!v || v === '-') return 0;
                 if (typeof v === 'number') return v;
-                return parseFloat(v.toString().replace(/\./g, '').replace(/,/g, '.')) || 0;
+                if (typeof v === 'string') {
+                    // Remove espaços, separador de milhar e troca vírgula por ponto
+                    return parseFloat(v.replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '.')) || 0;
+                }
+                return 0;
             };
 
             const totais = {
