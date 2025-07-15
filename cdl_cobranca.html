@@ -1081,12 +1081,12 @@
                 newRow[5] = row[indices.documento] || '';
                 newRow[6] = row[indices.situacao] || '';
                 newRow[7] = row[indices.tipoCobranca] || '';
-                newRow[8] = parseFloat(row[indices.valorTitulo]) || 0;
-                newRow[9] = parseFloat(row[indices.saldoTitulo]) || 0;
-                newRow[10] = parseFloat(row[indices.valorRecebido]) || 0;
-                newRow[12] = parseFloat(row[indices.valorCDL]) || 0;
-                newRow[13] = parseFloat(row[indices.taxas]) || 0;
-                newRow[14] = parseFloat(row[indices.valorLiquido]) || 0;
+                newRow[8] = +(parseFloat(row[indices.valorTitulo]) || 0).toFixed(2);
+                newRow[9] = +(parseFloat(row[indices.saldoTitulo]) || 0).toFixed(2);
+                newRow[10] = +(parseFloat(row[indices.valorRecebido]) || 0).toFixed(2);
+                newRow[12] = +(parseFloat(row[indices.valorCDL]) || 0).toFixed(2);
+                newRow[13] = +(parseFloat(row[indices.taxas]) || 0).toFixed(2);
+                newRow[14] = +(parseFloat(row[indices.valorLiquido]) || 0).toFixed(2);
                 newRow[18] = formatDate(row[indices.emissao]);
                 newRow[19] = formatDate(row[indices.vencimento]);
 
@@ -1094,14 +1094,14 @@
                 const valorCDL = newRow[12];
 
                 newRow[11] = valorRecuperado > 0 ? Math.ceil((valorCDL / valorRecuperado) * 100) / 100 : 0;
-                newRow[15] = valorCDL * 0.4;
-                newRow[16] = valorCDL * 0.6;
-                newRow[17] = (row[indices.situacao] && row[indices.situacao].toString().toLowerCase().includes('cancelada')) ? valorCDL : 0;
+                newRow[15] = +(valorCDL * 0.4).toFixed(2);
+                newRow[16] = +(valorCDL * 0.6).toFixed(2);
+                newRow[17] = (row[indices.situacao] && row[indices.situacao].toString().toLowerCase().includes('cancelada')) ? +(valorCDL).toFixed(2) : 0;
 
                 const basePremiacao = newRow[16] * 0.95;
-                newRow[20] = basePremiacao * 0.10;
-                newRow[21] = basePremiacao * 0.015;
-                newRow[22] = basePremiacao * 0.01;
+                newRow[20] = +(basePremiacao * 0.10).toFixed(2);
+                newRow[21] = +(basePremiacao * 0.015).toFixed(2);
+                newRow[22] = +(basePremiacao * 0.01).toFixed(2);
 
                 transformedRows.push(newRow);
 
