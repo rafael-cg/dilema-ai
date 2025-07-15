@@ -1616,6 +1616,8 @@
                     });
                     return obj;
                 });
+                console.log('HEADERS DA PLANILHA BASE:', headers);
+                console.log('PRIMEIRA LINHA DE DADOS:', allSheetsData[0]);
 
                 console.log(`✅ ${allSheetsData.length} registros carregados do Google Sheets`);
                 
@@ -1738,15 +1740,16 @@
         function calcularTotaisSheets(data) {
             // Função robusta para converter qualquer valor para número
             const toNumber = v => {
-                if (!v || v === '-') return 0;
+                if (!v) return 0;
                 if (typeof v === 'number') return v;
-                if (typeof v === 'string') {
-                    // Remove espaços, separador de milhar e troca vírgula por ponto
-                    return parseFloat(v.replace(/\s/g, '').replace(/\./g, '').replace(/,/g, '.')) || 0;
-                }
-                return 0;
+                return parseFloat(
+                    v.toString()
+                     .replace(/R\$\s?/g, '')
+                     .replace(/\./g, '') // remove separador de milhar
+                     .replace(/,/g, '.')
+                     .trim()
+                ) || 0;
             };
-
             const totais = {
                 valorRecuperado: 0,
                 receitaPlataforma: 0,
