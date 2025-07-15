@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+    <!-- Adicionar Chart.js CDN no <head> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
             margin: 0;
@@ -874,6 +876,16 @@
                     <div class="card-label">Total de Registros</div>
                 </div>
             </div>
+            <div style="margin: 40px 0;">
+              <label for="chartMetric" style="font-weight:600; color:#1e3c72;">Visualizar gráfico de:</label>
+              <select id="chartMetric" style="padding:8px 16px; border-radius:8px; margin:0 10px;">
+                <option value="valorRecuperado">Total Recuperado</option>
+                <option value="receitaPlataforma">Receita Plataforma</option>
+                <option value="receitaCDLManaus">Receita CDL Manaus</option>
+                <option value="receitaCDLDF">Receita CDL DF</option>
+              </select>
+              <canvas id="resumoChart" height="80"></canvas>
+            </div>
         </div>
 
         <!-- Seção de Detalhes por Associado -->
@@ -1714,6 +1726,12 @@
             
             // Atualizar tabela detalhada
             atualizarTabelaDetalhada();
+
+            // Atualizar gráfico
+            const metric = document.getElementById('chartMetric').value || 'valorRecuperado';
+            const {labels, valores} = gerarDadosGraficoResumo(metric);
+            let label = document.getElementById('chartMetric').options[document.getElementById('chartMetric').selectedIndex].text;
+            atualizarGraficoResumo(labels, valores, label);
         }
 
         // Calcular totais dos dados do Sheets
@@ -1849,6 +1867,71 @@
         // Log para debug
         console.log('📊 Sistema CDL Manaus carregado');
         console.log('📍 Planilha ID:', SPREADSHEET_ID);
+
+        // --- GRÁFICO DE RESUMO FINANCEIRO ---
+        let resumoChart = null;
+        function atualizarGraficoResumo(mesData, valores, label) {
+            const ctx = document.getElementById('resumoChart').getContext('2d');
+            if (resumoChart) resumoChart.destroy();
+            resumoChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: mesData,
+                    datasets: [{
+                        label: label,
+                        data: valores,
+                        backgroundColor: 'rgba(46, 82, 152, 0.7)',
+                        borderColor: 'rgba(30, 60, 114, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        maxBarThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, grid: { color: '#e8eef7' } }
+                    }
+                }
+            });
+        }
+        function gerarDadosGraficoResumo(metric) {
+            // Agrupa por mês/ano e soma a métrica
+            const meses = {};
+            allSheetsData.forEach(row => {
+                const dataPagamento = row['Data pagamento'];
+                if (dataPagamento) {
+                    const [dia, mes, ano] = dataPagamento.split('/');
+                    const chave = `${mes}/${ano}`;
+                    if (!meses[chave]) meses[chave] = 0;
+                    let valor = 0;
+                    if (metric === 'valorRecuperado') valor = parseFloat((row['Valor recuperado']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
+                    if (metric === 'receitaPlataforma') valor = parseFloat((row['Receita da Plataforma (negociação)']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
+                    if (metric === 'receitaCDLManaus') valor = parseFloat((row['Receita CDL Manaus (negociação)']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
+                    if (metric === 'receitaCDLDF') valor = parseFloat((row['Receita CDL DF (negociação)']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
+                    meses[chave] += valor;
+                }
+            });
+            // Ordena meses
+            const mesesOrdenados = Object.keys(meses).sort((a,b)=>{
+                const [ma,aa]=a.split('/'); const [mb,ab]=b.split('/');
+                return (parseInt(aa+ma)-parseInt(ab+mb));
+            });
+            const labels = mesesOrdenados.map(m=>formatarMesAno(m));
+            const valores = mesesOrdenados.map(m=>meses[m]);
+            return {labels, valores};
+        }
+        document.getElementById('chartMetric').addEventListener('change', function() {
+            const metric = this.value;
+            const {labels, valores} = gerarDadosGraficoResumo(metric);
+            let label = this.options[this.selectedIndex].text;
+            atualizarGraficoResumo(labels, valores, label);
+        });
     </script>
 </body>
 </html>
