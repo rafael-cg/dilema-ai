@@ -1917,6 +1917,18 @@
         function gerarDadosGraficoResumo(metric) {
             // Agrupa por mês/ano e soma a métrica
             const meses = {};
+            // Função robusta igual ao toNumber
+            const toNumber = v => {
+                if (!v) return 0;
+                if (typeof v === 'number') return v;
+                return parseFloat(
+                    v.toString()
+                     .replace(/R\$\s?/g, '')
+                     .replace(/\./g, '') // remove separador de milhar
+                     .replace(/,/g, '.')
+                     .trim()
+                ) || 0;
+            };
             allSheetsData.forEach(row => {
                 const dataPagamento = row['Data pagamento'];
                 if (dataPagamento) {
@@ -1924,10 +1936,10 @@
                     const chave = `${mes}/${ano}`;
                     if (!meses[chave]) meses[chave] = 0;
                     let valor = 0;
-                    if (metric === 'valorRecuperado') valor = parseFloat((row['Valor recuperado']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
-                    if (metric === 'receitaPlataforma') valor = parseFloat((row['Receita da Plataforma (negociação)']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
-                    if (metric === 'receitaCDLManaus') valor = parseFloat((row['Receita CDL Manaus (negociação)']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
-                    if (metric === 'receitaCDLDF') valor = parseFloat((row['Receita CDL DF (negociação)']||'0').replace(/\./g,'').replace(/,/g,'.'))||0;
+                    if (metric === 'valorRecuperado') valor = toNumber(row['Valor recuperado']);
+                    if (metric === 'receitaPlataforma') valor = toNumber(row['Receita da Plataforma (negociação)']);
+                    if (metric === 'receitaCDLManaus') valor = toNumber(row['Receita CDL Manaus (negociação)']);
+                    if (metric === 'receitaCDLDF') valor = toNumber(row['Receita CDL DF (negociação)']);
                     meses[chave] += valor;
                 }
             });
