@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PJ6Y3MB67"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-0PJ6Y3MB67');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>IA na Prática: Automatize sua Rotina - Dilema.ai</title>
+    <meta name="description" content="Acompanhe a palestra 'IA na Prática: Automatize sua Rotina' de Rafael Carneiro Garcia. Encontre prompts prontos, ferramentas e um passo a passo para aplicar IA no seu dia a dia.">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --link-color: #0066cc;
+            --border-color: #e0e0e0;
+            --hover-color: #f5f5f5;
+            --gray-text: #666666;
+            --code-bg: #f8f9fa;
+            --highlight-bg: #e3f2fd;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --link-color: #66b3ff;
+            --border-color: #404040;
+            --hover-color: #2a2a2a;
+            --gray-text: #a0a0a0;
+            --code-bg: #2d2d2d;
+            --highlight-bg: #1e3a5f;
+            --success-color: #66bb6a;
+            --warning-color: #ffb74d;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 18px;
+            line-height: 1.7;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .header { margin-bottom: 40px; position: relative; }
+        .back-link { color: var(--link-color); text-decoration: none; font-size: 16px; margin-bottom: 20px; display: inline-block; }
+        .back-link:hover { text-decoration: underline; }
+        .post-header { margin-bottom: 40px; text-align: center; }
+        .post-title { font-size: 2.5rem; font-weight: 600; line-height: 1.2; margin-bottom: 16px; }
+        .post-subtitle { font-size: 1.3rem; color: var(--gray-text); font-weight: 400; }
+        .post-content h2 { font-size: 1.8rem; font-weight: 600; margin: 40px 0 20px 0; color: var(--text-color); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
+        .post-content h3 { font-size: 1.4rem; font-weight: 600; margin: 32px 0 16px 0; color: var(--text-color); }
+        .post-content p { margin-bottom: 24px; }
+        .post-content a { color: var(--link-color); text-decoration: none; font-weight: 500; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content ul, .post-content ol { margin: 24px 0 24px 24px; }
+        .post-content li { margin-bottom: 12px; }
+        .prompt-box { background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin: 24px 0; border-left: 4px solid var(--link-color); position: relative; }
+        .prompt-label { font-weight: 600; color: var(--text-color); margin-bottom: 12px; font-size: 16px; }
+        .prompt-text { font-family: 'Monaco', 'Consolas', monospace; font-size: 16px; line-height: 1.5; background: var(--hover-color); padding: 16px; border-radius: 4px; white-space: pre-wrap; }
+        .copy-btn { position: absolute; top: 15px; right: 15px; background: var(--link-color); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: background-color 0.2s; }
+        .copy-btn:hover { background: #0056b3; }
+        .step-box { background: var(--highlight-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; margin: 32px 0; }
+        .recap-section { border-top: 1px solid var(--border-color); margin-top: 50px; padding-top: 30px; }
+        .recap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .recap-item { background: var(--hover-color); padding: 20px; border-radius: 8px; }
+        .recap-title { font-weight: 600; color: var(--link-color); margin-bottom: 8px; }
+        .qr-code { text-align: center; margin-top: 40px; }
+        .qr-code img { max-width: 150px; border: 5px solid var(--border-color); border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="back-link">← Voltar para a Dilema.ai</a>
+    </div>
+
+    <article>
+        <header class="post-header">
+            <h1 class="post-title">IA na Prática: Automatize sua Rotina</h1>
+            <p class="post-subtitle">Um guia prático com prompts e ferramentas da palestra de Rafael Carneiro Garcia</p>
+        </header>
+
+        <div class="post-content">
+            <p>Bem-vindo! Esta página é um recurso complementar à palestra "IA na Prática: Automatize sua Rotina". Aqui você encontrará um resumo dos principais conceitos, prompts prontos para usar e um passo a passo para aplicar o poder da Inteligência Artificial no seu dia a dia e liberar seu potencial.</p>
+
+            <h2>1. O Poder do Contexto: A Base de Tudo</h2>
+            <p>A regra de ouro para interagir com qualquer IA é: <strong>Contexto é Rei</strong>. Quanto mais informações relevantes você fornecer, mais precisa e útil será a resposta. A IA precisa ter seus olhos, sua memória e seus dados para trabalhar a seu favor.</p>
+            
+            <h3>Na Prática: Como Fornecer Contexto</h3>
+            
+            <h4>📄 Com Arquivos PDF</h4>
+            <div class="step-box">
+                <p><strong>Passo a Passo:</strong></p>
+                <ol>
+                    <li>Abra seu assistente de IA preferido (ChatGPT, Gemini, Claude).</li>
+                    <li>Anexe o arquivo PDF (contrato, manual, relatório, etc.).</li>
+                    <li>Faça perguntas específicas sobre o conteúdo do arquivo.</li>
+                </ol>
+            </div>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt para Análise de Contrato:</div>
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
+                <pre class="prompt-text"><code>Analise este contrato de aluguel (anexado) e responda às seguintes perguntas:
+1. Qual a duração do contrato?
+2. Existe multa por rescisão antecipada? Se sim, qual o valor?
+3. Quais são as minhas responsabilidades como inquilino em relação à manutenção?
+4. Existe alguma cláusula incomum que eu deva prestar atenção?</code></pre>
+            </div>
+
+            <h4>📊 Com Planilhas do Excel</h4>
+            <div class="step-box">
+                <p><strong>Passo a Passo:</strong></p>
+                <ol>
+                    <li>Exporte seus dados em um arquivo .xlsx ou .csv.</li>
+                    <li>Anexe a planilha na sua ferramenta de IA.</li>
+                    <li>Peça análises, gráficos ou insights em linguagem natural.</li>
+                </ol>
+            </div>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt para Análise de Vendas:</div>
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
+                <pre class="prompt-text"><code>Com base nesta planilha de vendas (anexada), crie uma análise completa:
+1. Gere um gráfico de barras mostrando as vendas totais por mês.
+2. Identifique o "Top 5" produtos mais vendidos.
+3. Calcule o ticket médio geral.
+4. Existe alguma tendência ou sazonalidade nos dados?</code></pre>
+            </div>
+
+            <h4>🖼️ Com Prints de Tela</h4>
+            <div class="step-box">
+                <p><strong>Passo a Passo:</strong></p>
+                <ol>
+                    <li>Tire um print (captura de tela) do erro, da interface ou da informação que você precisa de ajuda.</li>
+                    <li>Anexe a imagem na conversa com a IA.</li>
+                    <li>Descreva o problema ou o que você precisa.</li>
+                </ol>
+            </div>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt para Resolver um Erro:</div>
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
+                <pre class="prompt-text"><code>Estou recebendo a mensagem de erro que está neste print de tela. O que ela significa e qual o passo a passo para resolvê-la?</code></pre>
+            </div>
+            
+            <h2>2. Vibe Coding: Programe Sem Ser um Programador</h2>
+            <p>"Vibe coding" é a nova forma de criar pequenas aplicações e automatizar tarefas usando linguagem natural. Você descreve o que quer, e a IA gera o código para você. É uma maneira divertida e poderosa de criar suas próprias ferramentas.</p>
+
+            <h3>Na Prática: Criando o Jogo da Cobrinha</h3>
+            <div class="step-box">
+                <p><strong>Ferramenta:</strong> Gemini (ou ChatGPT com modo de código avançado)</p>
+                <p><strong>Passo a Passo:</strong></p>
+                <ol>
+                    <li>Abra a ferramenta de IA escolhida.</li>
+                    <li>Use um prompt claro e direto para descrever o que você quer criar.</li>
+                    <li>Copie o código gerado, cole em um editor de texto (como Bloco de Notas ou VS Code) e salve como um arquivo .html.</li>
+                    <li>Abra o arquivo no seu navegador para ver o resultado!</li>
+                </ol>
+            </div>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt para Criar o Jogo da Cobrinha:</div>
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
+                <pre class="prompt-text"><code>Crie o código completo (HTML, CSS e JavaScript em um único arquivo) para o clássico jogo da cobrinha (snake game). O jogo deve ter as seguintes características:
+- Um placar para a pontuação.
+- A cobrinha cresce ao comer a comida.
+- O jogo termina se a cobrinha bater na parede ou em si mesma.
+- Use um design simples e limpo.</code></pre>
+            </div>
+
+            <h2>3. Agentes de IA e Automação: O Futuro da Produtividade</h2>
+            <p>Agentes de IA são sistemas que podem executar tarefas completas de forma autônoma, usando diferentes ferramentas e raciocínio em múltiplas etapas. Eles são o próximo passo na automação de rotinas complexas.</p>
+
+            <h3>Na Prática: Automatizando Posts para Redes Sociais</h3>
+            <div class="step-box">
+                <p><strong>Ferramentas No-Code:</strong> <a href="https://make.com" target="_blank">Make.com</a> ou <a href="https://zapier.com" target="_blank">Zapier</a></p>
+                <p><strong>Passo a Passo (Conceitual):</strong></p>
+                <ol>
+                    <li><strong>Gatilho:</strong> Defina um gatilho, como "Toda segunda-feira às 9h".</li>
+                    <li><strong>Ação 1 (IA):</strong> Conecte com o ChatGPT/OpenAI e use um prompt para gerar uma ideia de post. Ex: <em>"Crie uma dica rápida sobre produtividade para pequenas empresas."</em></li>
+                    <li><strong>Ação 2 (IA):</strong> Use o resultado da Ação 1 como entrada para um novo prompt que gera a imagem. Ex: <em>"Crie uma imagem para um post de Instagram com o seguinte texto: [Resultado da Ação 1]"</em>.</li>
+                    <li><strong>Ação 3 (Rede Social):</strong> Conecte com o Instagram e configure para postar a imagem e o texto gerados.</li>
+                </ol>
+                <p>Com isso, você cria um sistema que posta conteúdo relevante para você toda semana, de forma 100% automática.</p>
+            </div>
+            <div class="prompt-box">
+                <div class="prompt-label">Prompt para Gerar Legenda (para usar em automações):</div>
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
+                <pre class="prompt-text"><code>Atue como um especialista em mídias sociais para o varejo. Crie uma legenda curta e impactante para o Instagram sobre a importância de um bom atendimento ao cliente. Inclua 3 hashtags relevantes. O tom deve ser inspirador e profissional.</code></pre>
+            </div>
+
+            <section class="recap-section">
+                <h2>Recapitulando: 5 Passos para o Sucesso</h2>
+                <div class="recap-grid">
+                    <div class="recap-item">
+                        <div class="recap-title">1. Cointeligência</div>
+                        <p>Sempre convide a IA para participar do seu trabalho. Ela é sua parceira de raciocínio.</p>
+                    </div>
+                    <div class="recap-item">
+                        <div class="recap-title">2. Contexto</div>
+                        <p>Forneça arquivos, prints e detalhes. Quanto mais a IA souber, melhor será a ajuda dela.</p>
+                    </div>
+                    <div class="recap-item">
+                        <div class="recap-title">3. Tarefa Clara</div>
+                        <p>Defina bem o que você quer resolver. Se a tarefa for complexa, divida-a em partes menores.</p>
+                    </div>
+                    <div class="recap-item">
+                        <div class="recap-title">4. Vibe Coding</div>
+                        <p>Não tenha medo de experimentar! Peça para a IA criar pequenas ferramentas e aplicações para você.</p>
+                    </div>
+                    <div class="recap-item">
+                        <div class="recap-title">5. Agentes e Automação</div>
+                        <p>Pense em tarefas repetitivas do seu dia a dia e explore ferramentas como Make.com para automatizá-las.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="qr-code">
+                <h3>Participe do nosso grupo no WhatsApp!</h3>
+                <p>Escaneie o QR Code para continuar a conversa, tirar dúvidas e receber mais dicas.</p>
+                <img src="https://i.imgur.com/your-qr-code-image.png" alt="QR Code para o grupo do WhatsApp">
+            </div>
+
+        </div>
+    </article>
+
+    <script>
+        function copyToClipboard(button) {
+            const promptText = button.nextElementSibling.textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                button.textContent = 'Copiado!';
+                setTimeout(() => {
+                    button.textContent = 'Copiar';
+                }, 2000);
+            }, (err) => {
+                console.error('Erro ao copiar texto: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
