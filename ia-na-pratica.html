@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PJ6Y3MB67"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -67,7 +68,7 @@
         .post-content li { margin-bottom: 12px; }
         .prompt-box { background: var(--code-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; margin: 24px 0; border-left: 4px solid var(--link-color); position: relative; }
         .prompt-label { font-weight: 600; color: var(--text-color); margin-bottom: 12px; font-size: 16px; }
-        .prompt-text { font-family: 'Monaco', 'Consolas', monospace; font-size: 16px; line-height: 1.5; background: var(--hover-color); padding: 16px; border-radius: 4px; white-space: pre-wrap; }
+        .prompt-text { font-family: 'Monaco', 'Consolas', monospace; font-size: 16px; line-height: 1.5; background: var(--hover-color); padding: 16px; border-radius: 4px; white-space: pre-wrap; overflow-x: auto; }
         .copy-btn { position: absolute; top: 15px; right: 15px; background: var(--link-color); color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; transition: background-color 0.2s; }
         .copy-btn:hover { background: #0056b3; }
         .step-box { background: var(--highlight-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 24px; margin: 32px 0; }
@@ -81,7 +82,7 @@
 </head>
 <body>
     <div class="header">
-        <a href="/" class="back-link">← Voltar para a Dilema.ai</a>
+        <a href="/index.html" class="back-link">← Voltar para a Dilema.ai</a>
     </div>
 
     <article>
@@ -103,18 +104,14 @@
                 <p><strong>Passo a Passo:</strong></p>
                 <ol>
                     <li>Abra seu assistente de IA preferido (ChatGPT, Gemini, Claude).</li>
-                    <li>Anexe o arquivo PDF (contrato, manual, relatório, etc.).</li>
+                    <li>Anexe um arquivo PDF (contrato, manual, relatório, etc.).</li>
                     <li>Faça perguntas específicas sobre o conteúdo do arquivo.</li>
                 </ol>
             </div>
             <div class="prompt-box">
-                <div class="prompt-label">Prompt para Análise de Contrato:</div>
+                <div class="prompt-label">Prática: Analise um Manual Técnico</div>
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
-                <pre class="prompt-text"><code>Analise este contrato de aluguel (anexado) e responda às seguintes perguntas:
-1. Qual a duração do contrato?
-2. Existe multa por rescisão antecipada? Se sim, qual o valor?
-3. Quais são as minhas responsabilidades como inquilino em relação à manutenção?
-4. Existe alguma cláusula incomum que eu deva prestar atenção?</code></pre>
+                <pre class="prompt-text"><code>Anexe o manual de um produto qualquer (ex: sua TV ou cafeteira) e peça: "Com base neste manual, crie um guia rápido de 5 passos para a primeira utilização do produto."</code></pre>
             </div>
 
             <h4>📊 Com Planilhas do Excel</h4>
@@ -127,73 +124,62 @@
                 </ol>
             </div>
             <div class="prompt-box">
-                <div class="prompt-label">Prompt para Análise de Vendas:</div>
+                <div class="prompt-label">Prática: Encontre Inconsistências</div>
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
-                <pre class="prompt-text"><code>Com base nesta planilha de vendas (anexada), crie uma análise completa:
-1. Gere um gráfico de barras mostrando as vendas totais por mês.
-2. Identifique o "Top 5" produtos mais vendidos.
-3. Calcule o ticket médio geral.
-4. Existe alguma tendência ou sazonalidade nos dados?</code></pre>
+                <pre class="prompt-text"><code>Anexe uma planilha com dados (pode ser de vendas, despesas, etc.) e peça: "Analise esta planilha e aponte 3 possíveis inconsistências ou erros de digitação nos dados."</code></pre>
             </div>
 
             <h4>🖼️ Com Prints de Tela</h4>
             <div class="step-box">
                 <p><strong>Passo a Passo:</strong></p>
                 <ol>
-                    <li>Tire um print (captura de tela) do erro, da interface ou da informação que você precisa de ajuda.</li>
+                    <li>Tire um print (captura de tela) de um erro, uma interface ou uma informação sobre a qual você tem dúvida.</li>
                     <li>Anexe a imagem na conversa com a IA.</li>
                     <li>Descreva o problema ou o que você precisa.</li>
                 </ol>
             </div>
             <div class="prompt-box">
-                <div class="prompt-label">Prompt para Resolver um Erro:</div>
+                <div class="prompt-label">Prática: Crie um Tutorial a partir de um Print</div>
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
-                <pre class="prompt-text"><code>Estou recebendo a mensagem de erro que está neste print de tela. O que ela significa e qual o passo a passo para resolvê-la?</code></pre>
+                <pre class="prompt-text"><code>Tire um print da tela inicial de um aplicativo que você usa muito e peça: "Com base neste print, escreva um parágrafo de boas-vindas para um novo usuário, explicando as 3 principais funções que ele pode ver na tela."</code></pre>
             </div>
             
             <h2>2. Vibe Coding: Programe Sem Ser um Programador</h2>
             <p>"Vibe coding" é a nova forma de criar pequenas aplicações e automatizar tarefas usando linguagem natural. Você descreve o que quer, e a IA gera o código para você. É uma maneira divertida e poderosa de criar suas próprias ferramentas.</p>
 
-            <h3>Na Prática: Criando o Jogo da Cobrinha</h3>
+            <h3>Na Prática: Criando uma Ferramenta Útil</h3>
             <div class="step-box">
                 <p><strong>Ferramenta:</strong> Gemini (ou ChatGPT com modo de código avançado)</p>
                 <p><strong>Passo a Passo:</strong></p>
                 <ol>
                     <li>Abra a ferramenta de IA escolhida.</li>
-                    <li>Use um prompt claro e direto para descrever o que você quer criar.</li>
-                    <li>Copie o código gerado, cole em um editor de texto (como Bloco de Notas ou VS Code) e salve como um arquivo .html.</li>
-                    <li>Abra o arquivo no seu navegador para ver o resultado!</li>
+                    <li>Use um prompt claro e direto para descrever a ferramenta que você quer criar.</li>
+                    <li>Copie o código gerado, cole em um editor de texto e salve como um arquivo .html.</li>
+                    <li>Abra o arquivo no seu navegador para usar sua nova ferramenta!</li>
                 </ol>
             </div>
             <div class="prompt-box">
-                <div class="prompt-label">Prompt para Criar o Jogo da Cobrinha:</div>
+                <div class="prompt-label">Prática: Crie uma Calculadora de Orçamento</div>
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
-                <pre class="prompt-text"><code>Crie o código completo (HTML, CSS e JavaScript em um único arquivo) para o clássico jogo da cobrinha (snake game). O jogo deve ter as seguintes características:
-- Um placar para a pontuação.
-- A cobrinha cresce ao comer a comida.
-- O jogo termina se a cobrinha bater na parede ou em si mesma.
-- Use um design simples e limpo.</code></pre>
+                <pre class="prompt-text"><code>Crie o código completo (HTML, CSS e JavaScript em um único arquivo) para uma calculadora de orçamento pessoal. Ela deve ter campos para:
+- Renda Mensal
+- Despesas Fixas (Aluguel, contas, etc.)
+- Despesas Variáveis (Lazer, alimentação, etc.)
+A calculadora deve mostrar o saldo final e uma mensagem se o saldo for positivo ou negativo. O design deve ser limpo e amigável.</code></pre>
             </div>
 
             <h2>3. Agentes de IA e Automação: O Futuro da Produtividade</h2>
             <p>Agentes de IA são sistemas que podem executar tarefas completas de forma autônoma, usando diferentes ferramentas e raciocínio em múltiplas etapas. Eles são o próximo passo na automação de rotinas complexas.</p>
 
-            <h3>Na Prática: Automatizando Posts para Redes Sociais</h3>
+            <h3>Na Prática: Planejando uma Automação</h3>
             <div class="step-box">
                 <p><strong>Ferramentas No-Code:</strong> <a href="https://make.com" target="_blank">Make.com</a> ou <a href="https://zapier.com" target="_blank">Zapier</a></p>
-                <p><strong>Passo a Passo (Conceitual):</strong></p>
-                <ol>
-                    <li><strong>Gatilho:</strong> Defina um gatilho, como "Toda segunda-feira às 9h".</li>
-                    <li><strong>Ação 1 (IA):</strong> Conecte com o ChatGPT/OpenAI e use um prompt para gerar uma ideia de post. Ex: <em>"Crie uma dica rápida sobre produtividade para pequenas empresas."</em></li>
-                    <li><strong>Ação 2 (IA):</strong> Use o resultado da Ação 1 como entrada para um novo prompt que gera a imagem. Ex: <em>"Crie uma imagem para um post de Instagram com o seguinte texto: [Resultado da Ação 1]"</em>.</li>
-                    <li><strong>Ação 3 (Rede Social):</strong> Conecte com o Instagram e configure para postar a imagem e o texto gerados.</li>
-                </ol>
-                <p>Com isso, você cria um sistema que posta conteúdo relevante para você toda semana, de forma 100% automática.</p>
+                <p>O primeiro passo para automatizar é pensar como um agente de IA. Descreva uma tarefa repetitiva em etapas lógicas.</p>
             </div>
             <div class="prompt-box">
-                <div class="prompt-label">Prompt para Gerar Legenda (para usar em automações):</div>
+                <div class="prompt-label">Prática: Desenhe um Fluxo de Automação</div>
                 <button class="copy-btn" onclick="copyToClipboard(this)">Copiar</button>
-                <pre class="prompt-text"><code>Atue como um especialista em mídias sociais para o varejo. Crie uma legenda curta e impactante para o Instagram sobre a importância de um bom atendimento ao cliente. Inclua 3 hashtags relevantes. O tom deve ser inspirador e profissional.</code></pre>
+                <pre class="prompt-text"><code>Quero automatizar o processo de responder a novos leads que chegam por e-mail. Descreva para mim, passo a passo, como um agente de IA poderia fazer isso. Comece com o gatilho "Novo e-mail recebido com o assunto 'Pedido de Orçamento'" e detalhe as ações, como ler o e-mail, extrair informações (nome, empresa, necessidade) e redigir uma resposta padrão.</code></pre>
             </div>
 
             <section class="recap-section">
@@ -225,22 +211,37 @@
             <div class="qr-code">
                 <h3>Participe do nosso grupo no WhatsApp!</h3>
                 <p>Escaneie o QR Code para continuar a conversa, tirar dúvidas e receber mais dicas.</p>
-                <img src="https://i.imgur.com/your-qr-code-image.png" alt="QR Code para o grupo do WhatsApp">
+                <img src="assets/images/qr-code-wpp.png" alt="QR Code para o grupo do WhatsApp" onerror="this.onerror=null;this.src='https://placehold.co/150x150/e0e0e0/000000?text=QR+Code';">
             </div>
 
         </div>
     </article>
 
     <script>
+        // Função para copiar o texto do prompt para a área de transferência
         function copyToClipboard(button) {
-            const promptText = button.nextElementSibling.textContent;
+            // Encontra o elemento <pre> irmão do botão
+            const preElement = button.nextElementSibling;
+            const promptText = preElement.textContent || preElement.innerText;
+            
+            // Usa a API do Clipboard para copiar o texto
             navigator.clipboard.writeText(promptText).then(() => {
+                // Feedback visual para o usuário
                 button.textContent = 'Copiado!';
+                button.style.backgroundColor = '#4caf50'; // Verde sucesso
                 setTimeout(() => {
                     button.textContent = 'Copiar';
+                    button.style.backgroundColor = 'var(--link-color)'; // Volta à cor original
                 }, 2000);
-            }, (err) => {
+            }).catch(err => {
                 console.error('Erro ao copiar texto: ', err);
+                // Feedback de erro (opcional)
+                button.textContent = 'Erro!';
+                button.style.backgroundColor = '#f44336'; // Vermelho erro
+                 setTimeout(() => {
+                    button.textContent = 'Copiar';
+                    button.style.backgroundColor = 'var(--link-color)';
+                }, 2000);
             });
         }
     </script>
