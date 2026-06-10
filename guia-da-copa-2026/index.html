@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia da Copa 2026 — As 48 seleções: convocados, táticas e palpites</title>
+<meta name="description" content="Guia interativo da Copa do Mundo 2026: os 12 grupos, convocados das 48 seleções, esquemas táticos, craques, histórico em Copas e palpites.">
+<meta name="theme-color" content="#057a35">
+<link rel="canonical" href="https://dilema.ai/guia-da-copa-2026/">
+<meta property="og:url" content="https://dilema.ai/guia-da-copa-2026/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Guia da Copa 2026 ⚽ 48 seleções: convocados, táticas e palpites">
+<meta property="og:description" content="Clique em qualquer seleção: elenco completo, campinho tático, craques com foto, histórico e palpite. EUA · México · Canadá, 11/06 a 19/07.">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Guia da Copa 2026 ⚽ 48 seleções">
+<meta name="twitter:description" content="Convocados, esquemas táticos, craques e palpites das 48 seleções da Copa 2026.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23057a35'/><text x='50' y='72' font-size='62' text-anchor='middle'>⚽</text></svg>">
+<style>
+:root{
+  --cup-green:#06aa48; --cup-green-dark:#057a35; --cup-green-deep:#024d21;
+  --cup-bg:#f2f2f2; --card:#ffffff; --ink:#222; --ink-soft:#555;
+  --accent:#ff5c00; --gold:#e6b800; --pitch1:#2e8b3d; --pitch2:#277934;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Open Sans",sans-serif;background:var(--cup-bg);color:var(--ink)}
+/* ---------- header ---------- */
+.topbar{background:#fff;border-bottom:1px solid #e2e2e2;position:sticky;top:0;z-index:50}
+.topbar-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
+.site-logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#0cce5c,#06aa48 55%,#02732f);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:24px;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.crumb{font-size:13px;color:var(--ink-soft)} .crumb b{color:var(--cup-green-dark)}
+.search{margin-left:auto}
+.search input{border:1px solid #d5d5d5;border-radius:20px;padding:8px 16px;font-size:13px;width:210px;outline:none}
+.search input:focus{border-color:var(--cup-green)}
+/* ---------- hero ---------- */
+.hero{background:linear-gradient(120deg,var(--cup-green-deep),var(--cup-green-dark) 45%,var(--cup-green));color:#fff;padding:38px 16px 30px;position:relative;overflow:hidden}
+.hero::after{content:"⚽";position:absolute;right:-20px;top:-30px;font-size:190px;opacity:.08;transform:rotate(18deg)}
+.hero-in{max-width:1100px;margin:0 auto}
+.hero h1{font-size:clamp(26px,4.5vw,42px);font-weight:800;line-height:1.05}
+.hero h1 span{color:#aef5c8}
+.hero p{margin-top:10px;font-size:15px;max-width:640px;opacity:.94}
+.hero .meta{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);border-radius:14px;padding:5px 12px;font-size:12.5px;font-weight:600}
+/* ---------- group nav ---------- */
+.gnav{position:sticky;top:67px;z-index:40;background:#fff;border-bottom:1px solid #e2e2e2;overflow-x:auto}
+.gnav-in{max-width:1100px;margin:0 auto;display:flex;gap:6px;padding:9px 16px;white-space:nowrap}
+.gpill{border:1px solid #d8d8d8;background:#fff;color:var(--ink-soft);border-radius:16px;padding:6px 13px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none}
+.gpill:hover,.gpill.hot{background:var(--cup-green);border-color:var(--cup-green);color:#fff}
+/* ---------- groups ---------- */
+.wrap{max-width:1100px;margin:0 auto;padding:26px 16px 60px}
+.gsec{margin-bottom:34px}
+.gsec h2{font-size:20px;font-weight:800;color:var(--cup-green-deep);border-left:5px solid var(--cup-green);padding-left:10px;margin-bottom:14px}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.tcard{background:var(--card);border-radius:12px;padding:16px;display:flex;align-items:center;gap:13px;cursor:pointer;border:1px solid #e7e7e7;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.tcard:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.13);border-color:var(--cup-green)}
+.shield{width:54px;height:60px;flex:0 0 54px;clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%);overflow:hidden;background:#ddd;box-shadow:inset 0 0 0 3px rgba(0,0,0,.12)}
+.shield img{width:100%;height:100%;object-fit:cover}
+.tcard .tn{font-weight:800;font-size:15.5px}
+.tcard .tc{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.tcard .tf{font-size:11px;color:var(--cup-green-dark);font-weight:700;margin-top:3px}
+/* ---------- modal ---------- */
+.ovl{position:fixed;inset:0;background:rgba(0,20,8,.62);z-index:100;display:none;overflow-y:auto;backdrop-filter:blur(2px)}
+.ovl.on{display:block}
+.sheet{max-width:860px;margin:30px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.sheet-h{background:linear-gradient(120deg,var(--cup-green-deep),var(--cup-green));color:#fff;padding:24px 24px 0;position:relative}
+.sheet-h .x{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.18);border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:17px;cursor:pointer}
+.sheet-h .x:hover{background:rgba(255,255,255,.35)}
+.sh-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.bigshield{width:84px;height:94px;clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%);overflow:hidden;box-shadow:inset 0 0 0 4px rgba(255,255,255,.55);background:#fff}
+.bigshield img{width:100%;height:100%;object-fit:cover}
+.sh-top h3{font-size:30px;font-weight:800}
+.sh-top .sub{font-size:13.5px;opacity:.93;margin-top:4px}
+.tabs{display:flex;gap:2px;margin-top:20px}
+.tab{background:rgba(255,255,255,.14);border:none;color:#fff;padding:11px 18px;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0}
+.tab.on{background:#fff;color:var(--cup-green-deep)}
+.sheet-b{padding:24px}
+.pane{display:none}.pane.on{display:block}
+.lbl{font-size:11.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--cup-green-dark);margin:18px 0 7px}
+.lbl:first-child{margin-top:0}
+.txt{font-size:14.5px;line-height:1.62;color:#333}
+.palp{background:#f0faf3;border-left:4px solid var(--cup-green);border-radius:0 10px 10px 0;padding:12px 15px;font-size:14px;line-height:1.55}
+.stars{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.star{background:#fafafa;border:1px solid #ececec;border-radius:12px;padding:14px;text-align:center}
+.star .ph{width:84px;height:84px;border-radius:50%;margin:0 auto 9px;background:linear-gradient(135deg,#e8e8e8,#d2d2d2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:#999;overflow:hidden;border:3px solid var(--cup-green)}
+.star .ph img{width:100%;height:100%;object-fit:cover;object-position:top}
+.star .role{font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+.star .nm{font-weight:800;font-size:14.5px;margin-top:3px}
+/* ---------- pitch ---------- */
+.pitchwrap{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.pitch{width:340px;height:480px;flex:0 0 340px;border-radius:12px;position:relative;background:repeating-linear-gradient(0deg,var(--pitch1) 0 60px,var(--pitch2) 60px 120px);box-shadow:inset 0 0 0 3px rgba(255,255,255,.65),0 6px 18px rgba(0,0,0,.18)}
+.pitch::before{content:"";position:absolute;left:50%;top:50%;width:92px;height:92px;border:2px solid rgba(255,255,255,.6);border-radius:50%;transform:translate(-50%,-50%)}
+.pitch::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:rgba(255,255,255,.6)}
+.area{position:absolute;left:50%;transform:translateX(-50%);width:170px;height:58px;border:2px solid rgba(255,255,255,.6)}
+.area.top{top:0;border-top:none}.area.bot{bottom:0;border-bottom:none}
+.chip{position:absolute;transform:translate(-50%,-50%);text-align:center;width:74px;z-index:2}
+.chip .dot{width:36px;height:36px;border-radius:50%;background:#fff;color:var(--cup-green-deep);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 2px 6px rgba(0,0,0,.35);border:2px solid var(--cup-green)}
+.chip.gk .dot{background:var(--gold);border-color:#a88600;color:#403300}
+.chip .cn{margin-top:3px;font-size:10px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8);line-height:1.15}
+.forminfo{flex:1;min-width:220px}
+.formbig{font-size:34px;font-weight:800;color:var(--cup-green-deep)}
+/* ---------- squad ---------- */
+.sq{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.sq h5{font-size:12px;font-weight:800;letter-spacing:1px;color:var(--cup-green-dark);text-transform:uppercase;margin-bottom:7px}
+.sq ul{list-style:none}
+.sq li{font-size:13px;padding:5px 0;border-bottom:1px solid #f0f0f0;line-height:1.35}
+.sq li i{color:var(--ink-soft);font-style:normal;font-size:11.5px}
+/* ---------- balanço ---------- */
+.fav{background:linear-gradient(120deg,#11321c,#0a5c2e);border-radius:16px;color:#fff;padding:26px;margin-top:10px}
+.fav h2{font-size:21px;margin-bottom:13px}
+.fav .row{display:flex;gap:8px;flex-wrap:wrap;margin:7px 0 14px}
+.fchip{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:6px 13px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px}
+.fchip img{width:22px;height:15px;border-radius:2px;object-fit:cover}
+.fav .ft{font-size:12px;letter-spacing:1.1px;text-transform:uppercase;opacity:.75;font-weight:800}
+footer{background:#1c1c1c;color:#aaa;font-size:12.5px;padding:26px 16px;text-align:center;line-height:1.7}
+footer a{color:#7fd6a0}
+@media(max-width:640px){.pitch{flex:1 1 100%;width:100%} .search input{width:130px}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-in">
+  <div class="site-logo">⚽</div>
+  <div class="crumb">futebol &rsaquo; <b>copa do mundo 2026</b></div>
+  <div class="search"><input id="q" type="search" placeholder="Buscar seleção..." oninput="filtra(this.value)"></div>
+</div></div>
+
+<div class="hero"><div class="hero-in">
+  <h1>COPA DO MUNDO <span>2026</span><br>O guia interativo das 48 seleções</h1>
+  <p>Estados Unidos, México e Canadá · 11 de junho a 19 de julho · 104 jogos. Convocados, esquemas táticos, craques, histórico e palpites — clique em qualquer seleção.</p>
+  <div class="meta">
+    <span class="badge">🏟️ 16 cidades-sede</span><span class="badge">🆕 4 estreantes</span>
+    <span class="badge">👑 Argentina defende o título</span><span class="badge">🐐 Messi e CR7 na 6ª Copa</span>
+  </div>
+</div></div>
+
+<nav class="gnav"><div class="gnav-in" id="gnav"></div></nav>
+
+<main class="wrap">
+  <div id="grupos"></div>
+
+  <section class="fav" id="balanco">
+    <h2>⭐ Balanço final: quem chega como favorito</h2>
+    <div class="ft">Favoritos</div><div class="row" id="favs"></div>
+    <div class="ft">Azarões de elite</div><div class="row" id="dark"></div>
+    <div class="ft">Palpite-síntese</div>
+    <p style="font-size:14px;line-height:1.6;margin-top:6px">Semifinais <b>Espanha x Brasil</b> e <b>França x Argentina</b>; final <b>Espanha x Argentina</b> no MetLife — a Finalissima que a guerra cancelou, remarcada pelo destino. Campeã: <b>Espanha</b>. Artilheiro: Mbappé. Craque: Lamine Yamal.</p>
+  </section>
+</main>
+
+<div class="ovl" id="ovl" onclick="if(event.target===this)fecha()">
+  <div class="sheet">
+    <div class="sheet-h">
+      <button class="x" onclick="fecha()">✕</button>
+      <div class="sh-top">
+        <div class="bigshield"><img id="m-flag" alt=""></div>
+        <div><h3 id="m-nome"></h3><div class="sub" id="m-sub"></div></div>
+      </div>
+      <div class="tabs">
+        <button class="tab on" onclick="aba(0,this)">Visão geral</button>
+        <button class="tab" onclick="aba(1,this)">Esquema tático</button>
+        <button class="tab" onclick="aba(2,this)">Convocados</button>
+      </div>
+    </div>
+    <div class="sheet-b">
+      <div class="pane on" id="p0">
+        <div class="lbl">Os caras do time</div><div class="stars" id="m-stars"></div>
+        <div class="lbl">Resenha</div><p class="txt" id="m-res"></p>
+        <div class="lbl">Histórico em Copas</div><p class="txt" id="m-hist"></p>
+        <div class="lbl">Palpite</div><div class="palp" id="m-palp"></div>
+      </div>
+      <div class="pane" id="p1">
+        <div class="pitchwrap">
+          <div class="pitch" id="m-pitch"><div class="area top"></div><div class="area bot"></div></div>
+          <div class="forminfo">
+            <div class="lbl">Esquema básico</div><div class="formbig" id="m-form"></div>
+            <div class="lbl">Time provável</div><p class="txt" id="m-xi"></p>
+            <div class="lbl">Técnico</div><p class="txt" id="m-coach"></p>
+          </div>
+        </div>
+      </div>
+      <div class="pane" id="p2"><div class="sq" id="m-sq"></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Guia não-oficial de torcedor, sem vínculo com a FIFA, federações ou veículos de imprensa.<br>
+  Convocações: listas oficiais FIFA (02/06/2026). Bandeiras: flagcdn.com · Fotos de jogadores: Wikipedia (carregadas ao abrir cada seleção).<br>
+  Times prováveis, resenhas e palpites são opinião editorial do autor.
+</footer>
+
+<script>
+/* ====== DADOS: 48 seleções ======
+   xi: GK primeiro, depois linhas de trás pra frente, cada linha da esquerda p/ direita.
+   sq: convocados por posição (G/D/M/A), "Nome (Clube)" separados por ";".
+   w: nomes p/ busca de foto na Wikipedia (líder, craque, aposta). */
+const TEAMS=[
+{id:"mex",n:"México",f:"mx",g:"A",coach:"Javier Aguirre",form:"4-3-3",
+xi:"Rangel|Gallardo|Vásquez|Montes|J. Sánchez|Mora|Edson Álvarez|Fidalgo|Vega|S. Giménez|Alvarado",
+stars:[["Líder","Edson Álvarez"],["Craque","Santiago Giménez"],["Aposta","Gilberto Mora"]],
+res:"Anfitrião pela 3ª vez, o México mistura a velha guarda (Ochoa, 40 anos, na 6ª Copa) com a geração de Gilberto Mora, joia de 17 anos. Time sólido com Edson Álvarez, campeão da Copa Ouro 2025 — mas a pressão do Azteca corta para os dois lados.",
+hist:"18ª participação. Nunca passou das quartas — e só chegou lá em casa (1970 e 1986). O 'quinto partido' é obsessão nacional.",
+palp:"Avança em 1º ou 2º e, embalado pela torcida, finalmente vence o 5º jogo: oitavas, com teto nas quartas.",
+sq:{G:"Raúl Rangel (Guadalajara); Carlos Acevedo (Santos Laguna); Guillermo Ochoa (AEL Limassol)",D:"Jorge Sánchez (PAOK); César Montes (Lokomotiv); Edson Álvarez (Fenerbahçe); Johan Vásquez (Genoa); Israel Reyes (América); Mateo Chávez (AZ); Jesús Gallardo (Toluca)",M:"Érik Lira (Cruz Azul); Luis Romo (Guadalajara); Álvaro Fidalgo (Betis); Orbelín Pineda (AEK); Obed Vargas (Atlético de Madrid); Gilberto Mora (Tijuana); Luis Chávez (Dynamo Moscou); Brian Gutiérrez (Guadalajara)",A:"Raúl Jiménez (Fulham); Alexis Vega (Toluca); Santiago Giménez (Milan); Armando González (Guadalajara); Julián Quiñones (Al-Qadsiah); César Huerta (Anderlecht); Guillermo Martínez (Pumas); Roberto Alvarado (Guadalajara)"}},
+{id:"rsa",n:"África do Sul",f:"za",g:"A",coach:"Hugo Broos",form:"4-3-3",
+xi:"R. Williams|Modiba|Ndamane|Sibisi|Mudau|Mokoena|Sithole|Adams|Appollis|Foster|Mofokeng",
+stars:[["Líder","Ronwen Williams"],["Craque","Teboho Mokoena"],["Aposta","Relebohile Mofokeng"]],
+res:"Os Bafana Bafana voltam após 16 anos com um bloco doméstico (Sundowns/Pirates) que se conhece de cor, 3º lugar na CAN-2023 e vaga ganha em campo sobre a Nigéria. Falta repertório contra defesas fechadas e experiência de palco grande.",
+hist:"4ª participação (1998, 2002, 2010). Nunca passou da fase de grupos — em 2010 foi a primeira sede eliminada na 1ª fase.",
+palp:"Briga ponto a ponto; 3º lugar com chance real de vaga entre os melhores terceiros.",
+sq:{G:"Ronwen Williams (Sundowns); Sipho Chaine (Orlando Pirates); Ricardo Goss (Siwelele)",D:"Thabang Matuludi (Polokwane); Khulumani Ndamane (Sundowns); Aubrey Modiba (Sundowns); Mbekezeli Mbokazi (Chicago Fire); Samukele Kabini (Molde); Nkosinathi Sibisi (Pirates); Khuliso Mudau (Sundowns); Ime Okon (Hannover); Olwethu Makhanya (Philadelphia); Bradley Cross (Kaizer Chiefs)",M:"Teboho Mokoena (Sundowns); Thalente Mbatha (Pirates); Themba Zwane (Sundowns); Sphephelo Sithole (Tondela); Jayden Adams (Sundowns)",A:"Oswin Appollis (Pirates); Tshepang Moremi (Pirates); Lyle Foster (Burnley); Relebohile Mofokeng (Pirates); Thapelo Maseko (AEL); Iqraam Rayners (Sundowns); Evidence Makgopa (Pirates); Kamogelo Sebelebele (Pirates)"}},
+{id:"kor",n:"Coreia do Sul",f:"kr",g:"A",coach:"Hong Myung-bo",form:"4-2-3-1",
+xi:"Jo Hyeon-woo|Lee Tae-seok|Lee Han-beom|Kim Min-jae|Kim Moon-hwan|Hwang In-beom|Paik Seung-ho|Son Heung-min|Lee Jae-sung|Lee Kang-in|Oh Hyeon-gyu",
+stars:[["Líder","Son Heung-min"],["Craque","Lee Kang-in"],["Aposta","Bae Jun-ho"]],
+res:"A espinha dorsal mais qualificada da Ásia: Kim Min-jae atrás, Lee Kang-in criando, Son — aos 33, talvez na última Copa — na frente. Transição veloz de elite; a dúvida é o centroavante e a bola parada defensiva.",
+hist:"12ª participação, 11ª seguida (recorde asiático). O 4º lugar de 2002 segue como auge; oitavas em 2010 e 2022.",
+palp:"Vaga nas oitavas como 2ª do grupo, possivelmente decidida no confronto direto com o México.",
+sq:{G:"Kim Seung-gyu (FC Tokyo); Song Bum-keun (Jeonbuk); Jo Hyeon-woo (Ulsan)",D:"Lee Han-beom (Midtjylland); Kim Min-jae (Bayern); Kim Tae-hyeon (Kashima); Lee Tae-seok (Austria Wien); Cho Wi-je (Jeonbuk); Kim Moon-hwan (Daejeon); Park Jin-seob (Zhejiang); Seol Young-woo (Estrela Vermelha); Jens Castrop (M'gladbach)",M:"Lee Gi-hyuk (Gangwon); Hwang In-beom (Feyenoord); Paik Seung-ho (Birmingham); Lee Jae-sung (Mainz); Bae Jun-ho (Stoke); Lee Kang-in (PSG); Yang Hyun-jun (Celtic); Kim Jin-gyu (Jeonbuk); Eom Ji-sung (Swansea); Lee Dong-gyeong (Ulsan)",A:"Son Heung-min (LAFC); Cho Gue-sung (Midtjylland); Hwang Hee-chan (Wolves); Oh Hyeon-gyu (Beşiktaş)"}},
+{id:"cze",n:"República Tcheca",f:"cz",g:"A",coach:"Miroslav Koubek",form:"4-2-3-1",
+xi:"Kovář|Jurásek|Krejčí|Hranáč|Coufal|Souček|Červ|Provod|Šulc|Hložek|Schick",
+stars:[["Líder","Tomáš Souček"],["Craque","Patrik Schick"],["Aposta","Pavel Šulc"]],
+res:"Time de um homem na frente — Schick, artilheiro de elite quando saudável — sustentado por um bloco da Slavia Praga (9 convocados). Classificou-se na raça: pênaltis contra a Dinamarca na final da repescagem.",
+hist:"Volta após 20 anos (última: 2006). Como Tchecoslováquia, foi vice em 1934 e 1962; como República Tcheca é só a 2ª participação.",
+palp:"Briga pela 2ª vaga, mas o cenário mais provável é o 3º lugar, torcendo pela repescagem dos terceiros.",
+sq:{G:"Matěj Kovář (PSV); Jindřich Staněk (Slavia); Lukáš Horníček (Braga)",D:"David Zima (Slavia); Tomáš Holeš (Slavia); Robin Hranáč (Hoffenheim); Vladimír Coufal (Hoffenheim); Štěpán Chaloupek (Slavia); Ladislav Krejčí (Wolves); David Jurásek (Slavia); Jaroslav Zelený (Sparta); David Douděra (Slavia)",M:"Vladimír Darida (Hradec Králové); Lukáš Červ (Plzeň); Lukáš Provod (Slavia); Michal Sadílek (Slavia); Tomáš Souček (West Ham); Alexandr Sojka (Plzeň); Hugo Sochůrek (Sparta)",A:"Adam Hložek (Hoffenheim); Patrik Schick (Leverkusen); Jan Kuchta (Sparta); Mojmír Chytil (Slavia); Pavel Šulc (Lyon); Tomáš Chorý (Slavia); Denis Višinský (Plzeň)"}},
+{id:"can",n:"Canadá",f:"ca",g:"B",coach:"Jesse Marsch",form:"4-2-2-2",
+xi:"St. Clair|Davies|Cornelius|Bombito|Johnston|Eustáquio|Koné|Shaffelburg|Buchanan|J. David|Larin",
+stars:[["Líder","Alphonso Davies"],["Craque","Jonathan David"],["Aposta","Moïse Bombito"]],
+res:"A melhor geração canadense joga em casa: Davies e Jonathan David (Juventus) formam dupla letal para o estilo vertical de Marsch, 4º lugar na Copa América 2024. Falta um camisa 10 clássico — e o histórico em Copas é quase virgem.",
+hist:"3ª participação (1986, 2022). Nunca venceu um jogo; o gol de Davies em 2022 foi o primeiro da história do país.",
+palp:"Primeira vitória da história e classificação às oitavas; cair de pé ali já seria campanha histórica.",
+sq:{G:"Dayne St. Clair (Inter Miami); Maxime Crépeau (Orlando); Owen Goodman (Barnsley)",D:"Alistair Johnston (Celtic); Alfie Jones (Middlesbrough); Luc de Fougerolles (Dender); Joel Waterman (Chicago); Derek Cornelius (Rangers); Moïse Bombito (Nice); Alphonso Davies (Bayern); Richie Laryea (Toronto); Niko Sigur (Hajduk)",M:"Mathieu Choinière (LAFC); Stephen Eustáquio (LAFC); Ismaël Koné (Sassuolo); Jacob Shaffelburg (LAFC); Jonathan Osorio (Toronto); Nathan Saliba (Anderlecht); Jayden Nelson (Austin)",A:"Cyle Larin (Southampton); Jonathan David (Juventus); Liam Millar (Hull); Tani Oluwaseyi (Villarreal); Tajon Buchanan (Villarreal); Ali Ahmed (Norwich); Promise David (Union SG)"}},
+{id:"sui",n:"Suíça",f:"ch",g:"B",coach:"Murat Yakin",form:"4-2-3-1",
+xi:"Kobel|Rodriguez|Elvedi|Akanji|Widmer|Xhaka|Freuler|Vargas|Manzambi|Ndoye|Embolo",
+stars:[["Líder","Granit Xhaka"],["Craque","Manuel Akanji"],["Aposta","Johan Manzambi"]],
+res:"Piso alto, teto baixo: organização impecável, Kobel e Akanji em eixo de elite, Xhaka regendo no auge da maturidade. Eliminatórias invictas e quase sem sofrer gols. O problema de sempre: quem faz os gols nos mata-matas.",
+hist:"13ª participação. Quartas em 1934/38/54; na era moderna, frequentadora assídua das oitavas sem nunca furar o teto.",
+palp:"Avança em 1º ou 2º e cai, de novo, nas oitavas ou quartas — nos detalhes, como sempre.",
+sq:{G:"Gregor Kobel (Dortmund); Yvon Mvogo (Lorient); Marvin Keller (Young Boys)",D:"Miro Muheim (Hamburgo); Silvan Widmer (Mainz); Nico Elvedi (M'gladbach); Manuel Akanji (Inter); Ricardo Rodriguez (Betis); Eray Cömert (Valencia); Aurèle Amenda (Eintracht); Luca Jaquez (Stuttgart)",M:"Denis Zakaria (Monaco); Remo Freuler (Bologna); Johan Manzambi (Freiburg); Granit Xhaka (Sunderland); Ardon Jashari (Milan); Djibril Sow (Sevilla); Michel Aebischer (Pisa); Fabian Rieder (Augsburg)",A:"Breel Embolo (Rennes); Dan Ndoye (Nottingham Forest); Christian Fassnacht (Young Boys); Rubén Vargas (Sevilla); Noah Okafor (Leeds); Zeki Amdouni (Burnley); Cedric Itten (Düsseldorf)"}},
+{id:"bih",n:"Bósnia e Herzegovina",f:"ba",g:"B",coach:"Sergej Barbarez",form:"4-4-2",
+xi:"Vasilj|Kolašinac|Hadžikadunić|Katić|Dedić|Bajraktarević|Tahirović|Gigović|Memić|Demirović|Džeko",
+stars:[["Líder","Edin Džeko"],["Craque","Ermedin Demirović"],["Aposta","Kerim Alajbegović"]],
+res:"A história romântica da repescagem: Džeko, aos 40, arrasta a Bósnia à Copa que faltava — depois de eliminar País de Gales e a Itália nos pênaltis. Time duro, direto e emocionalmente carregado; tecnicamente, o mais limitado do grupo.",
+hist:"2ª participação. Em 2014, única presença, caiu na fase de grupos com vitória sobre o Irã.",
+palp:"Compete com raça, rouba pontos de alguém, mas se despede na fase de grupos.",
+sq:{G:"Nikola Vasilj (St. Pauli); Mladen Jurkas (Borac); Martin Zlomislić (Rijeka)",D:"Nihad Mujakić (Gaziantep); Dennis Hadžikadunić (Sampdoria); Tarik Muharemović (Sassuolo); Sead Kolašinac (Atalanta); Amar Dedić (Benfica); Nikola Katić (Schalke); Stjepan Radeljić (Rijeka); Nidal Čelik (Lens)",M:"Benjamin Tahirović (Brøndby); Armin Gigović (Young Boys); Ivan Bašić (Astana); Ivan Šunjić (Pafos); Amar Memić (Plzeň); Amir Hadžiahmetović (Hull); Dženis Burnić (Karlsruher); Ermin Mahmić (Liberec)",A:"Samed Baždar (Jagiellonia); Ermedin Demirović (Stuttgart); Edin Džeko (Schalke); Kerim Alajbegović (RB Salzburg); Esmir Bajraktarević (PSV); Haris Tabaković (M'gladbach); Jovo Lukić (U. Cluj)"}},
+{id:"qat",n:"Catar",f:"qa",g:"B",coach:"Julen Lopetegui",form:"5-3-2",
+xi:"Barsham|Homam Ahmed|Lucas Mendes|Khoukhi|Issa Laye|Pedro Miguel|Hatem|Boudiaf|Madibo|Afif|Almoez Ali",
+stars:[["Líder","Hassan Al-Haydos"],["Craque","Akram Afif"],["Aposta","Yusuf Abdurisag"]],
+res:"Melhor que em 2022: bicampeão asiático (2024) com Afif em nível de craque continental e classificação inédita em campo sob Lopetegui. A missão histórica é clara: marcar o primeiro gol e somar o primeiro ponto do país em Copas.",
+hist:"2ª participação. Em 2022, como sede, perdeu os três jogos — pior campanha de um anfitrião na história.",
+palp:"Primeiro ponto (talvez primeira vitória) da história, mas eliminação em 4º.",
+sq:{G:"Mahmud Abunada (Al-Rayyan); Salah Zakaria (Al-Duhail); Meshaal Barsham (Al-Sadd)",D:"Pedro Miguel (Al-Sadd); Lucas Mendes (Al-Wakrah); Issa Laye (Al-Arabi); Jassem Gaber (Al-Rayyan); Ayoub Al-Oui (Al-Gharafa); Homam Ahmed (Cultural Leonesa); Boualem Khoukhi (Al-Sadd); Sultan Al-Brake (Al-Duhail); Al-Hashmi Al-Hussain (Al-Arabi)",M:"Abdulaziz Hatem (Al-Rayyan); Karim Boudiaf (Al-Duhail); Ahmed Al-Ganehi (Al-Gharafa); Ahmed Fathy (Al-Arabi); Assim Madibo (Al-Wakrah)",A:"Ahmed Alaaeldin (Al-Rayyan); Edmilson Junior (Al-Duhail); Mohammed Muntari (Al-Gharafa); Hassan Al-Haydos (Al-Sadd); Akram Afif (Al-Sadd); Yusuf Abdurisag (Al-Wakrah); Almoez Ali (Al-Duhail); Tahsin Jamshid (Al-Duhail); Mohamed Manai (Al-Shamal)"}},
+{id:"bra",n:"Brasil",f:"br",g:"C",coach:"Carlo Ancelotti",form:"4-3-3",
+xi:"Alisson|Alex Sandro|Gabriel Magalhães|Marquinhos|Danilo|Casemiro|Bruno Guimarães|Paquetá|Vinícius Jr.|Matheus Cunha|Raphinha",
+stars:[["Líder","Marquinhos"],["Craque","Vinícius Júnior"],["Aposta","Endrick"]],
+res:"O Brasil de Ancelotti trocou a ansiedade do 'jogo bonito obrigatório' por pragmatismo de Champions: bloco compacto e velocidade assassina com Vini, Raphinha e Cunha. Neymar vai à 4ª Copa como coringa, não como pilar. O Brasil menos favorito das últimas décadas no papel — e talvez o mais perigoso por isso.",
+hist:"Única seleção presente em todas as 23 edições. Pentacampeão (58, 62, 70, 94, 02) — mas sem título há 24 anos e sem semifinal desde 2014.",
+palp:"1º no grupo sem sustos. Cara de semifinal — e, se Vinícius decidir como no Real, briga pelo hexa.",
+sq:{G:"Alisson (Liverpool); Weverton (Grêmio); Ederson (Fenerbahçe)",D:"Gabriel Magalhães (Arsenal); Marquinhos (PSG); Alex Sandro (Flamengo); Danilo (Flamengo); Bremer (Juventus); Léo Pereira (Flamengo); Douglas Santos (Zenit); Roger Ibañez (Al-Ahli)",M:"Éderson (Atalanta); Casemiro (Manchester United); Bruno Guimarães (Newcastle); Fabinho (Al-Ittihad); Danilo (Botafogo); Lucas Paquetá (Flamengo)",A:"Vinícius Júnior (Real Madrid); Matheus Cunha (Manchester United); Neymar (Santos); Raphinha (Barcelona); Endrick (Lyon); Luiz Henrique (Zenit); Gabriel Martinelli (Arsenal); Igor Thiago (Brentford); Rayan (Bournemouth)"}},
+{id:"mar",n:"Marrocos",f:"ma",g:"C",coach:"Mohamed Ouahbi",form:"4-3-3",
+xi:"Bounou|Mazraoui|Aguerd|Diop|Hakimi|Amrabat|El Khannouss|Bouaddi|Abde|El Kaabi|Brahim Díaz",
+stars:[["Líder","Achraf Hakimi"],["Craque","Brahim Díaz"],["Aposta","Ayyoub Bouaddi"]],
+res:"Mais profundo que o semifinalista de 2022: à base Bounou–Aguerd–Hakimi somaram-se Brahim Díaz, El Khannouss e a geração campeã mundial sub-20. Eliminatórias perfeitas (8/8) e o título polêmico da CAN-2025 no tapetão. Sabe sofrer como poucos.",
+hist:"7ª participação. Primeiro africano a vencer um grupo (1986) e a chegar a uma semifinal (2022, 4º lugar).",
+palp:"Passa em 2º (ou assusta o Brasil pelo 1º); tem elenco para repetir as quartas.",
+sq:{G:"Yassine Bounou (Al-Hilal); Munir Mohamedi (Berkane); Ahmed Reda Tagnaouti (FAR)",D:"Achraf Hakimi (PSG); Noussair Mazraoui (Manchester United); Nayef Aguerd (Marseille); Zakaria El Ouahdi (Genk); Issa Diop (Fulham); Chadi Riad (Crystal Palace); Youssef Belammari (Al Ahly); Redouane Halhal (Mechelen); Anass Salah-Eddine (PSV)",M:"Sofyan Amrabat (Betis); Ayyoub Bouaddi (Lille); Chemsdine Talbi (Sunderland); Azzedine Ounahi (Girona); Ismael Saibari (PSV); Samir El Mourabet (Strasbourg); Gessime Yassine (Strasbourg); Bilal El Khannouss (Stuttgart); Neil El Aynaoui (Roma)",A:"Soufiane Rahimi (Al Ain); Brahim Díaz (Real Madrid); Abde Ezzalzouli (Betis); Ayoub El Kaabi (Olympiacos); Ayoube Amaimouni (Eintracht)"}},
+{id:"sco",n:"Escócia",f:"gb-sct",g:"C",coach:"Steve Clarke",form:"3-4-2-1",
+xi:"Gunn|Tierney|Souttar|Hendry|Robertson|Ferguson|McLean|Hickey|McGinn|McTominay|Adams",
+stars:[["Líder","Andy Robertson"],["Craque","Scott McTominay"],["Aposta","Ben Gannon-Doak"]],
+res:"De volta após 28 anos, com a classificação mais dramática das Eliminatórias: 4 a 2 na Dinamarca com gol de bicicleta nos acréscimos. Robertson e o renascido McTominay (craque do Napoli) são elite real; o eterno problema é o centroavante.",
+hist:"9ª participação, primeira desde 1998. Recorde melancólico: nunca passou da fase de grupos em oito tentativas.",
+palp:"O eterno quase: briga pelo 3º lugar com chance matemática via melhores terceiros.",
+sq:{G:"Angus Gunn (Nottingham Forest); Liam Kelly (Rangers); Craig Gordon (Hearts)",D:"Aaron Hickey (Brentford); Andy Robertson (Liverpool); Grant Hanley (Hibernian); Kieran Tierney (Celtic); Jack Hendry (Al-Ettifaq); John Souttar (Rangers); Dominic Hyam (Wrexham); Nathan Patterson (Everton); Anthony Ralston (Celtic); Scott McKenna (Dinamo Zagreb)",M:"Scott McTominay (Napoli); John McGinn (Aston Villa); Tyler Fletcher (Manchester United); Ryan Christie (Bournemouth); Lewis Ferguson (Bologna); Kenny McLean (Norwich)",A:"Lyndon Dykes (Charlton); Ché Adams (Torino); Ross Stewart (Southampton); Ben Gannon-Doak (Bournemouth); George Hirst (Ipswich); Lawrence Shankland (Hearts); Findlay Curtis (Kilmarnock)"}},
+{id:"hai",n:"Haiti",f:"ht",g:"C",coach:"Sébastien Migné",form:"4-3-3",
+xi:"Placide|Duverne|Delcroix|Adé|Arcus|Jean Jacques|Sainté|Bellegarde|Isidor|Pierrot|Nazon",
+stars:[["Líder","Johny Placide"],["Craque","Jean-Ricner Bellegarde"],["Aposta","Wilson Isidor"]],
+res:"Nenhuma seleção carrega mais simbolismo: sem poder jogar em casa, o Haiti mandou jogos em Curaçao e ainda assim venceu seu grupo da Concacaf. Bellegarde e Isidor dão qualidade de Premier League; o time joga com a liberdade de quem não deve nada.",
+hist:"2ª participação, 52 anos depois de 1974 — quando Sanon abriu o placar contra a Itália de Zoff.",
+palp:"4º lugar, mas com um momento de glória — um gol histórico ou um ponto roubado da Escócia.",
+sq:{G:"Johny Placide (Bastia); Alexandre Pierre (Sochaux); Josué Duverger (Cosmos Koblenz)",D:"Carlens Arcus (Angers); Keeto Thermoncy (Young Boys); Ricardo Adé (LDU); Hannes Delcroix (Lugano); Martin Expérience (Nancy); Duke Lacroix (Colorado Springs); Jean-Kévin Duverne (Gent); Wilguens Paugain (Zulte Waregem)",M:"Carl Sainté (El Paso); Jean-Ricner Bellegarde (Wolves); Leverton Pierre (Vizela); Danley Jean Jacques (Philadelphia); Dominique Simon (Tatran Prešov); Woodensky Pierre (Violette)",A:"Derrick Etienne Jr. (Toronto); Duckens Nazon (Esteghlal); Louicius Deedson (Dallas); Ruben Providence (Almere); Lenny Joseph (Ferencváros); Wilson Isidor (Sunderland); Yassin Fortuné (Vizela); Frantzdy Pierrot (Rizespor); Josué Casimir (Auxerre)"}},
+{id:"usa",n:"Estados Unidos",f:"us",g:"D",coach:"Mauricio Pochettino",form:"4-2-3-1",
+xi:"Turner|A. Robinson|Richards|Trusty|Dest|Adams|McKennie|Pulisic|Tillman|Weah|Balogun",
+stars:[["Líder","Tyler Adams"],["Craque","Christian Pulisic"],["Aposta","Malik Tillman"]],
+res:"A Copa em casa chega quando a geração dourada atinge a maturidade: Pulisic no auge no Milan, Pochettino com exigência de elite. As dúvidas: gol, goleiro e o histórico de derreter contra rivais diretos. Pressão e oportunidade nunca foram tão grandes.",
+hist:"12ª participação. Semifinal em 1930, quartas em 2002; frequentador das oitavas na era moderna.",
+palp:"1º no grupo e, com chaveamento de anfitrião, quartas — igualando 2002.",
+sq:{G:"Matt Turner (New England); Matt Freese (NYCFC); Chris Brady (Chicago)",D:"Sergiño Dest (PSV); Chris Richards (Crystal Palace); Antonee Robinson (Fulham); Auston Trusty (Celtic); Miles Robinson (Cincinnati); Tim Ream (Charlotte); Alex Freeman (Villarreal); Max Arfsten (Columbus); Mark McKenzie (Toulouse); Joe Scally (M'gladbach)",M:"Tyler Adams (Bournemouth); Gio Reyna (M'gladbach); Weston McKennie (Juventus); Sebastian Berhalter (Vancouver); Cristian Roldan (Seattle); Malik Tillman (Leverkusen)",A:"Ricardo Pepi (PSV); Christian Pulisic (Milan); Brenden Aaronson (Leeds); Haji Wright (Coventry); Folarin Balogun (Monaco); Timothy Weah (Marseille); Alejandro Zendejas (América)"}},
+{id:"tur",n:"Turquia",f:"tr",g:"D",coach:"Vincenzo Montella",form:"4-2-3-1",
+xi:"Günok|Kadıoğlu|Söyüncü|Demiral|Çelik|Çalhanoğlu|Yüksek|Yıldız|Güler|Aktürkoğlu|Deniz Gül",
+stars:[["Líder","Hakan Çalhanoğlu"],["Craque","Arda Güler"],["Aposta","Kenan Yıldız"]],
+res:"Nenhuma seleção europeia tem dupla jovem melhor que Güler e Yıldız, ambos de 21 anos. Çalhanoğlu rege na base; o time alterna atuações de gala com apagões (o 6 a 0 da Espanha assombra). A zebra de luxo que ninguém quer cruzar.",
+hist:"3ª participação (1954, 2002). Em 2002 fez sua obra-prima: 3º lugar, eliminada na semi pelo Brasil campeão. Volta após 24 anos.",
+palp:"Passa em 2º (ou surpreende os EUA) e tem talento para chegar às quartas.",
+sq:{G:"Mert Günok (Fenerbahçe); Altay Bayındır (Manchester United); Uğurcan Çakır (Galatasaray)",D:"Zeki Çelik (Roma); Merih Demiral (Al-Ahli); Çağlar Söyüncü (Fenerbahçe); Eren Elmalı (Galatasaray); Abdülkerim Bardakçı (Galatasaray); Ozan Kabak (Hoffenheim); Mert Müldür (Fenerbahçe); Ferdi Kadıoğlu (Brighton); Samet Akaydin (Rizespor)",M:"Salih Özcan (Dortmund); Orkun Kökçü (Beşiktaş); Hakan Çalhanoğlu (Inter); İsmail Yüksek (Fenerbahçe); Kaan Ayhan (Galatasaray)",A:"Kerem Aktürkoğlu (Fenerbahçe); Arda Güler (Real Madrid); Deniz Gül (Porto); Kenan Yıldız (Juventus); İrfan Can Kahveci (Kasımpaşa); Yunus Akgün (Galatasaray); Barış Alper Yılmaz (Galatasaray); Oğuz Aydın (Fenerbahçe); Can Uzun (Eintracht)"}},
+{id:"aus",n:"Austrália",f:"au",g:"D",coach:"Tony Popovic",form:"3-4-2-1",
+xi:"Ryan|Burgess|Souttar|Circati|Bos|Irvine|Metcalfe|Geria|Volpato|Irankunda|Touré",
+stars:[["Líder","Jackson Irvine"],["Craque","Alessandro Circati"],["Aposta","Nestory Irankunda"]],
+res:"Fiéis ao manual: físico, bola parada, mentalidade de azarão. A novidade é a juventude — Irankunda, Volpato e Touré dão velocidade que as últimas gerações não tinham. Falta um craque de verdade e gol de jogada construída.",
+hist:"7ª participação, 6ª seguida. Oitavas em 2006 (geração Kewell/Viduka) e 2022.",
+palp:"Briga com o Paraguai pelo 3º lugar; avançar como melhor terceiro é possível.",
+sq:{G:"Mathew Ryan (Levante); Paul Izzo (Randers); Patrick Beach (Melbourne City)",D:"Miloš Degenek (APOEL); Alessandro Circati (Parma); Jacob Italiano (Grazer AK); Jordan Bos (Feyenoord); Jason Geria (Albirex); Kai Trewin (NYCFC); Aziz Behich (Melbourne City); Harry Souttar (Leicester); Cameron Burgess (Swansea); Lucas Herrington (Colorado)",M:"Connor Metcalfe (St. Pauli); Aiden O'Neill (NYCFC); Cammy Devlin (Hearts); Jackson Irvine (St. Pauli); Paul Okon-Engstler (Sydney FC)",A:"Mathew Leckie (Melbourne City); Mohamed Touré (Norwich); Ajdin Hrustic (Heracles); Awer Mabil (Castellón); Nestory Irankunda (Watford); Cristian Volpato (Sassuolo); Nishan Velupillay (Melbourne Victory); Tete Yengi (Machida Zelvia)"}},
+{id:"par",n:"Paraguai",f:"py",g:"D",coach:"Gustavo Alfaro",form:"4-4-2",
+xi:"Gatito|Alonso|G. Gómez|Alderete|Cáceres|Sosa|Cubas|D. Gómez|Almirón|Enciso|Sanabria",
+stars:[["Líder","Gustavo Gómez"],["Craque","Julio Enciso"],["Aposta","Diego Gómez"]],
+res:"O Paraguai voltou a ser o Paraguai: zaga de ferro com Gómez e Alderete, Cubas destruindo, e a melhor dupla jovem em décadas (Enciso e Diego Gómez). Venceu Brasil e Argentina nas Eliminatórias. Especialista em jogos feios de 1 a 0.",
+hist:"9ª participação, primeira desde 2010 — quando fez sua melhor campanha: quartas, eliminado pela Espanha campeã.",
+palp:"Rouba pontos e disputa a vaga de melhor terceiro até a última rodada.",
+sq:{G:"Gatito Fernández (Cerro Porteño); Orlando Gill (San Lorenzo); Gastón Olveira (Olimpia)",D:"Gustavo Velázquez (Cerro Porteño); Omar Alderete (Sunderland); Juan José Cáceres (Dynamo Moscou); Fabián Balbuena (Grêmio); Júnior Alonso (Atlético-MG); José Canale (Lanús); Gustavo Gómez (Palmeiras); Alexandro Maidana (Talleres)",M:"Ramón Sosa (Palmeiras); Diego Gómez (Brighton); Miguel Almirón (Atlanta); Maurício (Palmeiras); Andrés Cubas (Vancouver); Damián Bobadilla (São Paulo); Braian Ojeda (Orlando); Matías Galarza (Atlanta); Gustavo Caballero (Portsmouth)",A:"Antonio Sanabria (Cremonese); Kaku (Al Ain); Álex Arce (Indep. Rivadavia); Julio Enciso (Strasbourg); Gabriel Ávalos (Independiente); Isidro Pitta (Bragantino)"}},
+{id:"ger",n:"Alemanha",f:"de",g:"E",coach:"Julian Nagelsmann",form:"4-2-3-1",
+xi:"Neuer|Raum|Schlotterbeck|Tah|Kimmich|Pavlović|Goretzka|Musiala|Wirtz|Sané|Woltemade",
+stars:[["Líder","Joshua Kimmich"],["Craque","Florian Wirtz"],["Aposta","Nick Woltemade"]],
+res:"Sem favoritismo automático, mas com o melhor par criativo em uma década: Wirtz e Musiala, 23 anos cada. Woltemade resolveu a carência de 9. Se os jovens repetirem o nível de clube, é candidata; se a fragilidade de 2018/22 voltar, cai cedo. Não há meio-termo alemão.",
+hist:"21ª participação. Tetracampeã (54, 74, 90, 2014), 8 finais — mas caiu na fase de grupos em 2018 e 2022.",
+palp:"1º no grupo e, no mínimo, quartas. Com Wirtz e Musiala inspirados, semifinal.",
+sq:{G:"Manuel Neuer (Bayern); Oliver Baumann (Hoffenheim); Alexander Nübel (Stuttgart)",D:"Antonio Rüdiger (Real Madrid); Waldemar Anton (Dortmund); Jonathan Tah (Bayern); Joshua Kimmich (Bayern); Nico Schlotterbeck (Dortmund); Nathaniel Brown (Eintracht); David Raum (RB Leipzig); Malick Thiaw (Newcastle)",M:"Aleksandar Pavlović (Bayern); Leon Goretzka (Bayern); Jamie Leweling (Stuttgart); Jamal Musiala (Bayern); Pascal Groß (Brighton); Angelo Stiller (Stuttgart); Florian Wirtz (Liverpool); Leroy Sané (Galatasaray); Nadiem Amiri (Mainz); Felix Nmecha (Dortmund); Assan Ouédraogo (RB Leipzig)",A:"Kai Havertz (Arsenal); Nick Woltemade (Newcastle); Maximilian Beier (Dortmund); Deniz Undav (Stuttgart)"}},
+{id:"ecu",n:"Equador",f:"ec",g:"E",coach:"Sebastián Beccacece",form:"4-2-3-1",
+xi:"Galíndez|Estupiñán|Hincapié|Pacho|Preciado|M. Caicedo|Franco|Plata|Páez|Angulo|E. Valencia",
+stars:[["Líder","Moisés Caicedo"],["Craque","Willian Pacho"],["Aposta","Kendry Páez"]],
+res:"A melhor safra defensiva da história equatoriana: Pacho, Hincapié e Moisés Caicedo, eixo de mais de 200 milhões de euros. 2º nas Eliminatórias, atrás só da Argentina. O calcanhar: Enner Valencia, 36 anos, segue a única referência de gol.",
+hist:"5ª participação. Oitavas em 2006, melhor resultado. Por um gol não passou da fase em 2022.",
+palp:"2º atrás da Alemanha e história nas oitavas; quartas inéditas não são delírio.",
+sq:{G:"Hernán Galíndez (Huracán); Moisés Ramírez (Kifisia); Gonzalo Valle (LDU)",D:"Félix Torres (Internacional); Piero Hincapié (Arsenal); Joel Ordóñez (Club Brugge); Willian Pacho (PSG); Pervis Estupiñán (Milan); Ángelo Preciado (Atlético-MG); Jackson Porozo (Tijuana); Yaimar Medina (Genk)",M:"Jordy Alcívar (Indep. del Valle); Anthony Valencia (Antwerp); Kendry Páez (River); Alan Minda (Atlético-MG); Pedro Vite (Pumas); Denil Castillo (Midtjylland); Alan Franco (Atlético-MG); Moisés Caicedo (Chelsea)",A:"John Yeboah (Venezia); Kevin Rodríguez (Union SG); Enner Valencia (Pachuca); Jordy Caicedo (Huracán); Gonzalo Plata (Flamengo); Nilson Angulo (Sunderland); Jeremy Arévalo (Stuttgart)"}},
+{id:"civ",n:"Costa do Marfim",f:"ci",g:"E",coach:"Emerse Faé",form:"4-3-3",
+xi:"Y. Fofana|Ndicka|Kossounou|Diomande|Singo|Kessié|Sangaré|Seko Fofana|Adingra|Guessand|Amad Diallo",
+stars:[["Líder","Franck Kessié"],["Craque","Amad Diallo"],["Aposta","Yan Diomande"]],
+res:"Campeã africana de 2023 com escudo, padrão e profundidade ofensiva que a geração Drogba invejaria: Amad, Guessand, Adingra e Pépé disputando vagas. Falta um meia criativo puro — e a história marfinense em Copas é de promessas não cumpridas.",
+hist:"4ª participação (2006, 2010, 2014). Nunca passou da fase de grupos — duas vezes em 'grupos da morte'.",
+palp:"Disputa a 2ª vaga com o Equador; primeira classificação ao mata-mata da história é o cenário.",
+sq:{G:"Yahia Fofana (Rizespor); Mohamed Koné (Charleroi); Alban Lafont (Panathinaikos)",D:"Ousmane Diomande (Sporting); Ghislain Konan (Gil Vicente); Wilfried Singo (Galatasaray); Odilon Kossounou (Atalanta); Christopher Opéri (Başakşehir); Guéla Doué (Strasbourg); Emmanuel Agbadou (Beşiktaş); Evan Ndicka (Roma)",M:"Jean Michaël Seri (Maribor); Seko Fofana (Porto); Franck Kessié (Al-Ahli); Ibrahim Sangaré (Nottingham Forest); Parfait Guiagon (Charleroi); Christ Inao Oulaï (Trabzonspor)",A:"Ange-Yoan Bonny (Inter); Simon Adingra (Monaco); Yan Diomande (RB Leipzig); Elye Wahi (Nice); Oumar Diakité (Cercle Brugge); Amad Diallo (Manchester United); Nicolas Pépé (Villarreal); Evann Guessand (Crystal Palace); Bazoumana Touré (Hoffenheim)"}},
+{id:"cur",n:"Curaçao",f:"cw",g:"E",coach:"Dick Advocaat",form:"4-3-3",
+xi:"Room|Floranus|Obispo|Bazoer|Brenet|L. Bacuna|Roemeratoe|J. Bacuna|Chong|Locadia|Hansen",
+stars:[["Líder","Leandro Bacuna"],["Craque","Tahith Chong"],["Aposta","Sontje Hansen"]],
+res:"O menor país da história a disputar uma Copa (~156 mil habitantes): projeto holandês com alma caribenha, invicto nas Eliminatórias sob Advocaat, 78 anos. Nenhuma estreante chega com tanta identidade tática — falta ritmo de elite.",
+hist:"Estreante absoluto.",
+palp:"4º lugar, mas com despedida digna — um ponto seria a maior história Davi x Golias do torneio.",
+sq:{G:"Eloy Room (Miami FC); Tyrick Bodak (Telstar); Trevor Doornbusch (VVV)",D:"Shurandy Sambo (Sparta Rotterdam); Jurién Gaari (Abha); Roshon van Eijma (RKC); Sherel Floranus (PEC Zwolle); Armando Obispo (PSV); Joshua Brenet (Kayserispor); Riechedly Bazoer (Konyaspor); Deveron Fonville (NEC)",M:"Godfried Roemeratoe (RKC); Juninho Bacuna (Volendam); Livano Comenencia (Zurique); Leandro Bacuna (Iğdır); Ar'jany Martha (Rotherham); Kevin Felida (Den Bosch); Tahith Chong (Sheffield United)",A:"Jürgen Locadia (Miami FC); Jeremy Antonisse (Kifisia); Sontje Hansen (Middlesbrough); Tyrese Noslin (Telstar); Kenji Gorré (Maccabi Haifa); Jearl Margaritha (Beveren); Brandley Kuwas (Volendam); Gervane Kastaneer (Terengganu)"}},
+{id:"ned",n:"Holanda",f:"nl",g:"F",coach:"Ronald Koeman",form:"4-3-3",
+xi:"Verbruggen|Van de Ven|Van Dijk|Aké|Dumfries|F. de Jong|Gravenberch|Reijnders|Gakpo|Depay|Lang",
+stars:[["Líder","Virgil van Dijk"],["Craque","Cody Gakpo"],["Aposta","Jorrel Hato"]],
+res:"O meio-campo mais subestimado do torneio — Gravenberch, Reijnders e De Jong — e Van Dijk organizando atrás. Depay, maior artilheiro da história da seleção, é o talismã. Time maduro e pragmático; falta a faísca dos grandes times holandeses.",
+hist:"12ª participação. A maior seleção sem título: 3 vices (1974, 1978, 2010), 3º em 2014.",
+palp:"1º num grupo traiçoeiro e caminhada até as quartas; dali em diante, depende do que o papel não mostra.",
+sq:{G:"Bart Verbruggen (Brighton); Robin Roefs (Sunderland); Mark Flekken (Leverkusen)",D:"Lutsharel Geertruida (Sunderland); Virgil van Dijk (Liverpool); Nathan Aké (Manchester City); Jan Paul van Hecke (Brighton); Mats Wieffer (Brighton); Micky van de Ven (Tottenham); Denzel Dumfries (Inter); Jorrel Hato (Chelsea)",M:"Marten de Roon (Atalanta); Justin Kluivert (Bournemouth); Ryan Gravenberch (Liverpool); Tijjani Reijnders (Manchester City); Guus Til (PSV); Teun Koopmeiners (Juventus); Frenkie de Jong (Barcelona); Quinten Timber (Marseille)",A:"Wout Weghorst (Ajax); Memphis Depay (Corinthians); Cody Gakpo (Liverpool); Noa Lang (Galatasaray); Donyell Malen (Roma); Brian Brobbey (Sunderland); Crysencio Summerville (West Ham)"}},
+{id:"jpn",n:"Japão",f:"jp",g:"F",coach:"Hajime Moriyasu",form:"3-4-2-1",
+xi:"Zion Suzuki|H. Itō|Itakura|Watanabe|Nakamura|Endo|Sano|J. Itō|Kubo|Kamada|Ueda",
+stars:[["Líder","Wataru Endo"],["Craque","Takefusa Kubo"],["Aposta","Zion Suzuki"]],
+res:"Deixou de ser zebra: primeiro classificado do mundo para 2026, virada histórica de 3 a 2 sobre o Brasil em 2025, elenco quase todo na Europa. A obsessão nacional: passar das oitavas pela primeira vez, após quatro eliminações nelas.",
+hist:"8ª participação consecutiva. Quatro vezes nas oitavas (2002, 2010, 2018, 2022), duas eliminações nos pênaltis.",
+palp:"Passa de grupo (talvez em 1º) e desta vez quebra o tabu: quartas de final.",
+sq:{G:"Zion Suzuki (Parma); Keisuke Ōsako (Sanfrecce); Tomoki Hayakawa (Kashima)",D:"Yukinari Sugawara (Werder Bremen); Shōgo Taniguchi (Sint-Truiden); Kō Itakura (Ajax); Yūto Nagatomo (FC Tokyo); Tsuyoshi Watanabe (Feyenoord); Ayumu Seko (Le Havre); Hiroki Itō (Bayern); Takehiro Tomiyasu (Ajax); Junnosuke Suzuki (Copenhague)",M:"Wataru Endo (Liverpool); Ao Tanaka (Leeds); Takefusa Kubo (Real Sociedad); Ritsu Dōan (Eintracht); Keito Nakamura (Reims); Junya Itō (Genk); Daichi Kamada (Crystal Palace); Yuito Suzuki (Freiburg); Kaishu Sano (Mainz)",A:"Daizen Maeda (Celtic); Keisuke Gotō (Sint-Truiden); Ayase Ueda (Feyenoord); Kōki Ogawa (NEC); Kento Shiogai (Wolfsburg)"}},
+{id:"swe",n:"Suécia",f:"se",g:"F",coach:"Graham Potter",form:"3-5-2",
+xi:"Widell Zetterström|Starfelt|Hien|Lindelöf|Gudmundsson|Ayari|Karlström|Bergvall|Svensson|Isak|Gyökeres",
+stars:[["Líder","Victor Lindelöf"],["Craque","Alexander Isak"],["Aposta","Lucas Bergvall"]],
+res:"O ataque mais caro da Europa (Isak + Gyökeres) quase ficou fora: campanha desastrosa, técnico demitido, e salvação na repescagem via Nations League com Potter. Se os dois engatarem juntos, é o azarão mais perigoso do torneio.",
+hist:"13ª participação. Vice em 1958 (contra o Brasil de Pelé), 3º em 1950 e 1994; quartas em 2018.",
+palp:"Avança em 2º ou como melhor 3º; nas oitavas, com a dupla inspirada, derruba qualquer um.",
+sq:{G:"Jacob Widell Zetterström (Derby); Viktor Johansson (Stoke); Kristoffer Nordfeldt (AIK)",D:"Gustaf Lagerbielke (Braga); Victor Lindelöf (Aston Villa); Isak Hien (Atalanta); Gabriel Gudmundsson (Leeds); Herman Johansson (Dallas); Daniel Svensson (Dortmund); Hjalmar Ekdal (Burnley); Carl Starfelt (Celta); Eric Smith (St. Pauli); Alexander Bernhardsson (Holstein Kiel); Elliot Stroud (Mjällby)",M:"Lucas Bergvall (Tottenham); Benjamin Nygren (Celtic); Ken Sema (Pafos); Jesper Karlström (Udinese); Yasin Ayari (Brighton); Mattias Svanberg (Wolfsburg); Besfort Zeneli (Union SG)",A:"Alexander Isak (Liverpool); Anthony Elanga (Newcastle); Viktor Gyökeres (Arsenal); Gustaf Nilsson (Club Brugge); Taha Ali (Malmö)"}},
+{id:"tun",n:"Tunísia",f:"tn",g:"F",coach:"Sabri Lamouchi",form:"4-3-3",
+xi:"Dahmen|Ben Ouanes|Talbi|Bronn|Valery|Skhiri|Khedira|Mejbri|Saad|Mastouri|Achouri",
+stars:[["Líder","Ellyes Skhiri"],["Craque","Hannibal Mejbri"],["Aposta","Sebastian Tounekti"]],
+res:"O time que nenhum favorito quer de terceiro adversário: bloco baixo impecável, invicta nas Eliminatórias e defesa quase intransponível. Sem um goleador, depende de erro alheio — contra Holanda e Japão, sobreviver já seria meio milagre.",
+hist:"7ª participação. Primeira africana a vencer um jogo de Copa (1978) — e nunca passou da fase de grupos.",
+palp:"Briga pelo ponto que vale vaga de 3º, mas o provável é a 7ª eliminação na 1ª fase.",
+sq:{G:"Mouhib Chamakh (Club Africain); Aymen Dahmen (Sfaxien); Sabri Ben Hessen (Étoile du Sahel)",D:"Ali Abdi (Nice); Montassar Talbi (Lorient); Omar Rekik (Maribor); Adem Arous (Kasımpaşa); Dylan Bronn (Servette); Mortadha Ben Ouanes (Kasımpaşa); Yan Valery (Young Boys); Mohamed Amine Ben Hamida (Espérance); Moutaz Neffati (Norrköping); Raed Chikhaoui (Monastir)",M:"Hannibal Mejbri (Burnley); Ismaël Gharbi (Augsburg); Rani Khedira (Union Berlin); Khalil Ayari (PSG); Hadj Mahmoud (Lugano); Ellyes Skhiri (Eintracht); Anis Ben Slimane (Norwich); Sebastian Tounekti (Celtic)",A:"Elias Achouri (Copenhague); Elias Saad (Hannover); Hazem Mastouri (Dynamo Makhachkala); Rayan Elloumi (Vancouver); Firas Chaouat (Club Africain)"}},
+{id:"bel",n:"Bélgica",f:"be",g:"G",coach:"Rudi Garcia",form:"4-2-3-1",
+xi:"Courtois|De Cuyper|Theate|Debast|Castagne|Onana|Tielemans|Doku|De Bruyne|De Ketelaere|Lukaku",
+stars:[["Líder","Kevin De Bruyne"],["Craque","Jérémy Doku"],["Aposta","Zeno Debast"]],
+res:"Entre duas eras: De Bruyne (renascido no Napoli) e Lukaku ainda decidem, mas o time pertence a Doku e De Ketelaere. Courtois segue top-3 do mundo — em mata-mata, vale um gol por jogo. Laterais e zaga lenta seguem o problema estrutural.",
+hist:"15ª participação. 3º lugar em 2018 (auge da geração dourada), 4º em 1986.",
+palp:"1º no grupo mais fraco do sorteio e quartas como teto — a despedida digna que a geração dourada não teve.",
+sq:{G:"Thibaut Courtois (Real Madrid); Senne Lammens (Manchester United); Mike Penders (Strasbourg)",D:"Zeno Debast (Sporting); Arthur Theate (Eintracht); Brandon Mechele (Club Brugge); Maxim De Cuyper (Brighton); Koni De Winter (Milan); Thomas Meunier (Lille); Joaquin Seys (Club Brugge); Timothy Castagne (Fulham); Nathan Ngoy (Lille)",M:"Axel Witsel (Girona); Kevin De Bruyne (Napoli); Youri Tielemans (Aston Villa); Diego Moreira (Strasbourg); Hans Vanaken (Club Brugge); Nicolas Raskin (Rangers); Amadou Onana (Aston Villa); Alexis Saelemaekers (Milan)",A:"Romelu Lukaku (Napoli); Leandro Trossard (Arsenal); Jérémy Doku (Manchester City); Dodi Lukébakio (Benfica); Charles De Ketelaere (Atalanta); Matias Fernandez-Pardo (Lille)"}},
+{id:"irn",n:"Irã",f:"ir",g:"G",coach:"Amir Ghalenoei",form:"4-4-2",
+xi:"Beiranvand|Mohammadi|Kanaanizadegan|Khalilzadeh|Hardani|Mohebi|Ezatolahi|Cheshmi|Jahanbakhsh|Taremi|Ghayedi",
+stars:[["Líder","Ehsan Hajsafi"],["Craque","Mehdi Taremi"],["Aposta","Mohammad Ghorbani"]],
+res:"Veterano, físico e emocionalmente blindado — joga há anos sob pressões que nenhuma outra seleção conhece, e disputará a Copa justamente nos EUA, no contexto geopolítico mais delicado do torneio. Taremi segue artilheiro de elite; o elenco envelheceu junto.",
+hist:"7ª participação, 4ª seguida. Nunca passou da fase de grupos — em 2022, caiu com gosto de quase contra os EUA.",
+palp:"3º lugar combativo, com chance real de classificação inédita via melhores terceiros.",
+sq:{G:"Alireza Beiranvand (Tractor); Payam Niazmand (Persepolis); Hossein Hosseini (Sepahan)",D:"Saleh Hardani (Esteghlal); Ehsan Hajsafi (Sepahan); Shojae Khalilzadeh (Tractor); Milad Mohammadi (Persepolis); Hossein Kanaanizadegan (Persepolis); Aria Yousefi (Sepahan); Ali Nemati (Foolad); Ramin Rezaeian (Foolad); Danial Eiri (Malavan)",M:"Saeid Ezatolahi (Shabab Al Ahli); Alireza Jahanbakhsh (Dender); Mohammad Mohebi (Rostov); Saman Ghoddos (Kalba); Rouzbeh Cheshmi (Esteghlal); Mehdi Torabi (Tractor); Mohammad Ghorbani (Al Wahda); Amirmohammad Razzaghinia (Esteghlal)",A:"Mehdi Taremi (Olympiacos); Mehdi Ghayedi (Al Nasr); Ali Alipour (Persepolis); Amirhossein Hosseinzadeh (Tractor); Shahriyar Moghanlou (Kalba); Dennis Eckert (Standard Liège)"}},
+{id:"egy",n:"Egito",f:"eg",g:"G",coach:"Hossam Hassan",form:"4-3-3",
+xi:"El Shenawy|Fatouh|Abdelmonem|Y. Ibrahim|Hany|Attia|Ashour|Lasheen|Zizo|Marmoush|Salah",
+stars:[["Líder","Mohamed Salah"],["Craque","Omar Marmoush"],["Aposta","Ibrahim Adel"]],
+res:"Pela primeira vez o Egito leva DOIS atacantes de elite mundial: Salah (34, na 2ª Copa da carreira) e Marmoush. O resto é o bloco organizado de sempre. A matemática que todo o país conhece: Salah em estado de graça = história.",
+hist:"4ª participação (1934, 1990, 2018) — primeira africana em Copas. Nunca venceu um jogo nem passou da fase de grupos.",
+palp:"2º no grupo e primeira vitória/classificação da história; nas oitavas, com Salah, ninguém fica tranquilo.",
+sq:{G:"Mohamed El Shenawy (Al Ahly); El Mahdy Soliman (Zamalek); Mostafa Shobeir (Al Ahly); Mohamed Alaa (El Gouna)",D:"Yasser Ibrahim (Al Ahly); Mohamed Hany (Al Ahly); Hossam Abdelmaguid (Zamalek); Ramy Rabia (Al Ain); Mohamed Abdelmonem (Nice); Ahmed Fatouh (Zamalek); Karim Hafez (Pyramids); Tarek Alaa (ZED)",M:"Emam Ashour (Al Ahly); Mostafa Ziko (Pyramids); Hamdy Fathy (Al-Wakrah); Mohanad Lasheen (Pyramids); Nabil Emad (Al-Najma); Marwan Attia (Al Ahly); Mahmoud Saber (ZED)",A:"Trézéguet (Al Ahly); Hamza Abdelkarim (Barcelona B); Mohamed Salah (Liverpool); Haissem Hassan (Oviedo); Ibrahim Adel (Nordsjælland); Omar Marmoush (Manchester City); Zizo (Al Ahly)"}},
+{id:"nzl",n:"Nova Zelândia",f:"nz",g:"G",coach:"Darren Bazeley",form:"4-4-2",
+xi:"Crocombe|Cacace|Boxall|Surman|Bindon|Old|Bell|Stamenić|Just|Wood|Barbarouses",
+stars:[["Líder","Chris Wood"],["Craque","Chris Wood"],["Aposta","Marko Stamenić"]],
+res:"Chris Wood e mais vinte e cinco: o centroavante do Forest, nas melhores temporadas da carreira aos 34, é dono de quase todos os recordes ofensivos do país. 4-4-2 britânico raiz: bola longa, segunda bola, cruzamento.",
+hist:"3ª participação (1982, 2010). Em 2010 foi a única invicta do torneio — três empates — e caiu na 1ª fase.",
+palp:"4º lugar; a meta honesta é repetir 2010 em miniatura: sair com um empate na bagagem.",
+sq:{G:"Max Crocombe (Millwall); Alex Paulsen (Lechia Gdańsk); Michael Woud (Auckland FC)",D:"Tim Payne (Wellington Phoenix); Francis de Vries (Auckland FC); Tyler Bindon (Sheffield United); Michael Boxall (Minnesota); Liberato Cacace (Wrexham); Nando Pijnaker (Auckland FC); Finn Surman (Portland); Callan Elliot (Auckland FC); Tommy Smith (Braintree)",M:"Joe Bell (Viking); Matthew Garbett (Peterborough); Marko Stamenić (Swansea); Sarpreet Singh (Wellington Phoenix); Elijah Just (Motherwell); Alex Rufer (Wellington Phoenix); Ben Old (Saint-Étienne); Callum McCowatt (Silkeborg); Ryan Thomas (PEC Zwolle); Lachlan Bayliss (Newcastle Jets)",A:"Chris Wood (Nottingham Forest); Kosta Barbarouses (W. Sydney); Ben Waine (Port Vale); Jesse Randall (Auckland FC)"}},
+{id:"esp",n:"Espanha",f:"es",g:"H",coach:"Luis de la Fuente",form:"4-3-3",
+xi:"Unai Simón|Cucurella|Laporte|Cubarsí|Llorente|Rodri|Pedri|Fabián Ruiz|Nico Williams|Oyarzabal|Lamine Yamal",
+stars:[["Líder","Rodri"],["Craque","Lamine Yamal"],["Aposta","Pau Cubarsí"]],
+res:"Favorita absoluta com justiça: campeã da Euro 2024, mais de dois anos quase sem perder, Pedri no auge, Rodri de volta ao nível Bola de Ouro e Lamine Yamal, 18 anos, como maior atração do planeta. Profundidade absurda; o risco é a pressão de ser O favorito.",
+hist:"17ª participação. Campeã em 2010; fora isso, histórico modesto para seu futebol — oitavas nos pênaltis em 2022.",
+palp:"Favorita ao título. Final Espanha x Argentina é o roteiro mais provável do torneio — e a taça fica com ela.",
+sq:{G:"David Raya (Arsenal); Joan García (Barcelona); Unai Simón (Athletic)",D:"Marc Pubill (Atlético); Álex Grimaldo (Leverkusen); Eric García (Barcelona); Marcos Llorente (Atlético); Pedro Porro (Tottenham); Aymeric Laporte (Athletic); Pau Cubarsí (Barcelona); Marc Cucurella (Chelsea)",M:"Mikel Merino (Arsenal); Fabián Ruiz (PSG); Gavi (Barcelona); Álex Baena (Atlético); Rodri (Manchester City); Martín Zubimendi (Arsenal); Pedri (Barcelona)",A:"Ferran Torres (Barcelona); Dani Olmo (Barcelona); Yéremy Pino (Crystal Palace); Nico Williams (Athletic); Lamine Yamal (Barcelona); Mikel Oyarzabal (Real Sociedad); Víctor Muñoz (Osasuna); Borja Iglesias (Celta)"}},
+{id:"uru",n:"Uruguai",f:"uy",g:"H",coach:"Marcelo Bielsa",form:"4-3-3",
+xi:"Rochet|Olivera|R. Araújo|Giménez|Varela|Ugarte|Valverde|Bentancur|De Arrascaeta|Darwin Núñez|Pellistri",
+stars:[["Líder","Federico Valverde"],["Craque","Ronald Araújo"],["Aposta","Maximiliano Araújo"]],
+res:"O meio-campo mais completo da América do Sul — Valverde, Bentancur, Ugarte — e a dupla Araújo/Giménez de puro aço charrúa. O enigma é duplo: Darwin Núñez, talento caótico, e o próprio Bielsa, gênio capaz de encantar ou implodir o grupo na semana errada.",
+hist:"15ª participação. Bicampeão (1930 e o Maracanazo de 1950); 4º lugar em 2010, último suspiro de glória.",
+palp:"2º no grupo da Espanha; oitavas no mínimo, quartas se Darwin acordar inspirado.",
+sq:{G:"Sergio Rochet (Internacional); Santiago Mele (Monterrey); Fernando Muslera (Estudiantes)",D:"José María Giménez (Atlético); Sebastián Cáceres (América); Ronald Araújo (Barcelona); Guillermo Varela (Flamengo); Mathías Olivera (Napoli); Matías Viña (River); Santiago Bueno (Wolves); Joaquín Piquerez (Palmeiras)",M:"Manuel Ugarte (Manchester United); Rodrigo Bentancur (Tottenham); Nicolás de la Cruz (Flamengo); Federico Valverde (Real Madrid); Giorgian de Arrascaeta (Flamengo); Agustín Canobbio (Fluminense); Emiliano Martínez (Palmeiras); Maximiliano Araújo (Sporting); Juan Manuel Sanabria (Real Salt Lake); Rodrigo Zalazar (Braga)",A:"Darwin Núñez (Al-Hilal); Facundo Pellistri (Panathinaikos); Brian Rodríguez (América); Rodrigo Aguirre (Tigres); Federico Viñas (Oviedo)"}},
+{id:"ksa",n:"Arábia Saudita",f:"sa",g:"H",coach:"Georgios Donis",form:"4-3-3",
+xi:"Al-Aqidi|Boushal|Al-Tambakti|Lajami|Abdulhamid|Kanno|Al-Khaibari|Al-Juwayr|S. Al-Dawsari|Al-Buraikan|Al-Ghannam",
+stars:[["Líder","Salem Al-Dawsari"],["Craque","Salem Al-Dawsari"],["Aposta","Musab Al-Juwayr"]],
+res:"O time de sempre, um pouco melhor: tecnicamente refinado, disciplinado nos bons dias, frágil nos maus. Al-Dawsari, autor do gol histórico contra a Argentina em 2022, segue o coração. A liga endinheirada elevou o nível diário do elenco.",
+hist:"7ª participação. Oitavas na estreia (1994); desde então, cinco fases de grupos — com a vitória sobre a Argentina como joia.",
+palp:"3º ou 4º; despedida na fase de grupos — de preferência com mais uma vítima ilustre.",
+sq:{G:"Nawaf Al-Aqidi (Al-Nassr); Mohammed Al-Owais (Al-Ula); Ahmed Al-Kassar (Al-Qadsiah)",D:"Ali Majrashi (Al-Ahli); Ali Lajami (Al-Hilal); Abdulelah Al-Amri (Al-Nassr); Hassan Al-Tambakti (Al-Hilal); Saud Abdulhamid (Lens); Nawaf Boushal (Al-Nassr); Hassan Kadesh (Al-Ittihad); Moteb Al-Harbi (Al-Hilal); Jehad Thakri (Al-Qadsiah); Mohammed Abu Al-Shamat (Al-Qadsiah)",M:"Nasser Al-Dawsari (Al-Hilal); Musab Al-Juwayr (Al-Qadsiah); Abdullah Al-Khaibari (Al-Nassr); Ziyad Al-Johani (Al-Ahli); Alaa Al-Hejji (Neom); Mohamed Kanno (Al-Hilal)",A:"Ayman Yahya (Al-Nassr); Firas Al-Buraikan (Al-Ahli); Salem Al-Dawsari (Al-Hilal); Saleh Al-Shehri (Al-Ittihad); Khalid Al-Ghannam (Al-Ettifaq); Abdullah Al-Hamdan (Al-Nassr); Sultan Mandash (Al-Hilal)"}},
+{id:"cpv",n:"Cabo Verde",f:"cv",g:"H",coach:"Bubista",form:"4-4-2",
+xi:"Vozinha|S. Lopes Cabral|Logan Costa|R. Lopes|Moreira|Jamiro Monteiro|K. Pina|Deroy Duarte|Arcanjo|Livramento|Ryan Mendes",
+stars:[["Líder","Ryan Mendes"],["Craque","Logan Costa"],["Aposta","Dailon Livramento"]],
+res:"Projeto vence dinheiro: federação que mapeou a diáspora (Roberto Lopes foi recrutado pelo LinkedIn), técnico estável há seis anos e classificação à frente de Camarões. Segundo menor país da história em Copas (~525 mil habitantes).",
+hist:"Estreante absoluto.",
+palp:"4º ou 3º; a vitória sobre a Arábia Saudita é o jogo da vida — e perfeitamente possível.",
+sq:{G:"Vozinha (Chaves); Mário Rosa (Montana); CJ dos Santos (San Diego)",D:"Stopira (Torreense); Diney (Al Bataeh); Roberto Lopes (Shamrock Rovers); Logan Costa (Villarreal); Sidny Lopes Cabral (Benfica); Steven Moreira (Columbus); Wagner Pina (Trabzonspor); Kelvin Pires (SJK)",M:"Kevin Pina (Krasnodar); Jovane Cabral (Estrela Amadora); João Paulo (FCSB); Jamiro Monteiro (PEC Zwolle); Deroy Duarte (Ludogorets); Laros Duarte (Puskás); Yannick Semedo (Farense); Willy Semedo (Omonia); Telmo Arcanjo (V. Guimarães); Nuno da Costa (Başakşehir); Hélio Varela (Maccabi Tel Aviv)",A:"Gilson Benchimol (Akron); Garry Rodrigues (Apollon); Dailon Livramento (Casa Pia); Ryan Mendes (Iğdır)"}},
+{id:"fra",n:"França",f:"fr",g:"I",coach:"Didier Deschamps",form:"4-3-3",
+xi:"Maignan|T. Hernandez|Upamecano|Saliba|Koundé|Tchouaméni|Koné|Zaïre-Emery|Mbappé|Thuram|Dembélé",
+stars:[["Líder","Kylian Mbappé"],["Craque","Ousmane Dembélé"],["Aposta","Désiré Doué"]],
+res:"A seleção mais profunda do mundo: três zagueiros de elite por posição e um ataque — Mbappé, Dembélé (Bola de Ouro 2025), Olise, Doué — que não cabe em campo. Última Copa de Deschamps. Quando a França cai, é a França quem se elimina.",
+hist:"17ª participação. Bicampeã (1998, 2018), vice em 2006 e 2022 — quatro finais em sete Copas. A dinastia moderna.",
+palp:"Semifinal no mínimo; terceira final seguida não surpreenderia ninguém.",
+sq:{G:"Brice Samba (Rennes); Mike Maignan (Milan); Robin Risser (Lens)",D:"Malo Gusto (Chelsea); Lucas Digne (Aston Villa); Dayot Upamecano (Bayern); Jules Koundé (Barcelona); Ibrahima Konaté (Liverpool); William Saliba (Arsenal); Théo Hernandez (Al-Hilal); Lucas Hernandez (PSG); Maxence Lacroix (Crystal Palace)",M:"Manu Koné (Roma); Aurélien Tchouaméni (Real Madrid); N'Golo Kanté (Fenerbahçe); Adrien Rabiot (Milan); Warren Zaïre-Emery (PSG); Rayan Cherki (Manchester City); Maghnes Akliouche (Monaco)",A:"Ousmane Dembélé (PSG); Marcus Thuram (Inter); Kylian Mbappé (Real Madrid); Michael Olise (Bayern); Bradley Barcola (PSG); Désiré Doué (PSG); Jean-Philippe Mateta (Crystal Palace)"}},
+{id:"nor",n:"Noruega",f:"no",g:"I",coach:"Ståle Solbakken",form:"4-2-3-1",
+xi:"Nyland|Wolfe|Østigård|Ajer|Ryerson|Berg|Berge|Nusa|Ødegaard|Sørloth|Haaland",
+stars:[["Líder","Martin Ødegaard"],["Craque","Erling Haaland"],["Aposta","Antonio Nusa"]],
+res:"Eliminatórias perfeitas (8/8) com goleadas históricas sobre a Itália e 16 gols de Haaland na campanha. Ødegaard rege, Sørloth é o plano B de 20 gols por ano. A fragilidade está na zaga e na inexperiência total de mata-mata de Copa.",
+hist:"4ª participação (1938, 1994, 1998 — quando bateu o Brasil). Volta após 28 anos.",
+palp:"Passa de grupo e tem pólvora para as quartas; se Haaland pegar fogo, semifinal histórica.",
+sq:{G:"Ørjan Nyland (Sevilla); Sander Tangvik (Hamburgo); Egil Selvik (Watford)",D:"Kristoffer Ajer (Brentford); Leo Østigård (Genoa); David Møller Wolfe (Wolves); Fredrik Bjørkan (Bodø/Glimt); Marcus Holmgren Pedersen (Torino); Torbjørn Heggem (Bologna); Sondre Langås (Derby); Henrik Falchener (Viking); Julian Ryerson (Dortmund)",M:"Morten Thorsby (Cremonese); Patrick Berg (Bodø/Glimt); Sander Berge (Fulham); Martin Ødegaard (Arsenal); Fredrik Aursnes (Benfica); Kristian Thorstvedt (Sassuolo); Thelo Aasgaard (Rangers); Andreas Schjelderup (Benfica); Oscar Bobb (Fulham); Jens Petter Hauge (Bodø/Glimt)",A:"Alexander Sørloth (Atlético); Erling Haaland (Manchester City); Jørgen Strand Larsen (Crystal Palace); Antonio Nusa (RB Leipzig)"}},
+{id:"sen",n:"Senegal",f:"sn",g:"I",coach:"Pape Thiaw",form:"4-3-3",
+xi:"É. Mendy|Jakobs|Koulibaly|Niakhaté|Diatta|Camara|P. M. Sarr|Diarra|Iliman Ndiaye|Jackson|I. Sarr",
+stars:[["Líder","Kalidou Koulibaly"],["Craque","Iliman Ndiaye"],["Aposta","Lamine Camara"]],
+res:"O elenco mais equilibrado da África — e o combustível emocional do título da CAN-2025 'roubado' no tapetão (caso na CAS). Camara, Sarr e Diarra formam sala de máquinas jovem de elite; Mané, Jackson e Iliman revezam na frente. Cuidado, França.",
+hist:"4ª participação. Quartas na estreia mítica de 2002 (batendo a França campeã na abertura); oitavas em 2022.",
+palp:"2º no grupo e possibilidade real de repetir o Marrocos de 2022: quartas, no mínimo briga de igual com gigante.",
+sq:{G:"Yehvann Diouf (Nice); Édouard Mendy (Al-Ahli); Mory Diaw (Le Havre)",D:"Mamadou Sarr (Chelsea); Kalidou Koulibaly (Al-Hilal); Abdoulaye Seck (Maccabi Haifa); Ismail Jakobs (Galatasaray); Krépin Diatta (Monaco); Moussa Niakhaté (Lyon); Antoine Mendy (Nice); El Hadji Malick Diouf (West Ham)",M:"Idrissa Gueye (Everton); Pathé Ciss (Rayo); Lamine Camara (Monaco); Pape Matar Sarr (Tottenham); Habib Diarra (Sunderland); Pape Gueye (Villarreal); Bara Sapoko Ndiaye (Bayern)",A:"Assane Diao (Como); Bamba Dieng (Lorient); Sadio Mané (Al-Nassr); Nicolas Jackson (Bayern); Cherif Ndiaye (Samsunspor); Iliman Ndiaye (Everton); Ismaïla Sarr (Crystal Palace); Ibrahim Mbaye (PSG)"}},
+{id:"irq",n:"Iraque",f:"iq",g:"I",coach:"Graham Arnold",form:"4-2-3-1",
+xi:"Jalal Hassan|Hussein Ali|Doski|Saadoon|Tahseen|Iqbal|Al-Ammari|Bayesh|Jasim|Amyn|Aymen Hussein",
+stars:[["Líder","Aymen Hussein"],["Craque","Ali Al-Hamadi"],["Aposta","Ali Jasim"]],
+res:"A classificação mais sofrida das 48: atravessou todas as fases asiáticas e bateu a Bolívia na decisão intercontinental em Monterrey. Time compacto, físico, letal em bola parada. Tecnicamente o mais limitado do grupo; emocionalmente, talvez o mais forte da Copa.",
+hist:"2ª participação. Em 1986, três derrotas dignas com o time treinando no exílio, em plena guerra.",
+palp:"4º lugar — mas o Iraque não veio somar pontos, veio existir. Um gol contra a França valeria uma geração.",
+sq:{G:"Fahad Talib (Al-Talaba); Jalal Hassan (Al-Zawraa); Ahmed Basil (Al-Shorta)",D:"Rebin Sulaka (Port FC); Hussein Ali (Pogoń Szczecin); Zaid Tahseen (Pakhtakor); Akam Hashim (Al-Zawraa); Manaf Younis (Al-Shorta); Ahmed Maknzi (Al-Karma); Merchas Doski (Viktoria Plzeň); Mustafa Saadoon (Al-Shorta); Frans Putros (Persib)",M:"Youssef Amyn (AEK Larnaca); Ibrahim Bayesh (Al Dhafra); Zidane Iqbal (Utrecht); Amir Al-Ammari (Cracovia); Kevin Yakob (AGF); Aimar Sher (Sarpsborg); Zaid Ismail (Al-Talaba)",A:"Ali Al-Hamadi (Luton); Mohanad Ali (Dibba); Ahmed Qasem (Nashville); Ali Yousif (Al-Talaba); Ali Jasim (Al-Najma); Aymen Hussein (Al-Karma); Marko Farji (Venezia)"}},
+{id:"arg",n:"Argentina",f:"ar",g:"J",coach:"Lionel Scaloni",form:"4-3-3",
+xi:"E. Martínez|Tagliafico|Otamendi|Romero|Molina|Mac Allister|Enzo Fernández|De Paul|Messi|J. Álvarez|Nico González",
+stars:[["Líder","Lionel Messi"],["Craque","Julián Álvarez"],["Aposta","Nico Paz"]],
+res:"Nenhum campeão chegou tão estável à defesa do título: bi da América, 1º disparado nas Eliminatórias, bloco de Doha rejuvenescido nas bordas (Nico Paz, Almada). Messi, aos 38, administra-se para julho. Duvidar desta Argentina tem sido o erro da década.",
+hist:"19ª participação. Tricampeã (1978, 1986, 2022) e atual campeã; 6 finais. Maradona em 86, Messi em 2022.",
+palp:"Semifinal é o piso. Briga pelo bi até o fim — Messi aos 39 no último ato, no MetLife, é o roteiro que o mundo espera.",
+sq:{G:"Juan Musso (Atlético); Gerónimo Rulli (Marseille); Emiliano Martínez (Aston Villa)",D:"Nicolás Tagliafico (Lyon); Gonzalo Montiel (River); Lisandro Martínez (Manchester United); Cristian Romero (Tottenham); Nicolás Otamendi (Benfica); Facundo Medina (Marseille); Nahuel Molina (Atlético)",M:"Leandro Paredes (Boca); Rodrigo De Paul (Inter Miami); Valentín Barco (Strasbourg); Giovani Lo Celso (Betis); Exequiel Palacios (Leverkusen); Alexis Mac Allister (Liverpool); Enzo Fernández (Chelsea)",A:"Julián Álvarez (Atlético); Lionel Messi (Inter Miami); Nicolás González (Atlético); Thiago Almada (Atlético); Giuliano Simeone (Atlético); Nico Paz (Como); José Manuel López (Palmeiras); Lautaro Martínez (Inter) — 25 inscritos"}},
+{id:"aut",n:"Áustria",f:"at",g:"J",coach:"Ralf Rangnick",form:"4-2-3-1",
+xi:"A. Schlager|Mwene|Alaba|Danso|Posch|X. Schlager|Seiwald|Wimmer|Sabitzer|Laimer|Arnautović",
+stars:[["Líder","David Alaba"],["Craque","Marcel Sabitzer"],["Aposta","Paul Wanner"]],
+res:"Time de autor: Rangnick implantou o gegenpressing como religião nacional e venceu o grupo das Eliminatórias sobre a Bósnia. Sem superestrelas (exceto Alaba, agora zagueiro cerebral), depende do coletivo a grau quase experimental.",
+hist:"8ª participação. O 3º lugar de 1954 é relíquia; volta após 28 anos.",
+palp:"2º atrás da Argentina e campanha de oitavas — ninguém quer enfrentar essa marcação.",
+sq:{G:"Alexander Schlager (RB Salzburg); Florian Wiegele (Plzeň); Patrick Pentz (Brøndby)",D:"David Affengruber (Elche); Kevin Danso (Tottenham); Stefan Posch (Mainz); David Alaba (Real Madrid); Philipp Lienhart (Freiburg); Phillipp Mwene (Mainz); Marco Friedl (Werder); Michael Svoboda (Venezia)",M:"Xaver Schlager (RB Leipzig); Nicolas Seiwald (RB Leipzig); Marcel Sabitzer (Dortmund); Florian Grillitsch (Braga); Carney Chukwuemeka (Dortmund); Romano Schmid (Werder); Konrad Laimer (Bayern); Alexander Prass (Hoffenheim); Paul Wanner (PSV); Alessandro Schöpf (Wolfsberger)",A:"Marko Arnautović (Estrela Vermelha); Michael Gregoritsch (Augsburg); Saša Kalajdžić (LASK); Patrick Wimmer (Wolfsburg) — 25 inscritos"}},
+{id:"alg",n:"Argélia",f:"dz",g:"J",coach:"Vladimir Petković",form:"4-3-3",
+xi:"Luca Zidane|Aït-Nouri|Bensebaini|Tougai|Mandi|Zerrouki|Bentaleb|Chaïbi|Gouiri|Amoura|Mahrez",
+stars:[["Líder","Riyad Mahrez"],["Craque","Mohamed Amoura"],["Aposta","Ibrahim Maza"]],
+res:"O ataque mais subestimado da África: Amoura artilheiro na Bundesliga, Gouiri no Marseille, Mahrez ainda decidindo jogo grande. Aït-Nouri e Bensebaini dão nível de Champions às laterais; o problema é goleiro e a proteção à zaga lenta.",
+hist:"5ª participação. 1982: venceu a Alemanha e caiu pelo 'pacto de Gijón'; oitavas em 2014. Volta após 12 anos.",
+palp:"Briga com a Áustria pela 2ª vaga; melhor terceiro é o cenário médio, oitavas o teto.",
+sq:{G:"Melvin Mastil (Stade Nyonnais); Oussama Benbot (USM Alger); Luca Zidane (Granada)",D:"Aïssa Mandi (Lille); Achref Abada (USM Alger); Mohamed Amine Tougai (Espérance); Zineddine Belaïd (JS Kabylie); Jaouen Hadjam (Young Boys); Rayan Aït-Nouri (Manchester City); Rafik Belghali (Hellas Verona); Ramy Bensebaini (Dortmund); Samir Chergui (Paris FC)",M:"Ramiz Zerrouki (Twente); Houssem Aouar (Al-Ittihad); Farès Chaïbi (Eintracht); Hicham Boudaoui (Nice); Nabil Bentaleb (Lille); Ibrahim Maza (Leverkusen); Yacine Titraoui (Charleroi)",A:"Riyad Mahrez (Al-Ahli); Amine Gouiri (Marseille); Anis Hadj Moussa (Feyenoord); Nadhir Benbouali (Győr); Mohamed Amoura (Wolfsburg); Adil Boulbina (Al-Duhail); Farès Ghedjemis (Frosinone)"}},
+{id:"jor",n:"Jordânia",f:"jo",g:"J",coach:"Jamal Sellami",form:"5-4-1",
+xi:"Abulaila|Taha|Al-Arab|Nasib|Abualnadi|Haddad|Al-Rawabdeh|Al-Rashdan|Abu Taha|Al-Taamari|Olwan",
+stars:[["Líder","Ihsan Haddad"],["Craque","Musa Al-Taamari"],["Aposta","Ali Olwan"]],
+res:"O ciclo que mudou o país: vice da Copa da Ásia 2024 e classificação direta inédita. Al-Taamari (Rennes) carrega a criação quase sozinho num 5-4-1 paciente. Contra Argentina, Áustria e Argélia, o objetivo é não se desfigurar.",
+hist:"Estreante absoluto.",
+palp:"4º lugar na estreia — com a missão de marcar o primeiro gol jordaniano em Copas.",
+sq:{G:"Yazeed Abulaila (Al-Hussein); Nour Bani Attiah (Al-Faisaly); Abdallah Al-Fakhouri (Al-Wehdat)",D:"Mohammad Abu Hashish (Al-Karma); Abdallah Nasib (Al-Zawraa); Husam Abu Dahab (Al-Faisaly); Yazan Al-Arab (FC Seoul); Mo Abualnadi (Selangor); Salim Obaid (Al-Hussein); Mohammad Taha (Al-Hussein); Saed Al-Rosan (Al-Hussein); Ihsan Haddad (Al-Hussein); Anas Badawi (Al-Faisaly)",M:"Amer Jamous (Al-Zawraa); Noor Al-Rawabdeh (Selangor); Rajaei Ayed (Al-Hussein); Ibrahim Sadeh (Al-Karma); Mohannad Abu Taha (Al-Quwa Al-Jawiya); Nizar Al-Rashdan (Qatar SC); Mohammad Al-Dawoud (Al-Wehdat)",A:"Mohammad Abu Zrayq (Raja); Ali Olwan (Al-Sailiya); Musa Al-Taamari (Rennes); Odeh Al-Fakhouri (Pyramids); Mahmoud Al-Mardi (Al-Hussein); Ali Azaizeh (Al-Shabab)"}},
+{id:"por",n:"Portugal",f:"pt",g:"K",coach:"Roberto Martínez",form:"4-3-3",
+xi:"Diogo Costa|Nuno Mendes|Inácio|Rúben Dias|Cancelo|Vitinha|João Neves|Bruno Fernandes|Rafael Leão|Cristiano Ronaldo|Bernardo Silva",
+stars:[["Líder","Cristiano Ronaldo"],["Craque","Vitinha"],["Aposta","Francisco Conceição"]],
+res:"Tire Ronaldo da frente e Portugal tem um dos três elencos mais talentosos do mundo: Vitinha e João Neves dominaram a Europa, Nuno Mendes é o melhor lateral-esquerdo do planeta. O dilema: como usar um CR7 de 41 anos? O time joga também por Diogo Jota.",
+hist:"9ª participação, 7ª seguida. 3º em 1966 (Eusébio), 4º em 2006. Nunca chegou a uma final.",
+palp:"1º no grupo com folga e elenco de semifinal. Dali pra cima, depende de qual Portugal aparece.",
+sq:{G:"Diogo Costa (Porto); José Sá (Wolves); Rui Silva (Sporting)",D:"Nélson Semedo (Fenerbahçe); Rúben Dias (Manchester City); Tomás Araújo (Benfica); Diogo Dalot (Manchester United); Renato Veiga (Villarreal); Gonçalo Inácio (Sporting); João Cancelo (Barcelona); Samú Costa (Mallorca); Nuno Mendes (PSG)",M:"Matheus Nunes (Manchester City); Bruno Fernandes (Manchester United); Bernardo Silva (Manchester City); João Neves (PSG); Rúben Neves (Al-Hilal); Vitinha (PSG)",A:"Cristiano Ronaldo (Al-Nassr); Gonçalo Ramos (PSG); João Félix (Al-Nassr); Francisco Trincão (Sporting); Rafael Leão (Milan); Pedro Neto (Chelsea); Gonçalo Guedes (Real Sociedad); Francisco Conceição (Juventus)"}},
+{id:"col",n:"Colômbia",f:"co",g:"K",coach:"Néstor Lorenzo",form:"4-2-3-1",
+xi:"C. Vargas|Mojica|Lucumí|D. Sánchez|Muñoz|Ríos|Lerma|Luis Díaz|James|J. Arias|J. Córdoba",
+stars:[["Líder","James Rodríguez"],["Craque","Luis Díaz"],["Aposta","Richard Ríos"]],
+res:"O time mais 'redondo' da América do Sul depois da Argentina: Luis Díaz em versão Bayern, Richard Ríos motor de Champions, James ainda enxergando passes que ninguém vê. Vice da Copa América 2024 e invencibilidade de quase dois anos no ciclo.",
+hist:"7ª participação. Quartas em 2014 (James artilheiro), oitavas em 1990 e 2018. Volta após 8 anos.",
+palp:"2º no grupo (ou 1º em cima de Portugal) e força real para quartas de final.",
+sq:{G:"David Ospina (Atlético Nacional); Camilo Vargas (Atlas); Álvaro Montero (Vélez)",D:"Daniel Muñoz (Crystal Palace); Jhon Lucumí (Bologna); Santiago Arias (Independiente); Yerry Mina (Cagliari); Johan Mojica (Mallorca); Willer Ditta (Cruz Azul); Deiver Machado (Nantes); Davinson Sánchez (Galatasaray)",M:"Kevin Castaño (River); Richard Ríos (Benfica); Jorge Carrascal (Flamengo); James Rodríguez (Minnesota United); Juan Portilla (Athletico-PR); Jefferson Lerma (Crystal Palace); Gustavo Puerta (Racing Santander); Juan Fernando Quintero (River)",A:"Luis Díaz (Bayern); Jhon Córdoba (Krasnodar); Jhon Arias (Palmeiras); Cucho Hernández (Betis); Jaminton Campaz (Rosario Central); Luis Suárez (Sporting); Andrés Gómez (Vasco)"}},
+{id:"cod",n:"RD Congo",f:"cd",g:"K",coach:"Sébastien Desabre",form:"4-3-3",
+xi:"Mpasi|Masuaku|Mbemba|Tuanzebe|Wan-Bissaka|Sadiki|Pickel|Mukau|Bongonda|Wissa|Elia",
+stars:[["Líder","Chancel Mbemba"],["Craque","Yoane Wissa"],["Aposta","Noah Sadiki"]],
+res:"Campanha épica: repescagem africana vencida nos pênaltis contra a Nigéria e vaga intercontinental sobre a Jamaica. Wan-Bissaka e Mbemba dão lastro de Premier League; Wissa e Mayele, gols. Primeira Copa em 52 anos — e não veio só para desfilar.",
+hist:"2ª participação. Em 1974, como Zaire, foi a primeira subsaariana em Copas — a barreira de Mwepu é imortal.",
+palp:"3º com chance concreta de bilhete de melhor terceiro; Portugal e Colômbia vão suar.",
+sq:{G:"Lionel Mpasi (Le Havre); Timothy Fayulu (Noah); Matthieu Epolo (Standard)",D:"Aaron Wan-Bissaka (West Ham); Steve Kapuadi (Widzew); Axel Tuanzebe (Burnley); Dylan Batubinsika (AEL); Joris Kayembe (Genk); Chancel Mbemba (Lille); Gédéon Kalulu (Aris); Arthur Masuaku (Lens)",M:"Ngal'ayel Mukau (Lille); Nathanaël Mbuku (Montpellier); Samuel Moutoussamy (Atromitos); Théo Bongonda (Spartak); Noah Sadiki (Sunderland); Aaron Tshibola (Kilmarnock); Charles Pickel (Espanyol); Edo Kayembe (Watford)",A:"Brian Cipenga (Castellón); Gaël Kakuta (AEL); Meschak Elia (Alanyaspor); Cédric Bakambu (Betis); Fiston Mayele (Pyramids); Yoane Wissa (Newcastle); Simon Banza (Al Jazira)"}},
+{id:"uzb",n:"Uzbequistão",f:"uz",g:"K",coach:"Fabio Cannavaro",form:"4-2-3-1",
+xi:"Yusupov|Nasrullaev|Ashurmatov|Khusanov|Alijonov|Hamrobekov|Shukurov|Masharipov|Fayzullaev|Urunov|Shomurodov",
+stars:[["Líder","Eldor Shomurodov"],["Craque","Abdukodir Khusanov"],["Aposta","Abbosbek Fayzullaev"]],
+res:"A estreante mais 'pronta': Khusanov é titular do City aos 21, Fayzullaev é um 10 de nível europeu, Shomurodov garante gols. Cannavaro, campeão do mundo como zagueiro, deu malícia a um time que já era organizado.",
+hist:"Estreante absoluto, após quatro eliminações por detalhe em ciclos anteriores.",
+palp:"3º ou 4º; um ponto histórico é quase certo, e vitória sobre a RD Congo abre conversa de melhor terceiro.",
+sq:{G:"Utkir Yusupov (Navbahor); Abduvohid Nematov (Nasaf); Botirali Ergashev (Neftchi)",D:"Abdukodir Khusanov (Manchester City); Khojiakbar Alijonov (Pakhtakor); Farrukh Sayfiev (Neftchi); Rustam Ashurmatov (Esteghlal); Sherzod Nasrullaev (Nasaf); Umar Eshmurodov (Nasaf); Abdulla Abdullaev (Dibba); Bekhruz Karimov (Surkhon); Avazbek Ulmasaliev (AGMK); Jakhongir Urozov (Dinamo Samarqand)",M:"Akmal Mozgovoy (Pakhtakor); Otabek Shukurov (Baniyas); Jamshid Iskanderov (Neftchi); Odiljon Hamrobekov (Tractor); Jaloliddin Masharipov (Esteghlal); Oston Urunov (Persepolis); Dostonbek Khamdamov (Pakhtakor); Azizjon Ganiev (Al Bataeh); Abbosbek Fayzullaev (Başakşehir); Sherzod Esanov (Bukhara)",A:"Eldor Shomurodov (Başakşehir); Azizbek Amonov (Dinamo Samarqand); Igor Sergeev (Persepolis)"}},
+{id:"eng",n:"Inglaterra",f:"gb-eng",g:"L",coach:"Thomas Tuchel",form:"4-2-3-1",
+xi:"Pickford|Livramento|Guéhi|Stones|James|Rice|Anderson|Rashford|Bellingham|Saka|Kane",
+stars:[["Líder","Harry Kane"],["Craque","Jude Bellingham"],["Aposta","Elliot Anderson"]],
+res:"Tuchel cortou sentimentalismos e entregou a campanha mais dominante da Europa: 8 vitórias em 8, nenhum gol sofrido. Kane na fase mais artilheira da carreira, Saka o melhor ponta da Premier League. O time inglês mais completo desde 1966.",
+hist:"17ª participação. Campeã em 1966, em casa — desde então, peregrinação de 'quase': 4º em 2018, vice da Euro 2024.",
+palp:"Semifinal no mínimo, candidatíssima à final. Sem a maldição dos pênaltis, a 2ª estrela nunca esteve tão perto.",
+sq:{G:"Jordan Pickford (Everton); Dean Henderson (Crystal Palace); James Trafford (Manchester City)",D:"Ezri Konsa (Aston Villa); Nico O'Reilly (Manchester City); John Stones (Manchester City); Marc Guéhi (Manchester City); Tino Livramento (Newcastle); Dan Burn (Newcastle); Reece James (Chelsea); Djed Spence (Tottenham); Jarell Quansah (Leverkusen)",M:"Declan Rice (Arsenal); Elliot Anderson (Nottingham Forest); Jude Bellingham (Real Madrid); Jordan Henderson (Brentford); Kobbie Mainoo (Manchester United); Morgan Rogers (Aston Villa); Eberechi Eze (Arsenal)",A:"Bukayo Saka (Arsenal); Harry Kane (Bayern); Marcus Rashford (Barcelona); Anthony Gordon (Newcastle); Ollie Watkins (Aston Villa); Noni Madueke (Arsenal); Ivan Toney (Al-Ahli)"}},
+{id:"cro",n:"Croácia",f:"hr",g:"L",coach:"Zlatko Dalić",form:"4-3-3",
+xi:"Livaković|Gvardiol|Šutalo|Pongračić|Stanišić|Modrić|Kovačić|P. Sučić|Perišić|Budimir|Kramarić",
+stars:[["Líder","Luka Modrić"],["Craque","Joško Gvardiol"],["Aposta","Martin Baturina"]],
+res:"O eterno enterro adiado: a cada ciclo decretam o fim, e o meio Modrić–Kovačić — agora com Sučić e Baturina — segue dando aula. Modrić, aos 40, vai à 5ª Copa como titular e capitão. A fraqueza de sempre: o camisa 9.",
+hist:"7ª participação. Para 3,8 milhões de habitantes: vice em 2018, 3º em 1998 e 2022. A potência per capita do futebol.",
+palp:"Passa em 2º, vence um mata-mata nos pênaltis (tradição) e cai com honra nas quartas — o último ato de Modrić.",
+sq:{G:"Dominik Livaković (Dinamo Zagreb); Ivor Pandur (Hull); Dominik Kotarski (Copenhague)",D:"Josip Stanišić (Bayern); Marin Pongračić (Fiorentina); Joško Gvardiol (Manchester City); Duje Ćaleta-Car (Real Sociedad); Josip Šutalo (Ajax); Kristijan Jakić (Augsburg); Luka Vušković (Hamburgo); Martin Erlić (Midtjylland)",M:"Nikola Moro (Bologna); Mateo Kovačić (Manchester City); Luka Modrić (Milan); Nikola Vlašić (Torino); Mario Pašalić (Atalanta); Martin Baturina (Como); Petar Sučić (Inter); Toni Fruk (Rijeka); Luka Sučić (Real Sociedad)",A:"Andrej Kramarić (Hoffenheim); Ante Budimir (Osasuna); Ivan Perišić (PSV); Igor Matanović (Freiburg); Marco Pašalić (Orlando); Petar Musa (Dallas)"}},
+{id:"gha",n:"Gana",f:"gh",g:"L",coach:"Carlos Queiroz",form:"4-3-3",
+xi:"Ati-Zigi|Mensah|Mumin|Adjetey|Seidu|Partey|Sibo|Yirenkyi|Semenyo|Iñaki Williams|Fatawu",
+stars:[["Líder","Thomas Partey"],["Craque","Antoine Semenyo"],["Aposta","Abdul Fatawu"]],
+res:"A eterna sensação de ser menos que a soma dos talentos: Semenyo virou reforço de elite do City, Partey segue o cérebro, Fatawu e Sulemana dão velocidade. Queiroz é especialista em organizar seleções em pouco tempo — exatamente o que Gana nunca teve.",
+hist:"5ª participação. As quartas de 2010 — a mão de Suárez, o pênalti de Gyan na trave — seguem como a maior dor/glória africana em Copas.",
+palp:"Briga com o Panamá pelo 3º; com Semenyo inspirado, rouba a 2ª vaga da Croácia.",
+sq:{G:"Lawrence Ati-Zigi (St. Gallen); Joseph Anang (St Patrick's); Benjamin Asare (Hearts of Oak)",D:"Alidu Seidu (Rennes); Jonas Adjetey (Wolfsburg); Abdul Mumin (Rayo); Gideon Mensah (Auxerre); Abdul Rahman Baba (PAOK); Jerome Opoku (Başakşehir); Kojo Peprah Oppong (Nice); Derrick Luckassen (Pafos); Marvin Senaya (Auxerre)",M:"Caleb Yirenkyi (Nordsjælland); Thomas Partey (Villarreal); Kwasi Sibo (Oviedo); Elisha Owusu (Auxerre); Augustine Boakye (Saint-Étienne)",A:"Abdul Fatawu (Leicester); Jordan Ayew (Leicester); Brandon Thomas-Asante (Coventry); Antoine Semenyo (Manchester City); Christopher Bonsu Baah (Al-Qadsiah); Iñaki Williams (Athletic); Kamaldeen Sulemana (Atalanta); Ernest Nuamah (Lyon); Prince Kwabena Adu (Plzeň)"}},
+{id:"pan",n:"Panamá",f:"pa",g:"L",coach:"Thomas Christiansen",form:"4-4-2",
+xi:"Mosquera|Davis|Escobar|J. Córdoba|Murillo|Bárcenas|Carrasquilla|Godoy|J. L. Rodríguez|Fajardo|Waterman",
+stars:[["Líder","Aníbal Godoy"],["Craque","Adalberto Carrasquilla"],["Aposta","José Córdoba"]],
+res:"Incomparavelmente melhor que em 2018: eliminou os EUA na Nations League, venceu seu grupo nas Eliminatórias com 3 a 0 na última rodada. Bloco compacto, cínico quando precisa, mortal em bola parada. Falta gol — e contra Inglaterra e Croácia isso costuma ser fatal.",
+hist:"2ª participação. Em 2018, três derrotas — mas o gol de Baloy parou o país.",
+palp:"3º ou 4º; o duelo com Gana define se vem a primeira vitória da história panamenha em Copas.",
+sq:{G:"Luis Mejía (Nacional-URU); César Samudio (Marathón); Orlando Mosquera (Al-Fayha)",D:"César Blackman (Slovan Bratislava); José Córdoba (Norwich); Fidel Escobar (Saprissa); Edgardo Fariña (Pari NN); Jiovany Ramos (Puerto Cabello); Carlos Harvey (Minnesota); Eric Davis (Plaza Amador); Andrés Andrade (LASK); Michael Amir Murillo (Beşiktaş); Roderick Miller (Turan Tovuz); Jorge Gutiérrez (La Guaira)",M:"Cristian Martínez (Kiryat Shmona); José Luis Rodríguez (Juárez); Adalberto Carrasquilla (Pumas); Ismael Díaz (León); Yoel Bárcenas (Mazatlán); Alberto Quintero (Plaza Amador); Aníbal Godoy (San Diego); César Yanis (Cobresal)",A:"Tomás Rodríguez (Saprissa); José Fajardo (U. Católica-EQU); Cecilio Waterman (U. de Concepción); Azarias Londoño (U. Católica-EQU)"}}
+];
+const GRUPOS="ABCDEFGHIJKL".split("");
+const flag=(c,w)=>`https://flagcdn.com/${w}/${c}.png`;
+
+/* nav de grupos */
+document.getElementById("gnav").innerHTML =
+  GRUPOS.map(g=>`<a class="gpill" href="#g${g}">Grupo ${g}</a>`).join("") +
+  `<a class="gpill" href="#balanco">⭐ Balanço</a>`;
+
+/* cards por grupo */
+document.getElementById("grupos").innerHTML = GRUPOS.map(g=>`
+  <section class="gsec" id="g${g}"><h2>Grupo ${g}</h2>
+    <div class="tgrid">
+      ${TEAMS.filter(t=>t.g===g).map(t=>`
+        <div class="tcard" data-n="${t.n.toLowerCase()}" onclick="abre('${t.id}')">
+          <div class="shield"><img loading="lazy" src="${flag(t.f,"w160")}" alt="${t.n}"></div>
+          <div><div class="tn">${t.n}</div><div class="tc">${t.coach}</div><div class="tf">${t.form} · ver guia →</div></div>
+        </div>`).join("")}
+    </div>
+  </section>`).join("");
+
+/* balanço */
+const chip=id=>{const t=TEAMS.find(x=>x.id===id);return `<span class="fchip"><img src="${flag(t.f,"w40")}">${t.n}</span>`};
+document.getElementById("favs").innerHTML=["esp","fra","arg","eng","bra"].map(chip).join("");
+document.getElementById("dark").innerHTML=["nor","jpn","mar","sen","col","uru"].map(chip).join("");
+
+/* busca */
+function filtra(q){q=q.trim().toLowerCase();
+  document.querySelectorAll(".tcard").forEach(c=>c.style.display=c.dataset.n.includes(q)?"":"none");
+  document.querySelectorAll(".gsec").forEach(s=>{
+    s.style.display=[...s.querySelectorAll(".tcard")].some(c=>c.style.display!=="none")?"":"none";});}
+
+/* modal */
+function abre(id){
+  const t=TEAMS.find(x=>x.id===id);
+  document.getElementById("m-flag").src=flag(t.f,"w320");
+  document.getElementById("m-nome").textContent=t.n;
+  document.getElementById("m-sub").textContent=`Grupo ${t.g} · Técnico: ${t.coach} · Esquema ${t.form}`;
+  document.getElementById("m-res").textContent=t.res;
+  document.getElementById("m-hist").textContent=t.hist;
+  document.getElementById("m-palp").innerHTML="🔮 "+t.palp;
+  document.getElementById("m-form").textContent=t.form;
+  document.getElementById("m-coach").textContent=t.coach;
+
+  /* craques com foto */
+  document.getElementById("m-stars").innerHTML=t.stars.map(([r,n],i)=>`
+    <div class="star"><div class="ph" id="ph-${i}">${n.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+    <div class="role">${r}</div><div class="nm">${n}</div></div>`).join("");
+  t.stars.forEach(([_,n],i)=>foto(n,document.getElementById("ph-"+i)));
+
+  /* campinho */
+  const pitch=document.getElementById("m-pitch");
+  pitch.querySelectorAll(".chip").forEach(e=>e.remove());
+  const nomes=t.xi.split("|"), linhas=t.form.split("-").map(Number);
+  let k=0, html="";
+  const add=(nome,x,y,gk)=>{html+=`<div class="chip${gk?" gk":""}" style="left:${x}%;top:${y}%">
+    <div class="dot">${nome.split(" ").map(w=>w[0]).slice(0,2).join("")}</div><div class="cn">${nome}</div></div>`};
+  add(nomes[k++],50,91,true);
+  linhas.forEach((qt,li)=>{
+    const y=76-li*(62/Math.max(linhas.length-1,1));
+    for(let j=0;j<qt;j++) add(nomes[k++],(100/(qt+1))*(j+1),y,false);
+  });
+  pitch.insertAdjacentHTML("beforeend",html);
+  document.getElementById("m-xi").textContent=t.xi.replaceAll("|",", ");
+
+  /* convocados */
+  const cab={G:"Goleiros",D:"Defensores",M:"Meio-campistas",A:"Atacantes"};
+  document.getElementById("m-sq").innerHTML=Object.entries(t.sq).map(([p,lista])=>`
+    <div><h5>${cab[p]}</h5><ul>${lista.split(";").map(j=>{
+      const m=j.trim().match(/^(.*)\((.*)\)(.*)$/);
+      return m?`<li><b>${m[1].trim()}</b> <i>· ${m[2]}</i>${m[3]||""}</li>`:`<li>${j.trim()}</li>`;
+    }).join("")}</ul></div>`).join("");
+
+  aba(0,document.querySelector(".tab"));
+  document.getElementById("ovl").classList.add("on");
+  document.body.style.overflow="hidden";
+}
+function fecha(){document.getElementById("ovl").classList.remove("on");document.body.style.overflow=""}
+function aba(i,btn){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("on"));
+  document.querySelectorAll(".pane").forEach(p=>p.classList.remove("on"));
+  btn.classList.add("on");document.getElementById("p"+i).classList.add("on");
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")fecha()});
+
+/* deep-link: #t/bra/1 abre a seleção (aba 0=geral, 1=tática, 2=convocados) */
+function deepLink(){const h=location.hash.match(/^#t\/([a-z]+)(?:\/(\d))?/);
+  if(h&&TEAMS.some(t=>t.id===h[1])){abre(h[1]);
+    if(h[2])aba(Number(h[2]),document.querySelectorAll(".tab")[Number(h[2])]);}}
+deepLink();
+window.addEventListener("hashchange",deepLink);
+window.addEventListener("pageshow",deepLink);
+
+/* foto do jogador via Wikipedia (pt → en) com cache */
+const FCACHE={};
+async function foto(nome,el){
+  if(FCACHE[nome]){if(FCACHE[nome]!=="x")el.innerHTML=`<img src="${FCACHE[nome]}" alt="${nome}">`;return;}
+  for(const wiki of["pt","en"]){
+    try{
+      const r=await fetch(`https://${wiki}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(nome.replaceAll(" ","_"))}`);
+      if(!r.ok)continue;
+      const d=await r.json();
+      if(d.thumbnail&&d.thumbnail.source){FCACHE[nome]=d.thumbnail.source;
+        el.innerHTML=`<img src="${d.thumbnail.source}" alt="${nome}">`;return;}
+    }catch(e){}
+  }
+  FCACHE[nome]="x";
+}
+</script>
+</body>
+</html>
