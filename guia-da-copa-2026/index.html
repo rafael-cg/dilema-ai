@@ -104,6 +104,45 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Open Sans",
 .sq ul{list-style:none}
 .sq li{font-size:13px;padding:5px 0;border-bottom:1px solid #f0f0f0;line-height:1.35}
 .sq li i{color:var(--ink-soft);font-style:normal;font-size:11.5px}
+/* ---------- jogos do grupo ---------- */
+.jg{margin-top:12px;background:#fff;border:1px solid #e7e7e7;border-radius:12px;overflow:hidden}
+.jg summary{cursor:pointer;padding:11px 16px;font-size:13px;font-weight:800;color:var(--cup-green-dark);list-style:none}
+.jg summary::before{content:"📅 ";}
+.jg[open] summary{border-bottom:1px solid #eee}
+.jg table{width:100%;border-collapse:collapse;font-size:13px}
+.jg td{padding:8px 10px;border-bottom:1px solid #f3f3f3;vertical-align:middle}
+.jg tr:last-child td{border-bottom:none}
+.jg .dt{color:var(--ink-soft);font-weight:700;white-space:nowrap;width:52px}
+.jg .tm{font-weight:700;white-space:nowrap}
+.jg .tm img{width:20px;height:14px;border-radius:2px;vertical-align:-2px;object-fit:cover}
+.jg .st{color:var(--ink-soft);font-size:12px;text-align:right}
+.jg .vs{color:#bbb;font-weight:400;padding:0 4px}
+@media(max-width:640px){.jg .st{display:none}}
+/* ---------- simulador ---------- */
+.sim{background:#fff;border:1px solid #e7e7e7;border-radius:16px;padding:20px;margin-bottom:34px}
+.sim h2{font-size:20px;font-weight:800;color:var(--cup-green-deep);border-left:5px solid var(--cup-green);padding-left:10px;margin-bottom:6px}
+.sim .hint{font-size:13px;color:var(--ink-soft);margin-bottom:12px;line-height:1.5}
+.simbtns{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.sbtn{border:none;border-radius:16px;padding:8px 15px;font-size:13px;font-weight:700;cursor:pointer}
+.sbtn.go{background:var(--cup-green);color:#fff}.sbtn.go:hover{background:var(--cup-green-dark)}
+.sbtn.rs{background:#eee;color:#444}.sbtn.rs:hover{background:#ddd}
+.brack{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px}
+.rcol{flex:0 0 218px;display:flex;flex-direction:column}
+.rcol h4{font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--cup-green-dark);text-align:center;margin-bottom:8px}
+.rbody{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:8px;min-height:100%}
+.mcard{background:#fafafa;border:1px solid #e8e8e8;border-radius:10px;padding:7px 9px}
+.mcard .mi{font-size:10px;color:#999;margin-bottom:4px;line-height:1.3}
+.mteam{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:700;border:1px solid transparent}
+.mteam:hover{background:#eef7f1}
+.mteam img{width:20px;height:14px;border-radius:2px;object-fit:cover}
+.mteam.win{background:var(--cup-green);color:#fff}
+.mteam.out{opacity:.45;text-decoration:line-through}
+.mteam.tbd{color:#aaa;cursor:default;font-weight:600}
+.mteam select{border:none;background:transparent;font:inherit;width:100%;cursor:pointer;outline:none}
+.champ{flex:0 0 218px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;text-align:center}
+.champ .cup{font-size:46px}
+.champ .cname{font-size:17px;font-weight:800;color:var(--cup-green-deep);display:flex;align-items:center;gap:8px}
+.champ .cname img{width:28px;height:19px;border-radius:3px;object-fit:cover}
 /* ---------- balanço ---------- */
 .fav{background:linear-gradient(120deg,#11321c,#0a5c2e);border-radius:16px;color:#fff;padding:26px;margin-top:10px}
 .fav h2{font-size:21px;margin-bottom:13px}
@@ -138,12 +177,22 @@ footer a{color:#7fd6a0}
 <main class="wrap">
   <div id="grupos"></div>
 
+  <section class="sim" id="simulador">
+    <h2>🎮 Simulador do mata-mata</h2>
+    <p class="hint">Os 16-avos seguem o chaveamento oficial da FIFA (jogos 73 a 88, com data e estádio). Troque qualquer classificado nos menus dos 16-avos e <b>clique no time</b> para avançá-lo de fase, até conhecer o campeão. "Preencher com o palpite do guia" simula o caminho previsto na resenha.</p>
+    <div class="simbtns">
+      <button class="sbtn go" onclick="simPalpite()">⚡ Preencher com o palpite do guia</button>
+      <button class="sbtn rs" onclick="simReset()">↺ Limpar</button>
+    </div>
+    <div class="brack" id="brack"></div>
+  </section>
+
   <section class="fav" id="balanco">
     <h2>⭐ Balanço final: quem chega como favorito</h2>
     <div class="ft">Favoritos</div><div class="row" id="favs"></div>
     <div class="ft">Azarões de elite</div><div class="row" id="dark"></div>
     <div class="ft">Palpite-síntese</div>
-    <p style="font-size:14px;line-height:1.6;margin-top:6px">Semifinais <b>Espanha x Brasil</b> e <b>França x Argentina</b>; final <b>Espanha x Argentina</b> no MetLife — a Finalissima que a guerra cancelou, remarcada pelo destino. Campeã: <b>Espanha</b>. Artilheiro: Mbappé. Craque: Lamine Yamal.</p>
+    <p style="font-size:14px;line-height:1.6;margin-top:6px">Pelo chaveamento oficial, o caminho do guia dá semifinais <b>França x Espanha</b> e <b>Brasil x Argentina</b>; final <b>Espanha x Argentina</b> no MetLife — a Finalissima que a guerra cancelou, remarcada pelo destino. Campeã: <b>Espanha</b>. Artilheiro: Mbappé. Craque: Lamine Yamal. Monte o seu caminho no <a href="#simulador" style="color:#aef5c8">simulador</a>.</p>
   </section>
 </main>
 
@@ -535,12 +584,60 @@ sq:{G:"Luis Mejía (Nacional-URU); César Samudio (Marathón); Orlando Mosquera 
 const GRUPOS="ABCDEFGHIJKL".split("");
 const flag=(c,w)=>`https://flagcdn.com/${w}/${c}.png`;
 
+/* ====== TABELA DE JOGOS (fase de grupos) — data, ids, estádio/cidade ====== */
+const JOGOS={
+A:[["11/06","mex","rsa","Estádio Azteca, Cidade do México"],["11/06","kor","cze","Estadio Akron, Guadalajara"],["18/06","cze","rsa","Mercedes-Benz Stadium, Atlanta"],["18/06","mex","kor","Estadio Akron, Guadalajara"],["24/06","cze","mex","Estádio Azteca, Cidade do México"],["24/06","rsa","kor","Estadio BBVA, Monterrey"]],
+B:[["12/06","can","bih","BMO Field, Toronto"],["13/06","qat","sui","Levi's Stadium, Santa Clara"],["18/06","sui","bih","SoFi Stadium, Los Angeles"],["18/06","can","qat","BC Place, Vancouver"],["24/06","sui","can","BC Place, Vancouver"],["24/06","bih","qat","Lumen Field, Seattle"]],
+C:[["13/06","bra","mar","MetLife Stadium, Nova Jersey"],["13/06","hai","sco","Gillette Stadium, Boston"],["19/06","sco","mar","Gillette Stadium, Boston"],["19/06","bra","hai","Lincoln Financial Field, Filadélfia"],["24/06","sco","bra","Hard Rock Stadium, Miami"],["24/06","mar","hai","Mercedes-Benz Stadium, Atlanta"]],
+D:[["12/06","usa","par","SoFi Stadium, Los Angeles"],["13/06","aus","tur","BC Place, Vancouver"],["19/06","usa","aus","Lumen Field, Seattle"],["19/06","tur","par","Levi's Stadium, Santa Clara"],["25/06","tur","usa","SoFi Stadium, Los Angeles"],["25/06","par","aus","Levi's Stadium, Santa Clara"]],
+E:[["14/06","ger","cur","NRG Stadium, Houston"],["14/06","civ","ecu","Lincoln Financial Field, Filadélfia"],["20/06","ger","civ","BMO Field, Toronto"],["20/06","ecu","cur","Arrowhead Stadium, Kansas City"],["25/06","cur","civ","Lincoln Financial Field, Filadélfia"],["25/06","ecu","ger","MetLife Stadium, Nova Jersey"]],
+F:[["14/06","ned","jpn","AT&T Stadium, Dallas"],["14/06","swe","tun","Estadio BBVA, Monterrey"],["20/06","ned","swe","NRG Stadium, Houston"],["20/06","tun","jpn","Estadio BBVA, Monterrey"],["25/06","jpn","swe","AT&T Stadium, Dallas"],["25/06","tun","ned","Arrowhead Stadium, Kansas City"]],
+G:[["15/06","bel","egy","Lumen Field, Seattle"],["15/06","irn","nzl","SoFi Stadium, Los Angeles"],["21/06","bel","irn","SoFi Stadium, Los Angeles"],["21/06","nzl","egy","BC Place, Vancouver"],["26/06","egy","irn","Lumen Field, Seattle"],["26/06","nzl","bel","BC Place, Vancouver"]],
+H:[["15/06","esp","cpv","Mercedes-Benz Stadium, Atlanta"],["15/06","ksa","uru","Hard Rock Stadium, Miami"],["21/06","esp","ksa","Mercedes-Benz Stadium, Atlanta"],["21/06","uru","cpv","Hard Rock Stadium, Miami"],["26/06","cpv","ksa","NRG Stadium, Houston"],["26/06","uru","esp","Estadio Akron, Guadalajara"]],
+I:[["16/06","fra","sen","MetLife Stadium, Nova Jersey"],["16/06","irq","nor","Gillette Stadium, Boston"],["22/06","fra","irq","Lincoln Financial Field, Filadélfia"],["22/06","nor","sen","MetLife Stadium, Nova Jersey"],["26/06","nor","fra","Gillette Stadium, Boston"],["26/06","sen","irq","BMO Field, Toronto"]],
+J:[["16/06","arg","alg","Arrowhead Stadium, Kansas City"],["16/06","aut","jor","Levi's Stadium, Santa Clara"],["22/06","arg","aut","AT&T Stadium, Dallas"],["22/06","jor","alg","Levi's Stadium, Santa Clara"],["27/06","alg","aut","Arrowhead Stadium, Kansas City"],["27/06","jor","arg","AT&T Stadium, Dallas"]],
+K:[["17/06","por","cod","NRG Stadium, Houston"],["17/06","uzb","col","Estádio Azteca, Cidade do México"],["23/06","por","uzb","NRG Stadium, Houston"],["23/06","col","cod","Estadio Akron, Guadalajara"],["27/06","col","por","Hard Rock Stadium, Miami"],["27/06","cod","uzb","Mercedes-Benz Stadium, Atlanta"]],
+L:[["17/06","eng","cro","AT&T Stadium, Dallas"],["17/06","gha","pan","BMO Field, Toronto"],["23/06","eng","gha","Gillette Stadium, Boston"],["23/06","pan","cro","BMO Field, Toronto"],["27/06","pan","eng","MetLife Stadium, Nova Jersey"],["27/06","cro","gha","Lincoln Financial Field, Filadélfia"]]};
+
+/* ====== MATA-MATA: chaveamento oficial (ordem visual = alimentação da chave) ====== */
+const KO={
+r32:[
+ {m:74,a:"1º E",b:"3º A/B/C/D/F",ta:"ger",tb:"par",d:"29/06",v:"Gillette Stadium, Boston"},
+ {m:77,a:"1º I",b:"3º C/D/F/G/H",ta:"fra",tb:"swe",d:"30/06",v:"MetLife Stadium, Nova Jersey"},
+ {m:73,a:"2º A",b:"2º B",ta:"kor",tb:"can",d:"28/06",v:"SoFi Stadium, Los Angeles"},
+ {m:75,a:"1º F",b:"2º C",ta:"ned",tb:"mar",d:"29/06",v:"Estadio BBVA, Monterrey"},
+ {m:83,a:"2º K",b:"2º L",ta:"col",tb:"cro",d:"02/07",v:"BMO Field, Toronto"},
+ {m:84,a:"1º H",b:"2º J",ta:"esp",tb:"aut",d:"02/07",v:"SoFi Stadium, Los Angeles"},
+ {m:81,a:"1º D",b:"3º B/E/F/I/J",ta:"usa",tb:"alg",d:"01/07",v:"Levi's Stadium, Santa Clara"},
+ {m:82,a:"1º G",b:"3º A/E/H/I/J",ta:"bel",tb:"rsa",d:"01/07",v:"Lumen Field, Seattle"},
+ {m:76,a:"1º C",b:"2º F",ta:"bra",tb:"jpn",d:"29/06",v:"NRG Stadium, Houston"},
+ {m:78,a:"2º E",b:"2º I",ta:"ecu",tb:"sen",d:"30/06",v:"AT&T Stadium, Dallas"},
+ {m:79,a:"1º A",b:"3º C/E/F/H/I",ta:"mex",tb:"civ",d:"30/06",v:"Estádio Azteca, Cidade do México"},
+ {m:80,a:"1º L",b:"3º E/H/I/J/K",ta:"eng",tb:"cod",d:"01/07",v:"Mercedes-Benz Stadium, Atlanta"},
+ {m:86,a:"1º J",b:"2º H",ta:"arg",tb:"uru",d:"03/07",v:"Hard Rock Stadium, Miami"},
+ {m:88,a:"2º D",b:"2º G",ta:"tur",tb:"egy",d:"03/07",v:"AT&T Stadium, Dallas"},
+ {m:85,a:"1º B",b:"3º E/F/G/I/J",ta:"sui",tb:"irn",d:"02/07",v:"BC Place, Vancouver"},
+ {m:87,a:"1º K",b:"3º D/E/I/J/L",ta:"por",tb:"nor",d:"03/07",v:"Arrowhead Stadium, Kansas City"}],
+r16:[{m:89,d:"04/07",v:"Lincoln Financial Field, Filadélfia"},{m:90,d:"04/07",v:"NRG Stadium, Houston"},
+ {m:93,d:"06/07",v:"AT&T Stadium, Dallas"},{m:94,d:"06/07",v:"Lumen Field, Seattle"},
+ {m:91,d:"05/07",v:"MetLife Stadium, Nova Jersey"},{m:92,d:"05/07",v:"Estádio Azteca, Cidade do México"},
+ {m:95,d:"07/07",v:"Mercedes-Benz Stadium, Atlanta"},{m:96,d:"07/07",v:"BC Place, Vancouver"}],
+qf:[{m:97,d:"09/07",v:"Gillette Stadium, Boston"},{m:98,d:"10/07",v:"SoFi Stadium, Los Angeles"},
+ {m:99,d:"11/07",v:"Hard Rock Stadium, Miami"},{m:100,d:"11/07",v:"Arrowhead Stadium, Kansas City"}],
+sf:[{m:101,d:"14/07",v:"AT&T Stadium, Dallas"},{m:102,d:"15/07",v:"Mercedes-Benz Stadium, Atlanta"}],
+fin:[{m:104,d:"19/07",v:"MetLife Stadium, Nova Jersey"}]};
+/* palpite do guia, na ordem visual de cada fase */
+const PALPITE={r32:["ger","fra","can","mar","cro","esp","usa","bel","bra","sen","mex","eng","arg","tur","sui","por"],
+ r16:["fra","mar","esp","usa","bra","eng","arg","por"],qf:["fra","esp","bra","arg"],sf:["esp","arg"],fin:["esp"]};
+
 /* nav de grupos */
 document.getElementById("gnav").innerHTML =
   GRUPOS.map(g=>`<a class="gpill" href="#g${g}">Grupo ${g}</a>`).join("") +
-  `<a class="gpill" href="#balanco">⭐ Balanço</a>`;
+  `<a class="gpill" href="#simulador">🎮 Simulador</a><a class="gpill" href="#balanco">⭐ Balanço</a>`;
 
-/* cards por grupo */
+/* cards por grupo + tabela de jogos */
+const T=id=>TEAMS.find(t=>t.id===id);
+const tflag=(id,w)=>`<img loading="lazy" src="${flag(T(id).f,w||"w40")}" alt="">`;
 document.getElementById("grupos").innerHTML = GRUPOS.map(g=>`
   <section class="gsec" id="g${g}"><h2>Grupo ${g}</h2>
     <div class="tgrid">
@@ -550,7 +647,66 @@ document.getElementById("grupos").innerHTML = GRUPOS.map(g=>`
           <div><div class="tn">${t.n}</div><div class="tc">${t.coach}</div><div class="tf">${t.form} · ver guia →</div></div>
         </div>`).join("")}
     </div>
+    <details class="jg"><summary>Jogos do Grupo ${g} — datas e estádios</summary>
+      <table>${JOGOS[g].map(j=>`<tr>
+        <td class="dt">${j[0]}</td>
+        <td class="tm">${tflag(j[1])} ${T(j[1]).n}<span class="vs">x</span>${tflag(j[2])} ${T(j[2]).n}</td>
+        <td class="st">🏟️ ${j[3]}</td></tr>`).join("")}
+      </table>
+    </details>
   </section>`).join("");
+
+/* ====== SIMULADOR ====== */
+const STAGES=["r32","r16","qf","sf","fin"];
+const STAGE_NAMES={r32:"16-avos de final",r16:"Oitavas",qf:"Quartas",sf:"Semifinais",fin:"Final"};
+let E=KO.r32.map(x=>({a:x.ta,b:x.tb}));           // classificados editáveis dos 16-avos
+let W={r32:Array(16).fill(null),r16:Array(8).fill(null),qf:Array(4).fill(null),sf:Array(2).fill(null),fin:[null]};
+
+function parts(st,i){
+  if(st==="r32")return [E[i].a,E[i].b];
+  const prev=STAGES[STAGES.indexOf(st)-1];
+  return [W[prev][2*i],W[prev][2*i+1]];
+}
+function valida(){ // limpa vencedores que não estão mais entre os participantes
+  for(const st of STAGES) W[st]=W[st].map((w,i)=>{const p=parts(st,i);return (w&&p.includes(w))?w:null;});
+}
+function simPick(st,i,id){if(!id)return;W[st][i]=(W[st][i]===id)?null:id;valida();simRender();}
+function simEntrant(i,side,id){E[i][side]=id;valida();simRender();}
+function simReset(){E=KO.r32.map(x=>({a:x.ta,b:x.tb}));W={r32:Array(16).fill(null),r16:Array(8).fill(null),qf:Array(4).fill(null),sf:Array(2).fill(null),fin:[null]};simRender();}
+function simPalpite(){simReset();for(const st of STAGES)PALPITE[st].forEach((id,i)=>W[st][i]=id);valida();simRender();}
+
+function selTeams(cur,i,side){
+  const ops=GRUPOS.map(g=>`<optgroup label="Grupo ${g}">${TEAMS.filter(t=>t.g===g).map(t=>
+    `<option value="${t.id}"${t.id===cur?" selected":""}>${t.n}</option>`).join("")}</optgroup>`).join("");
+  return `<select onclick="event.stopPropagation()" onchange="simEntrant(${i},'${side}',this.value)">${ops}</select>`;
+}
+function rowHTML(st,i,id,slotLbl,editIdx,side){
+  const w=W[st][i];
+  if(!id)return `<div class="mteam tbd">— ${slotLbl||"aguardando"}</div>`;
+  const cls="mteam"+(w===id?" win":(w?" out":""));
+  const inner=(st==="r32")?`${tflag(id)} ${selTeams(id,editIdx,side)}`:`${tflag(id)} ${T(id).n}`;
+  return `<div class="${cls}" onclick="simPick('${st}',${i},'${id}')">${inner}</div>`;
+}
+function simRender(){
+  let html="";
+  for(const st of STAGES){
+    const meta=KO[st];
+    html+=`<div class="rcol"><h4>${STAGE_NAMES[st]}</h4><div class="rbody">`;
+    meta.forEach((mt,i)=>{
+      const [pa,pb]=parts(st,i);
+      const la=(st==="r32")?mt.a:null, lb=(st==="r32")?mt.b:null;
+      html+=`<div class="mcard"><div class="mi">Jogo ${mt.m} · ${mt.d} · ${mt.v}</div>
+        ${rowHTML(st,i,pa,la,i,"a")}${rowHTML(st,i,pb,lb,i,"b")}</div>`;
+    });
+    html+=`</div></div>`;
+  }
+  const c=W.fin[0];
+  html+=`<div class="champ"><div class="cup">🏆</div>
+    <div class="cname">${c?tflag(c,"w80")+" "+T(c).n:"?"}</div>
+    <div style="font-size:12px;color:var(--ink-soft)">Campeão do mundo<br>19/07 · MetLife Stadium</div></div>`;
+  document.getElementById("brack").innerHTML=html;
+}
+simRender();
 
 /* balanço */
 const chip=id=>{const t=TEAMS.find(x=>x.id===id);return `<span class="fchip"><img src="${flag(t.f,"w40")}">${t.n}</span>`};
