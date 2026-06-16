@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Trends AI | Maloka</title>
+  <meta name="description" content="Pesquise trends do Twitter e crie posts para todas as redes sociais com IA">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #070710;
+      --bg2: #0d0d1c;
+      --bg3: #141428;
+      --bg4: #1c1c38;
+      --border: #252540;
+      --border2: #353560;
+      --accent: #7c3aed;
+      --accent2: #9f67f0;
+      --accent3: #c084fc;
+      --text: #e8e8f5;
+      --text2: #8888b0;
+      --text3: #4a4a70;
+      --success: #22c55e;
+      --error: #ef4444;
+      --warn: #f59e0b;
+      --twitter: #1d9bf0;
+      --instagram: #e1306c;
+      --instagram2: #f77737;
+      --linkedin: #0077b5;
+      --tiktok: #ff0050;
+      --tiktok2: #00f2ea;
+      --r: 12px;
+      --r2: 8px;
+      --ease: 0.2s ease;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      background: rgba(7, 7, 16, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .logo-text { font-size: 17px; font-weight: 700; color: var(--text); }
+    .logo-sep { color: var(--text3); font-weight: 300; }
+    .logo-sub { font-size: 14px; color: var(--text2); }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .api-badges { display: flex; gap: 6px; }
+
+    .api-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-ok {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      color: #4ade80;
+    }
+
+    .badge-missing {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+
+    .badge-optional {
+      background: rgba(74, 74, 112, 0.3);
+      border: 1px solid var(--border);
+      color: var(--text3);
+    }
+
+    .btn-icon {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: var(--r2);
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: color var(--ease), border-color var(--ease);
+    }
+
+    .btn-icon:hover { color: var(--text); border-color: var(--border2); }
+
+    /* ── Main ── */
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 24px 100px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124, 58, 237, 0.12);
+      border: 1px solid rgba(124, 58, 237, 0.28);
+      color: var(--accent3);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(26px, 5vw, 46px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      background: linear-gradient(140deg, #fff 0%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--text2);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── Search ── */
+    .search-wrap {
+      margin-bottom: 44px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 7px;
+      transition: border-color var(--ease), box-shadow var(--ease);
+    }
+
+    .search-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+    }
+
+    .search-input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 16px;
+      padding: 9px 12px;
+    }
+
+    .search-input::placeholder { color: var(--text3); }
+
+    .btn-search {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--r2);
+      padding: 11px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: opacity var(--ease), transform var(--ease);
+      letter-spacing: 0.01em;
+    }
+
+    .btn-search:hover { opacity: 0.9; }
+    .btn-search:active { transform: scale(0.97); }
+    .btn-search:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    /* ── Error ── */
+    .error-card {
+      display: none;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: var(--r);
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      color: #fca5a5;
+    }
+
+    .error-card.show { display: block; }
+    .error-title { font-weight: 700; margin-bottom: 5px; }
+    .error-msg { font-size: 14px; line-height: 1.5; }
+
+    /* ── Loading ── */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .loading.show { display: block; }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 18px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-label {
+      font-size: 15px;
+      color: var(--text2);
+      margin-bottom: 24px;
+    }
+
+    .loading-steps {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .lstep {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text3);
+      transition: color var(--ease);
+    }
+
+    .lstep.active { color: var(--accent3); }
+    .lstep.done { color: var(--success); }
+    .lstep-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Results ── */
+    .results { display: none; }
+    .results.show { display: block; }
+
+    .section-head {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text3);
+      margin-bottom: 12px;
+    }
+
+    /* Trends card */
+    .trends-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px 24px;
+      margin-bottom: 32px;
+    }
+
+    .trends-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .trends-topic {
+      font-size: 18px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .source-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 11px;
+      border-radius: 20px;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+
+    .source-live {
+      background: rgba(29, 155, 240, 0.12);
+      border: 1px solid rgba(29, 155, 240, 0.28);
+      color: var(--twitter);
+    }
+
+    .source-ai {
+      background: rgba(124, 58, 237, 0.12);
+      border: 1px solid rgba(124, 58, 237, 0.28);
+      color: var(--accent3);
+    }
+
+    .trends-summary {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .hashtags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .htag {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--accent3);
+      font-size: 13px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      cursor: default;
+    }
+
+    /* Platform tabs */
+    .ptabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 4px;
+      margin-bottom: 18px;
+    }
+
+    .ptab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text2);
+      border: none;
+      background: none;
+      transition: background var(--ease), color var(--ease);
+    }
+
+    .ptab[data-p="twitter"].on  { background: rgba(29,155,240,0.14); color: var(--twitter); font-weight: 700; }
+    .ptab[data-p="instagram"].on{ background: rgba(225,48,108,0.14); color: var(--instagram); font-weight: 700; }
+    .ptab[data-p="linkedin"].on { background: rgba(0,119,181,0.14);  color: var(--linkedin); font-weight: 700; }
+    .ptab[data-p="tiktok"].on   { background: rgba(255,0,80,0.14);   color: var(--tiktok); font-weight: 700; }
+
+    .pcontent { display: none; }
+    .pcontent.on { display: block; }
+
+    /* Post card */
+    .post-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .post-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-pname {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .pdot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pdot-twitter    { background: var(--twitter); }
+    .pdot-instagram  { background: linear-gradient(135deg, var(--instagram), var(--instagram2)); }
+    .pdot-linkedin   { background: var(--linkedin); }
+    .pdot-tiktok     { background: var(--tiktok); }
+
+    .post-card-actions { display: flex; gap: 8px; }
+
+    .btn-copy {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: 6px;
+      padding: 6px 13px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color var(--ease), border-color var(--ease);
+    }
+
+    .btn-copy:hover { color: var(--text); border-color: var(--border2); }
+    .btn-copy.copied { color: var(--success); border-color: rgba(34,197,94,0.4); }
+
+    .post-body { padding: 20px 20px 18px; }
+
+    .post-text {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .post-foot {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .post-htags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .phtag { font-size: 12px; color: var(--accent3); }
+
+    .char-count { font-size: 12px; color: var(--text3); white-space: nowrap; }
+    .char-count.warn { color: var(--warn); }
+    .char-count.over { color: var(--error); }
+
+    /* TikTok sections */
+    .tksec { margin-bottom: 20px; }
+    .tksec:last-child { margin-bottom: 0; }
+
+    .tksec-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      margin-bottom: 8px;
+    }
+
+    .tkhook {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--tiktok);
+      line-height: 1.4;
+    }
+
+    .tksounds { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .sound-tag {
+      background: rgba(255, 0, 80, 0.08);
+      border: 1px solid rgba(255, 0, 80, 0.2);
+      color: var(--tiktok);
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── Modal ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .overlay.show { display: flex; }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .modal-title { font-size: 17px; font-weight: 700; }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .fgroup { margin-bottom: 18px; }
+
+    .flabel {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text2);
+      margin-bottom: 7px;
+    }
+
+    .finput {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      color: var(--text);
+      font-size: 13px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      padding: 10px 13px;
+      outline: none;
+      transition: border-color var(--ease);
+    }
+
+    .finput:focus { border-color: var(--accent); }
+
+    .fhint {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .fhint a { color: var(--accent3); text-decoration: none; }
+    .fhint a:hover { text-decoration: underline; }
+
+    .btn-save {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      border-radius: var(--r2);
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: opacity var(--ease);
+    }
+
+    .btn-save:hover { opacity: 0.9; }
+
+    .modal-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 580px) {
+      header { padding: 0 14px; }
+      main { padding: 36px 14px 80px; }
+      .ptab { font-size: 12px; padding: 9px 8px; gap: 5px; }
+      .ptab-label { display: none; }
+      .btn-search span:last-child { display: none; }
+      .trends-top { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <a class="logo" href="/">
+    <div class="logo-icon">🔮</div>
+    <span class="logo-text">Maloka</span>
+    <span class="logo-sep">&nbsp;/&nbsp;</span>
+    <span class="logo-sub">Social Trends</span>
+  </a>
+  <div class="header-right">
+    <div class="api-badges" id="apiBadges"></div>
+    <button class="btn-icon" onclick="openSettings()" title="Configurar API Keys">⚙️</button>
+  </div>
+</header>
+
+<!-- ── Main ── -->
+<main>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-chip">✦ Assistente de Redes Sociais</div>
+    <h1>Do Twitter para<br>todas as redes</h1>
+    <p>Digite um assunto e descubra o que está em alta no Twitter. A IA cria posts otimizados para cada plataforma.</p>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <input
+        type="text"
+        class="search-input"
+        id="topicInput"
+        placeholder="Ex: inteligência artificial, sustentabilidade, startups…"
+        maxlength="120"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn-search" id="searchBtn" onclick="search()">
+        <span>🔍</span>
+        <span>Buscar Trends</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-card" id="errorCard">
+    <div class="error-title">⚠️ Algo deu errado</div>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loadingSection">
+    <div class="spinner"></div>
+    <div class="loading-label" id="loadingLabel">Buscando tendências…</div>
+    <div class="loading-steps">
+      <div class="lstep" id="s1"><div class="lstep-dot"></div><span>Buscando trends no Twitter</span></div>
+      <div class="lstep" id="s2"><div class="lstep-dot"></div><span>Analisando contexto com IA</span></div>
+      <div class="lstep" id="s3"><div class="lstep-dot"></div><span>Criando posts para cada plataforma</span></div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="resultsSection">
+
+    <!-- Trends -->
+    <div class="section-head">Tendências encontradas</div>
+    <div class="trends-card">
+      <div class="trends-top">
+        <div class="trends-topic" id="trendsTopic"></div>
+        <span class="source-tag" id="sourceTag"></span>
+      </div>
+      <div class="trends-summary" id="trendsSummary"></div>
+      <div class="hashtags-row" id="hashtagsRow"></div>
+    </div>
+
+    <!-- Platform tabs -->
+    <div class="section-head">Posts criados pela IA</div>
+    <div class="ptabs">
+      <button class="ptab on" data-p="twitter"   onclick="tab('twitter')">  <span>𝕏</span>    <span class="ptab-label">Twitter</span>   </button>
+      <button class="ptab"    data-p="instagram" onclick="tab('instagram')"><span>📷</span>   <span class="ptab-label">Instagram</span> </button>
+      <button class="ptab"    data-p="linkedin"  onclick="tab('linkedin')"> <span>💼</span>   <span class="ptab-label">LinkedIn</span>  </button>
+      <button class="ptab"    data-p="tiktok"    onclick="tab('tiktok')">   <span>🎵</span>   <span class="ptab-label">TikTok</span>    </button>
+    </div>
+
+    <!-- Twitter -->
+    <div class="pcontent on" id="pc-twitter">
+      <div class="post-card">
+        <div class="post-card-head">
+          <div class="post-pname"><div class="pdot pdot-twitter"></div>Twitter / X</div>
+          <div class="post-card-actions">
+            <button class="btn-copy" onclick="copy('twitter')">📋 Copiar</button>
+          </div>
+        </div>
+        <div class="post-body">
+          <div class="post-text" id="pt-twitter"></div>
+          <div class="post-foot">
+            <div class="post-htags" id="ph-twitter"></div>
+            <div class="char-count" id="cc-twitter"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instagram -->
+    <div class="pcontent" id="pc-instagram">
+      <div class="post-card">
+        <div class="post-card-head">
+          <div class="post-pname"><div class="pdot pdot-instagram"></div>Instagram</div>
+          <div class="post-card-actions">
+            <button class="btn-copy" onclick="copy('instagram')">📋 Copiar</button>
+          </div>
+        </div>
+        <div class="post-body">
+          <div class="post-text" id="pt-instagram"></div>
+          <div class="post-foot">
+            <div class="post-htags" id="ph-instagram"></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LinkedIn -->
+    <div class="pcontent" id="pc-linkedin">
+      <div class="post-card">
+        <div class="post-card-head">
+          <div class="post-pname"><div class="pdot pdot-linkedin"></div>LinkedIn</div>
+          <div class="post-card-actions">
+            <button class="btn-copy" onclick="copy('linkedin')">📋 Copiar</button>
+          </div>
+        </div>
+        <div class="post-body">
+          <div class="post-text" id="pt-linkedin"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TikTok -->
+    <div class="pcontent" id="pc-tiktok">
+      <div class="post-card">
+        <div class="post-card-head">
+          <div class="post-pname"><div class="pdot pdot-tiktok"></div>TikTok</div>
+          <div class="post-card-actions">
+            <button class="btn-copy" onclick="copy('tiktok')">📋 Copiar</button>
+          </div>
+        </div>
+        <div class="post-body">
+          <div class="tksec">
+            <div class="tksec-label">🪝 Hook — primeiros 3 segundos</div>
+            <div class="tkhook" id="tk-hook"></div>
+          </div>
+          <div class="tksec">
+            <div class="tksec-label">📝 Script do vídeo</div>
+            <div class="post-text" id="pt-tiktok"></div>
+          </div>
+          <div class="tksec">
+            <div class="tksec-label">🎵 Sons em alta sugeridos</div>
+            <div class="tksounds" id="tk-sounds"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+</main>
+
+<!-- ── Settings Modal ── -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">⚙️ Configurações de API</div>
+      <button class="modal-close" onclick="closeSettings()">✕</button>
+    </div>
+
+    <div class="fgroup">
+      <label class="flabel" for="kAnthropic">Anthropic API Key <span style="color:var(--error)">*</span></label>
+      <input type="password" class="finput" id="kAnthropic" placeholder="sk-ant-api03-…">
+      <div class="fhint">
+        Obrigatório para geração de posts com IA.<br>
+        <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Obter chave no Console Anthropic →</a>
+      </div>
+    </div>
+
+    <hr class="modal-divider">
+
+    <div class="fgroup">
+      <label class="flabel" for="kTwitter">Twitter Bearer Token <span style="color:var(--text3)">(opcional)</span></label>
+      <input type="password" class="finput" id="kTwitter" placeholder="AAAAAAAAAAAAAAAAAAAAAA…">
+      <div class="fhint">
+        Com este token, as trends são buscadas em tempo real do Twitter.<br>
+        Sem ele, a IA analisa tendências com base no seu conhecimento.<br>
+        <a href="https://developer.twitter.com/en/portal/dashboard" target="_blank" rel="noopener">Twitter Developer Portal →</a>
+      </div>
+    </div>
+
+    <button class="btn-save" onclick="saveSettings()">💾 Salvar configurações</button>
+  </div>
+</div>
+
+<script>
+  // ── State ──
+  let posts = {};
+
+  // ── Settings ──
+  function openSettings() {
+    document.getElementById('kAnthropic').value = ls('ant') || '';
+    document.getElementById('kTwitter').value   = ls('twt') || '';
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function closeSettings() {
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  function overlayClick(e) {
+    if (e.target === document.getElementById('overlay')) closeSettings();
+  }
+
+  function saveSettings() {
+    const ant = document.getElementById('kAnthropic').value.trim();
+    const twt = document.getElementById('kTwitter').value.trim();
+    ant ? localStorage.setItem('mk_ant', ant) : localStorage.removeItem('mk_ant');
+    twt ? localStorage.setItem('mk_twt', twt) : localStorage.removeItem('mk_twt');
+    updateBadges();
+    closeSettings();
+  }
+
+  function ls(k) { return localStorage.getItem('mk_' + k) || ''; }
+
+  function updateBadges() {
+    const ant = !!ls('ant');
+    const twt = !!ls('twt');
+    document.getElementById('apiBadges').innerHTML =
+      `<span class="api-badge ${ant ? 'badge-ok' : 'badge-missing'}">${ant ? '✓' : '✗'} Claude</span>` +
+      `<span class="api-badge ${twt ? 'badge-ok' : 'badge-optional'}">${twt ? '✓' : '◌'} Twitter</span>`;
+  }
+
+  // ── Tabs ──
+  function tab(p) {
+    document.querySelectorAll('.ptab').forEach(t => t.classList.remove('on'));
+    document.querySelectorAll('.pcontent').forEach(c => c.classList.remove('on'));
+    document.querySelector(`.ptab[data-p="${p}"]`).classList.add('on');
+    document.getElementById('pc-' + p).classList.add('on');
+  }
+
+  // ── Copy ──
+  async function copy(p) {
+    let text = '';
+    if (p === 'tiktok') {
+      const hook   = document.getElementById('tk-hook').textContent;
+      const script = document.getElementById('pt-tiktok').textContent;
+      text = `HOOK:\n${hook}\n\nSCRIPT:\n${script}`;
+    } else {
+      text = document.getElementById('pt-' + p).textContent;
+      const htags = (posts[p]?.hashtags || []);
+      if (htags.length) text += '\n\n' + htags.map(h => '#' + h).join(' ');
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      const btn = document.querySelector(`#pc-${p} .btn-copy`);
+      btn.classList.add('copied');
+      btn.textContent = '✓ Copiado!';
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '📋 Copiar'; }, 2000);
+    } catch (e) { console.error(e); }
+  }
+
+  // ── Step indicator ──
+  function setStep(n) {
+    ['s1','s2','s3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.classList.remove('active','done');
+      if (i + 1 < n)      el.classList.add('done');
+      else if (i + 1 === n) el.classList.add('active');
+    });
+  }
+
+  // ── Search ──
+  async function search() {
+    const topic = document.getElementById('topicInput').value.trim();
+    if (!topic) { document.getElementById('topicInput').focus(); return; }
+
+    const ant = ls('ant');
+    if (!ant) { openSettings(); return; }
+
+    // Reset UI
+    hide('errorCard');
+    hide('resultsSection');
+    show('loadingSection');
+    document.getElementById('searchBtn').disabled = true;
+    setStep(1);
+
+    try {
+      const twt = ls('twt');
+      let tweetCtx = '';
+      let isLive   = false;
+
+      // Step 1: Twitter trends (optional)
+      if (twt) {
+        try {
+          document.getElementById('loadingLabel').textContent = 'Buscando no Twitter…';
+          const td = await fetchTwitter(topic, twt);
+          if (td?.tweets?.length) {
+            tweetCtx = buildTweetCtx(td);
+            isLive = true;
+          }
+        } catch(e) {
+          console.warn('Twitter fallback to AI:', e.message);
+        }
+      }
+
+      setStep(2);
+      document.getElementById('loadingLabel').textContent = 'Analisando tendências com IA…';
+
+      setStep(3);
+      document.getElementById('loadingLabel').textContent = 'Criando posts personalizados…';
+
+      // Step 2+3: Generate with Claude
+      const result = await claude(topic, tweetCtx, ant);
+
+      // Display
+      render(topic, result, isLive);
+
+    } catch(e) {
+      showErr(e.message || 'Erro inesperado. Verifique a API Key.');
+    } finally {
+      hide('loadingSection');
+      document.getElementById('searchBtn').disabled = false;
+      document.getElementById('loadingLabel').textContent = 'Buscando tendências…';
+    }
+  }
+
+  // ── Twitter proxy ──
+  async function fetchTwitter(topic, token) {
+    const res = await fetch('social-trends-proxy.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ topic, twitter_token: token }),
+      signal: AbortSignal.timeout(12000)
+    });
+    if (!res.ok) throw new Error('Twitter proxy ' + res.status);
+    return res.json();
+  }
+
+  function buildTweetCtx(d) {
+    let s = '';
+    if (d.tweets?.length) {
+      s += 'Tweets populares:\n';
+      d.tweets.slice(0, 8).forEach((t, i) => s += `${i+1}. "${t}"\n`);
+    }
+    if (d.hashtags?.length)
+      s += '\nHashtags em alta: ' + d.hashtags.map(h => '#' + h).join(', ');
+    return s;
+  }
+
+  // ── Claude API ──
+  async function claude(topic, tweetCtx, key) {
+    const hasCtx = tweetCtx.length > 0;
+
+    const prompt = (hasCtx
+      ? `Analise as seguintes tendências REAIS do Twitter sobre "${topic}" e crie posts otimizados.\n\n${tweetCtx}\n\nCom base nessas tendências em tempo real:`
+      : `Analise o tema "${topic}" no contexto digital brasileiro atual. Com base no que você sabe sobre tendências e debates em torno desse assunto:`)
+    + `
+
+Crie posts de alto engajamento para cada plataforma:
+
+**TWITTER/X** — máximo 270 caracteres, tom direto e conversacional, 2-3 hashtags relevantes. Use perguntas ou afirmações fortes.
+
+**INSTAGRAM** — caption completa com emojis (150-300 chars de texto), CTA claro no final, depois de uma linha em branco coloque 12-15 hashtags relevantes separadas.
+
+**LINKEDIN** — post profissional de 900-1400 caracteres. Comece com uma frase impactante. Traga um insight real, dados ou perspectiva única. Tom reflexivo e de autoridade. Não use hashtags no meio do texto.
+
+**TIKTOK** — hook de até 8 palavras para abrir o vídeo (deve parar o scroll), script de 30-60 segundos em primeira pessoa, e 3 sugestões de sons/músicas em alta no TikTok BR que combinem com o tema.
+
+Responda SOMENTE com JSON válido neste formato exato (sem markdown, sem comentários):
+{
+  "trending_summary": "2-3 frases resumindo o que está em alta sobre o tema",
+  "trending_hashtags": ["tag1","tag2","tag3","tag4","tag5","tag6"],
+  "twitter": { "post": "texto", "hashtags": ["t1","t2","t3"] },
+  "instagram": { "post": "texto com emojis", "hashtags": ["ig1","ig2","ig3","ig4","ig5","ig6","ig7","ig8","ig9","ig10","ig11","ig12"] },
+  "linkedin": { "post": "texto profissional" },
+  "tiktok": { "hook": "frase de abertura", "script": "script do vídeo", "sounds": ["som 1","som 2","som 3"] }
+}`;
+
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-allow-browser': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 2048,
+        system: 'Você é um especialista em marketing digital e criação de conteúdo para redes sociais no Brasil. Cria posts virais, autênticos e otimizados para cada plataforma. Responde sempre em português brasileiro.',
+        messages: [{ role: 'user', content: prompt }]
+      }),
+      signal: AbortSignal.timeout(30000)
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `Anthropic API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    const raw  = data.content?.[0]?.text || '';
+    const match = raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Resposta inesperada da IA. Tente novamente.');
+    return JSON.parse(match[0]);
+  }
+
+  // ── Render results ──
+  function render(topic, data, isLive) {
+    posts = data;
+
+    // Trends
+    document.getElementById('trendsTopic').textContent = 'Em alta: ' + topic;
+    document.getElementById('trendsSummary').textContent = data.trending_summary || '';
+
+    const st = document.getElementById('sourceTag');
+    st.className = 'source-tag ' + (isLive ? 'source-live' : 'source-ai');
+    st.innerHTML = isLive ? '🐦 Twitter ao vivo' : '🤖 Análise por IA';
+
+    const hr = document.getElementById('hashtagsRow');
+    hr.innerHTML = (data.trending_hashtags || [])
+      .map(t => `<span class="htag">#${t}</span>`).join('');
+
+    // Twitter
+    setText('pt-twitter', data.twitter?.post || '');
+    document.getElementById('ph-twitter').innerHTML =
+      (data.twitter?.hashtags || []).map(h => `<span class="phtag">#${h}</span>`).join('');
+    const cc = (data.twitter?.post || '').length;
+    const ccEl = document.getElementById('cc-twitter');
+    ccEl.textContent = `${cc}/280`;
+    ccEl.className = 'char-count' + (cc > 280 ? ' over' : cc > 250 ? ' warn' : '');
+
+    // Instagram
+    setText('pt-instagram', data.instagram?.post || '');
+    document.getElementById('ph-instagram').innerHTML =
+      (data.instagram?.hashtags || []).map(h => `<span class="phtag">#${h}</span>`).join('');
+
+    // LinkedIn
+    setText('pt-linkedin', data.linkedin?.post || '');
+
+    // TikTok
+    document.getElementById('tk-hook').textContent   = data.tiktok?.hook   || '';
+    setText('pt-tiktok', data.tiktok?.script || '');
+    document.getElementById('tk-sounds').innerHTML =
+      (data.tiktok?.sounds || []).map(s => `<span class="sound-tag">🎵 ${s}</span>`).join('');
+
+    show('resultsSection');
+    tab('twitter');
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Helpers ──
+  function setText(id, txt) { document.getElementById(id).textContent = txt; }
+  function show(id) { document.getElementById(id).classList.add('show'); }
+  function hide(id) { document.getElementById(id).classList.remove('show'); }
+  function showErr(msg) {
+    document.getElementById('errorMsg').textContent = msg;
+    show('errorCard');
+    hide('loadingSection');
+  }
+
+  // Enter key
+  document.getElementById('topicInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') search();
+  });
+
+  // Init
+  updateBadges();
+</script>
+</body>
+</html>
