@@ -1035,26 +1035,40 @@ Responda SOMENTE com JSON válido neste formato exato (sem markdown, sem coment�
   "tiktok": { "hook": "frase de abertura", "script": "script do vídeo", "sounds": ["som 1","som 2","som 3"] }
 }`;
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-allow-browser': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 2048,
-        system: 'Você é um especialista em marketing digital e criação de conteúdo para redes sociais no Brasil. Cria posts virais, autênticos e otimizados para cada plataforma. Responde sempre em português brasileiro.',
-        messages: [{ role: 'user', content: prompt }]
-      }),
-      signal: AbortSignal.timeout(30000)
-    });
+    const payload = {
+      api_key: key,
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 2048,
+      system: 'Você é um especialista em marketing digital e criação de conteúdo para redes sociais no Brasil. Cria posts virais, autênticos e otimizados para cada plataforma. Responde sempre em português brasileiro.',
+      messages: [{ role: 'user', content: prompt }]
+    };
+
+    // Tenta proxy local primeiro (evita CORS); cai em chamada direta se não disponível
+    let res;
+    try {
+      res = await fetch('anthropic-proxy.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (_) {
+      // Proxy não disponível (ex: GitHub Pages puro) — tenta chamada direta
+      const { api_key, ...direct } = payload;
+      res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': api_key,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-allow-browser': 'true'
+        },
+        body: JSON.stringify(direct)
+      });
+    }
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || `Anthropic API error ${res.status}`);
+      throw new Error(err.error?.message || `Erro ${res.status} na API. Verifique sua chave.`);
     }
 
     const data = await res.json();
